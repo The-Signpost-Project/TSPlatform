@@ -1,0 +1,22 @@
+{
+	"name": "carbon-nexus",
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"turbo": "^2.3.3",
+		"typescript": "^5.7.2"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"packageManager": "bun@1.1.42",
+	"private": true,
+	"scripts": {
+		"build": "bunx turbo build",
+		"dev": "bunx turbo dev",
+		"start": "NODE_ENV=production bunx turbo run start",
+		"test": "bunx turbo test",
+		"format": "bunx turbo format",
+		"lint": "bunx turbo lint"
+	},
+	"workspaces": ["apps/*", "packages/*"]
+}

@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "bundler", // or "nodenext" or "bundler"
+		"baseUrl": ".",
+		"paths": {
+			"@shared/*": ["node_modules/@shared/*"]
+		},
+		"strictNullChecks": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"noFallthroughCasesInSwitch": true,
+		"verbatimModuleSyntax": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
+}

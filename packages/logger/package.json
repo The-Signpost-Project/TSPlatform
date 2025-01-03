@@ -1,0 +1,23 @@
+{
+	"name": "@shared/logger",
+	"module": "index.ts",
+	"type": "module",
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/morgan": "^1.9.9"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"pino": "^9.4.0",
+		"rotating-file-stream": "^3.2.5"
+	},
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"format": "bunx biome format --write .",
+		"lint": "bunx biome lint --write ./src"
+	}
+}

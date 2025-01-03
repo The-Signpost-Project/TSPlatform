@@ -1,0 +1,57 @@
+{
+	"name": "backend",
+	"module": "index.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "NODE_ENV=development bun run --watch src/index.ts",
+		"build": "NODE_ENV=production bun build src/index.ts --outdir dist --minify-whitespace --minify-syntax --target bun --sourcemap=linked -e '@nestjs/websockets' -e '@nestjs/microservices' -e 'class-transformer' -e 'class-validator'",
+		"start": "NODE_ENV=production bun run ./index.js",
+		"test": "NODE_ENV=test bun test --coverage",
+		"prisma:resetDb": "dotenv -e .env.test -- prisma db push --force-reset --schema src/db/schema.prisma",
+		"format": "bunx biome format --write .",
+		"lint": "bunx biome lint --write ./src",
+		"prisma:generate": "dotenv -e .env.development -- prisma generate --schema src/db/schema.prisma",
+		"prisma:migrate": "dotenv -e .env.development -- prisma migrate dev --schema src/db/schema.prisma",
+		"prisma:format": "prisma format --schema src/db/schema.prisma"
+	},
+	"devDependencies": {
+		"@faker-js/faker": "^9.3.0",
+		"@nestjs/testing": "^10.4.15",
+		"@shared/biome-config": "workspace:*",
+		"@shared/common": "workspace:*",
+		"@shared/logger": "workspace:*",
+		"@types/bun": "latest",
+		"@types/cookie-parser": "^1.4.8",
+		"@types/express": "^4.17.21",
+		"@types/multer": "^1.4.12",
+		"@types/node": "^22.10.5",
+		"@types/nodemailer": "^6.4.17",
+		"@types/supertest": "^6.0.2",
+		"dotenv-cli": "^7.4.4",
+		"prisma": "^5.22.0",
+		"supertest": "^7.0.0",
+		"ts-jest": "^29.2.5",
+		"zod": "^3.24.1"
+	},
+	"peerDependencies": {
+		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"@libsql/client": "^0.14.0",
+		"@nestjs/common": "^10.4.15",
+		"@nestjs/config": "^3.3.0",
+		"@nestjs/core": "^10.4.15",
+		"@nestjs/platform-express": "^10.4.15",
+		"@nestjs/throttler": "^6.3.0",
+		"@prisma/adapter-libsql": "^5.22.0",
+		"@prisma/client": "^5.22.0",
+		"@types/handlebars": "^4.1.0",
+		"@types/jest": "^29.5.14",
+		"arctic": "^2.3.3",
+		"bun": "^1.1.42",
+		"cookie-parser": "^1.4.7",
+		"express": "^4.21.2",
+		"handlebars": "^4.7.8",
+		"nodemailer": "^6.9.16"
+	}
+}

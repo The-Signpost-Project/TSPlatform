@@ -1,0 +1,13 @@
+{
+	"name": "@shared/biome-config",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"format": "bunx biome format --write .",
+		"lint": "bunx biome lint --write ."
+	}
+}
