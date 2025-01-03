@@ -1,24 +1,24 @@
 services:
   backend:
-    container_name: carbon-nexus-backend
+    container_name: TSPlatform-backend
     build: 
       context: .
       dockerfile: ./external/docker/backend.Dockerfile
     ports:
       - 8080:8080
     networks:
-      - carbon-nexus-network
+      - TSPlatform-network
     
   frontend:
-    container_name: carbon-nexus-frontend
+    container_name: TSPlatform-frontend
     build: 
       context: .
       dockerfile: ./external/docker/frontend.Dockerfile
     ports:
       - 3000:3000
     networks:
-      - carbon-nexus-network
+      - TSPlatform-network
 
 networks:
-  carbon-nexus-network:
+  TSPlatform-network:
     driver: bridge

@@ -1,5 +1,5 @@
 {
-	"name": "carbon-nexus",
+	"name": "TSPlatform",
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"turbo": "^2.3.3",

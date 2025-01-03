@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Carbon Nexus",
+	title: "TSPlatform",
 	description: "Fullstack starter template",
 };
 

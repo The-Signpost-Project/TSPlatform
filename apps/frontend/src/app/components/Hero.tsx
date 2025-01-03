@@ -11,7 +11,7 @@ export function Hero() {
 
 				<div className="flex flex-col gap-2">
 					<Title className="bg-gradient-to-r from-purple-500 to-blue-700 inline-block text-transparent bg-clip-text">
-						Carbon Nexus
+						TSPlatform
 					</Title>
 					<Text>
 						A modern, streamlined, and powerful boilerplate for building web applications.

@@ -7,7 +7,7 @@ export function Footer() {
 				<Text className="text-zinc-600 dark:text-zinc-300">
 					Made with ❤️ © SebassNoob {new Date().getFullYear()}
 				</Text>
-				<Link href="https://github.com/SebassNoob/carbon-nexus" external>
+				<Link href="https://github.com/The-Signpost-Project/TSPlatform" external>
 					Source Code
 				</Link>
 			</div>

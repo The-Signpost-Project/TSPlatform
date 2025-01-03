@@ -24,7 +24,7 @@ const envSchema = z.object({
 	NODE_ENV: z.string().default("development"),
 	FRONTEND_URL: z.string().url(),
 	BACKEND_INTERNAL_URL: z.string().url(),
-  BACKEND_PUBLIC_URL: z.string().url(),
+	BACKEND_PUBLIC_URL: z.string().url(),
 	DATABASE_URL: z.string(),
 	DATABASE_TOKEN: z.string().optional(),
 	DISCORD_OAUTH_CLIENT_ID: z.string(),

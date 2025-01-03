@@ -1,14 +1,5 @@
-# carbon-nexus
+# TSPlatform
 
-testing. this is a test
-
-fullstack boilerplate with turborepo integration
-
-- nextjs
-- nestjs (+ prisma)
-- devtools and stuff (biome, turborepo)
-- login/logout, oauth, email integration
-- (WIP) tests
 
 ## Setup
 
