@@ -1,5 +1,5 @@
 "use client";
-import { AutocompleteSettingsRow, BooleanSettingsRow } from "..";
+import { BooleanSettingsRow } from "..";
 import { AuthContext, ClientContext } from "@lib/providers";
 import { useContext } from "react";
 import { toast } from "react-hot-toast";

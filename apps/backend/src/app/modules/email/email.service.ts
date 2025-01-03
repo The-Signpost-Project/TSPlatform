@@ -6,7 +6,7 @@ import { createTransport, type Transporter } from "nodemailer";
 import { compile, type TemplateDelegate } from "handlebars";
 import { readdirSync, readFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
-import * as path from "path";
+import * as path from "node:path";
 
 @Injectable()
 export class EmailService {
