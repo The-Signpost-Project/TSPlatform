@@ -28,7 +28,6 @@ export const SafeUserSchema = z.object({
 	verified: z.boolean(),
 	oAuthProviders: z.enum(["google"]).array(),
 	hasPassword: z.boolean(),
-	allowMarketing: z.boolean(),
-	timezone: z.string(),
+	allowEmailNotifications: z.boolean(),
 	createdAt: z.coerce.date(),
 }) satisfies z.ZodType<SafeUser>;

@@ -17,12 +17,13 @@ model User {
   passwordHash String?
   verified     Boolean  @default(false)
 
-  // preferences
-  timezone       String  @default("UTC")
-  allowMarketing Boolean @default(false)
+  // preference
+  allowEmailNotifications Boolean @default(false)
 
   sessions     Session[]
   oauthAccount OAuthAccount[]
+  roles        UserRole[]
+  createdCases Case[]
 
   // one time tokens
   passwordResetToken PasswordResetToken?
@@ -59,4 +60,86 @@ model VerificationToken {
   token     String   @unique
   expiresAt DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Policy {
+  id        String      @id @default(uuid())
+  action    String
+  resource  String
+  condition Condition[]
+  role      Role        @relation(fields: [roleId], references: [id])
+  roleId    String
+}
+
+model Condition {
+  id       String @id @default(uuid())
+  field    String
+  operator String
+  value    String
+  policy   Policy @relation(fields: [policyId], references: [id])
+  policyId String
+}
+
+model Role {
+  id       String     @id @default(uuid())
+  name     String     @unique
+  policies Policy[]
+  users    UserRole[]
+}
+
+model UserRole {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  role   Role   @relation(fields: [roleId], references: [id])
+  userId String
+  roleId String
+}
+
+model Peddler {
+  id         String  @id @default(uuid())
+  codename   String  @unique
+  mainRegion String
+  firstName  String?
+  lastName   String
+  race       String
+  sex        String
+  birthYear  Int
+
+  createdAt DateTime @default(now())
+
+  disabilities PeddlerDisability[]
+  cases        Case[]
+}
+
+model PeddlerDisability {
+  id           String     @id @default(uuid())
+  peddler      Peddler    @relation(fields: [peddlerId], references: [id])
+  disability   Disability @relation(fields: [disabilityId], references: [id])
+  peddlerId    String
+  disabilityId String
+}
+
+model Disability {
+  id   String @id @default(uuid())
+  name String @unique
+
+  peddlers PeddlerDisability[]
+}
+
+model Case {
+  id               String   @id @default(uuid())
+  peddler          Peddler  @relation(fields: [peddlerId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  createdBy        User     @relation(fields: [createdById], references: [id])
+  createdById      String
+  interactionDate  DateTime
+  region           String
+  location         String
+  photoPath        String?
+  notes            String
+  importance       Int
+  firstInteraction Boolean
+
+  peddlerId String
 }

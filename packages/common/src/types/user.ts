@@ -11,8 +11,7 @@ export type SafeUser = {
 	hasPassword: boolean;
 
 	// User preferences
-	allowMarketing: boolean;
-	timezone: string;
+  allowEmailNotifications: boolean;
 };
 
 export type GetUserInput = string;
