@@ -27,15 +27,11 @@ const envSchema = z.object({
 	BACKEND_PUBLIC_URL: z.string().url(),
 	DATABASE_URL: z.string(),
 	DATABASE_TOKEN: z.string().optional(),
-	DISCORD_OAUTH_CLIENT_ID: z.string(),
-	DISCORD_OAUTH_CLIENT_SECRET: z.string(),
-	DISCORD_OAUTH_REDIRECT_URI: z.string(),
+
 	GOOGLE_OAUTH_CLIENT_ID: z.string(),
 	GOOGLE_OAUTH_CLIENT_SECRET: z.string(),
 	GOOGLE_OAUTH_REDIRECT_URI: z.string(),
-	GITHUB_OAUTH_CLIENT_ID: z.string(),
-	GITHUB_OAUTH_CLIENT_SECRET: z.string(),
-	GITHUB_OAUTH_REDIRECT_URI: z.string(),
+
 	EMAIL_HOST: z.string(),
 	EMAIL_PORT: z.string().transform((val) => Number.parseInt(val, 10)),
 	EMAIL_SECURE: z.string().transform((val) => val.toLowerCase() === "true"),

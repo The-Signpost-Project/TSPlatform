@@ -1,4 +1,4 @@
-export type OAuthProvider = "discord" | "google" | "github";
+export type OAuthProvider = "google";
 export type SignUpInput = {
 	username: string;
 	email: string;

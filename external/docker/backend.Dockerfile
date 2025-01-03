@@ -16,7 +16,7 @@ FROM oven/bun:1.1.42 AS runner
 WORKDIR /usr/local
 
 COPY --from=builder /usr/local/apps/backend/dist .
-COPY --from=builder /usr/local/apps/backend/src/public ./public
+COPY --from=builder /usr/local/apps/backend/src/public ./src/public
 COPY --from=builder /usr/local/apps/backend/package.json .
 COPY --from=builder /usr/local/node_modules ./node_modules
 

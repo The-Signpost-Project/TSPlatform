@@ -6,10 +6,8 @@ export default function SignIn() {
 		<>
 			<Title order={3}>Sign Up</Title>
 			<Text>Welcome! Fill in your details to get started.</Text>
-			<div className="flex flex-wrap w-full gap-1">
-				<OAuthButton name="Discord" location="/oauth/discord" iconPath="/icons/discord.svg" />
+			<div className="flex w-full justify-center space-x-2">
 				<OAuthButton name="Google" location="/oauth/google" iconPath="/icons/google.svg" />
-				<OAuthButton name="GitHub" location="/oauth/github" iconPath="/icons/github.svg" />
 			</div>
 
 			<div className="flex flex-row flex-grow w-11/12 items-center">

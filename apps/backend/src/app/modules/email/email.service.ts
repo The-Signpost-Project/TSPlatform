@@ -6,6 +6,7 @@ import { createTransport, type Transporter } from "nodemailer";
 import { compile, type TemplateDelegate } from "handlebars";
 import { readdirSync, readFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
+import * as path from "path";
 
 @Injectable()
 export class EmailService {
@@ -44,7 +45,9 @@ export class EmailService {
 		});
 		this.emailFrom = this.config.get<string>("EMAIL_USER") ?? "";
 
-		this.emailTemplates = this.compileTemplatesFromDir(`${process.cwd()}/public/emailTemplates`);
+		this.emailTemplates = this.compileTemplatesFromDir(
+			path.join(process.cwd(), "src", "public", "emailTemplates"),
+		);
 	}
 
 	private async sendEmail(

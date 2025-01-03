@@ -26,7 +26,7 @@ export const SafeUserSchema = z.object({
 	username: z.string(),
 	email: z.string().email().nullable(),
 	verified: z.boolean(),
-	oAuthProviders: z.enum(["discord", "google", "github"]).array(),
+	oAuthProviders: z.enum(["google"]).array(),
 	hasPassword: z.boolean(),
 	allowMarketing: z.boolean(),
 	timezone: z.string(),

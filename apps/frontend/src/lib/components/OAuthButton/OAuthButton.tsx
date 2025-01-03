@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "react-hot-toast";
-import { Button, Image } from "@lib/components";
+import { Button, Image, Text } from "@lib/components";
 import { useRouter } from "next/navigation";
 import { query } from "@utils";
 import type { OAuthButtonProps } from "./types";
@@ -36,11 +36,11 @@ export function OAuthButton({ location, iconPath, name }: OAuthButtonProps) {
 	return (
 		<Button
 			onClick={() => startTransition(initOAuth)}
-			className="flex gap-1 items-center p-2 text-xs flex-grow"
+			className="flex gap-2 items-center p-2 text-xs flex-grow"
 			disabled={isPending}
 		>
 			<Image src={iconPath} alt="icon" width={24} height={24} />
-			{name}
+			{isPending ? "Loading..." : `Sign in with ${name}`}
 		</Button>
 	);
 }

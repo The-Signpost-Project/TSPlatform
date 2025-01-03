@@ -27,20 +27,10 @@ export class OpenAuthController {
 	@HttpCode(200)
 	async getAuthUrl(@Param("provider") provider: string, @Res({ passthrough: true }) res: Response) {
 		switch (provider) {
-			case "discord": {
-				const { url, state } = await this.openAuthService.getDiscordAuthUrl();
-				this.setCSRFCookie(res, oAuthCookieNames.discord.state, state);
-				return { url };
-			}
 			case "google": {
 				const { url, state, codeVerifier } = await this.openAuthService.getGoogleAuthUrl();
 				this.setCSRFCookie(res, oAuthCookieNames.google.state, state);
 				this.setCSRFCookie(res, oAuthCookieNames.google.codeVerifier, codeVerifier);
-				return { url };
-			}
-			case "github": {
-				const { url, state } = await this.openAuthService.getGitHubAuthUrl();
-				this.setCSRFCookie(res, oAuthCookieNames.github.state, state);
 				return { url };
 			}
 
@@ -58,22 +48,6 @@ export class OpenAuthController {
 		@Res({ passthrough: true }) res: Response,
 	) {
 		switch (provider) {
-			case "discord": {
-				const stateCookie = req.cookies[oAuthCookieNames.discord.state];
-				if (!stateCookie) {
-					throw new AppError(AppErrorTypes.InvalidState);
-				}
-
-				res.clearCookie(oAuthCookieNames.discord.state);
-				if (stateCookie !== state) {
-					throw new AppError(AppErrorTypes.InvalidState);
-				}
-				const cookie = await this.openAuthService.handleDiscordCallback(code);
-
-				this.luciaService.setSessionCookie(res, sessionCookieName, cookie);
-				return res.redirect(this.configService.get<string>("FRONTEND_URL") as string);
-			}
-
 			case "google": {
 				const stateCookie = req.cookies[oAuthCookieNames.google.state];
 				const codeVerifierCookie = req.cookies[oAuthCookieNames.google.codeVerifier];
@@ -87,21 +61,6 @@ export class OpenAuthController {
 					throw new AppError(AppErrorTypes.InvalidState);
 				}
 				const cookie = await this.openAuthService.handleGoogleCallback(code, codeVerifierCookie);
-
-				this.luciaService.setSessionCookie(res, sessionCookieName, cookie);
-				return res.redirect(this.configService.get<string>("FRONTEND_URL") as string);
-			}
-			case "github": {
-				const stateCookie = req.cookies[oAuthCookieNames.github.state];
-				if (!stateCookie) {
-					throw new AppError(AppErrorTypes.InvalidState);
-				}
-
-				res.clearCookie(oAuthCookieNames.github.state);
-				if (stateCookie !== state) {
-					throw new AppError(AppErrorTypes.InvalidState);
-				}
-				const cookie = await this.openAuthService.handleGitHubCallback(code);
 
 				this.luciaService.setSessionCookie(res, sessionCookieName, cookie);
 				return res.redirect(this.configService.get<string>("FRONTEND_URL") as string);

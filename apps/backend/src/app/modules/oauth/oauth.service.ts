@@ -1,34 +1,18 @@
 import { Injectable } from "@nestjs/common";
-import {
-	generateState,
-	generateCodeVerifier,
-	Discord,
-	Google,
-	GitHub,
-	type OAuth2Tokens,
-} from "arctic";
-import type { TokenCookie } from "@shared/common/types";
+import { generateState, generateCodeVerifier, Google, type OAuth2Tokens } from "arctic";
+import type { TokenCookie, OAuthProvider } from "@shared/common/types";
 import { validateSchema } from "@utils/validateSchema";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { PrismaService, LuciaService } from "@db/client";
 import { ConfigService } from "@nestjs/config";
-import type {
-	DiscordUser,
-	GoogleUser,
-	GitHubUser,
-	InitOAuthData,
-	OAuthUser,
-	OAuthProvider,
-} from "./types";
-import { DiscordUserSchema, GoogleUserSchema, GitHubUserSchema } from "./constants";
+import type { GoogleUser, InitOAuthData, OAuthUser } from "./types";
+import { GoogleUserSchema } from "./constants";
 import type { z } from "zod";
 
 @Injectable()
 export class OpenAuthService {
-	private discord!: Discord;
 	private google!: Google;
-	private github!: GitHub;
 
 	constructor(
 		private readonly configService: ConfigService,
@@ -37,20 +21,10 @@ export class OpenAuthService {
 	) {}
 
 	onModuleInit() {
-		this.discord = new Discord(
-			this.configService.get<string>("DISCORD_OAUTH_CLIENT_ID") as string,
-			this.configService.get<string>("DISCORD_OAUTH_CLIENT_SECRET") as string,
-			this.configService.get<string>("DISCORD_OAUTH_REDIRECT_URI") as string,
-		);
 		this.google = new Google(
 			this.configService.get<string>("GOOGLE_OAUTH_CLIENT_ID") as string,
 			this.configService.get<string>("GOOGLE_OAUTH_CLIENT_SECRET") as string,
 			this.configService.get<string>("GOOGLE_OAUTH_REDIRECT_URI") as string,
-		);
-		this.github = new GitHub(
-			this.configService.get<string>("GITHUB_OAUTH_CLIENT_ID") as string,
-			this.configService.get<string>("GITHUB_OAUTH_CLIENT_SECRET") as string,
-			null,
 		);
 	}
 
@@ -160,8 +134,6 @@ export class OpenAuthService {
 		}
 		try {
 			switch (provider) {
-				case "discord":
-					return await this.discord.validateAuthorizationCode(code);
 				case "google":
 					if (codeVerifier === undefined) {
 						throw new AppError(
@@ -169,8 +141,7 @@ export class OpenAuthService {
 						);
 					}
 					return await this.google.validateAuthorizationCode(code, codeVerifier);
-				case "github":
-					return await this.github.validateAuthorizationCode(code);
+
 				default:
 					throw new AppError(AppErrorTypes.GenericError("Unsupported OAuth provider"));
 			}
@@ -180,38 +151,12 @@ export class OpenAuthService {
 			throw new AppError(AppErrorTypes.GenericError(msg));
 		}
 	}
-	async getDiscordAuthUrl(): Promise<InitOAuthData> {
-		const state = generateState();
-		const url = this.discord.createAuthorizationURL(state, ["identify", "email"]);
-		return { state, url: url.toString() };
-	}
 
 	async getGoogleAuthUrl(): Promise<Required<InitOAuthData>> {
 		const state = generateState();
 		const codeVerifier = generateCodeVerifier();
 		const url = this.google.createAuthorizationURL(state, codeVerifier, ["profile", "email"]);
 		return { state, codeVerifier, url: url.toString() };
-	}
-
-	async getGitHubAuthUrl(): Promise<InitOAuthData> {
-		const state = generateState();
-		const url = this.github.createAuthorizationURL(state, ["user:email"]);
-		return { state, url: url.toString() };
-	}
-
-	async handleDiscordCallback(code: string | undefined): Promise<TokenCookie> {
-		const tokens = await this.getOAuthTokens("discord", code);
-
-		// get user info from discord
-		const discordUser = await this.fetchUserDataFromOAuthProvider<DiscordUser>(
-			"https://discord.com/api/users/@me",
-			{
-				Authorization: `Bearer ${tokens.accessToken()}`,
-			},
-			DiscordUserSchema,
-		);
-
-		return await this.handleOAuth("discord", discordUser);
 	}
 
 	async handleGoogleCallback(
@@ -233,24 +178,6 @@ export class OpenAuthService {
 			id: googleUser.sub,
 			email: googleUser.email,
 			username: googleUser.name,
-		});
-	}
-
-	async handleGitHubCallback(code: string | undefined): Promise<TokenCookie> {
-		const tokens = await this.getOAuthTokens("github", code);
-		// get user info from github
-		const githubUser = await this.fetchUserDataFromOAuthProvider<GitHubUser>(
-			"https://api.github.com/user",
-			{
-				Authorization: `Bearer ${tokens.accessToken()}`,
-			},
-			GitHubUserSchema,
-		);
-
-		return await this.handleOAuth("github", {
-			id: githubUser.id.toString(),
-			email: githubUser.email,
-			username: githubUser.login,
 		});
 	}
 }
