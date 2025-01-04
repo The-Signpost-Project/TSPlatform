@@ -3,14 +3,17 @@ import { LuciaService, PrismaService } from "@db/client";
 import type { OAuthProvider, SafeUser, UpdateUserInput } from "@shared/common/types";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
+import { CrudService } from "@base";
 import type { Prisma } from "@prisma/client";
 
 @Injectable()
-export class UserService {
+export class UserService extends CrudService<SafeUser> {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly lucia: LuciaService,
-	) {}
+	) {
+		super();
+	}
 
 	private rawUserFindFields = {
 		id: true,
@@ -44,7 +47,7 @@ export class UserService {
 		};
 	}
 
-	async getUserBySessionId(tokenId: string | undefined): Promise<SafeUser> {
+	async getBySessionId(tokenId: string | undefined): Promise<SafeUser> {
 		if (!tokenId) {
 			throw new AppError(AppErrorTypes.InvalidToken);
 		}
@@ -55,10 +58,10 @@ export class UserService {
 			throw new AppError(AppErrorTypes.InvalidToken);
 		}
 
-		return this.getUserById(user.id);
+		return this.getById(user.id);
 	}
 
-	async getUserById(id: string): Promise<SafeUser> {
+	async getById(id: string): Promise<SafeUser> {
 		const rawUser = await this.prisma.user.findUnique({
 			where: { id },
 			select: this.rawUserFindFields,
@@ -70,7 +73,7 @@ export class UserService {
 		return this.cleanUserData(rawUser);
 	}
 
-	async updateUserById(id: string, data: UpdateUserInput): Promise<SafeUser> {
+	async updateById(id: string, data: UpdateUserInput): Promise<SafeUser> {
 		try {
 			const rawUser = await this.prisma.user.update({
 				where: { id },
@@ -84,7 +87,7 @@ export class UserService {
 		}
 	}
 
-	async deleteUserById(id: string): Promise<void> {
+	async deleteById(id: string): Promise<void> {
 		const user = await this.prisma.user.findUnique({
 			where: { id },
 		});

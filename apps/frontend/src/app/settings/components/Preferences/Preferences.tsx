@@ -4,7 +4,6 @@ import { AuthContext, ClientContext } from "@lib/providers";
 import { useContext } from "react";
 import { toast } from "react-hot-toast";
 
-
 export function Preferences() {
 	const { updateUser, user, loading } = useContext(AuthContext);
 	const { theme, setTheme, reducedMotion, setReducedMotion } = useContext(ClientContext);
@@ -23,7 +22,6 @@ export function Preferences() {
 		});
 	}
 
-	
 	return (
 		<div className="space-y-4">
 			<BooleanSettingsRow
@@ -42,7 +40,6 @@ export function Preferences() {
 				value={user.allowEmailNotifications}
 				onChange={(v) => changeAllowEmailCallback(user.id, v)}
 			/>
-
 		</div>
 	);
 }

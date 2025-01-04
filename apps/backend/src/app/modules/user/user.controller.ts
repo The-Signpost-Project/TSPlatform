@@ -15,26 +15,26 @@ export class UserController {
 	@Get("me")
 	async user(@Req() req: Request) {
 		const tokenId = req.cookies[sessionCookieName] as string | undefined;
-		return await this.userService.getUserBySessionId(tokenId);
+		return await this.userService.getBySessionId(tokenId);
 	}
 
 	@Get()
-	async getUserById(@Query("id", new ValidationPipe(GetUserInputSchema)) id: string) {
-		return await this.userService.getUserById(id);
+	async getById(@Query("id", new ValidationPipe(GetUserInputSchema)) id: string) {
+		return await this.userService.getById(id);
 	}
 
 	@Patch(":id")
 	@UseGuards(AuthGuard("params", "id"))
-	async updateUserById(
+	async updateById(
 		@Param("id", new ValidationPipe(GetUserInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdateUserInputSchema)) data: UpdateUserInput,
 	) {
-		return await this.userService.updateUserById(id, data);
+		return await this.userService.updateById(id, data);
 	}
 
 	@Delete(":id")
 	@UseGuards(AuthGuard("params", "id"))
-	async deleteUserById(@Param("id", new ValidationPipe(GetUserInputSchema)) id: string) {
-		return await this.userService.deleteUserById(id);
+	async deleteById(@Param("id", new ValidationPipe(GetUserInputSchema)) id: string) {
+		return await this.userService.deleteById(id);
 	}
 }

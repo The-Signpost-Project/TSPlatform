@@ -26,8 +26,9 @@ model User {
   createdCases Case[]
 
   // one time tokens
-  passwordResetToken PasswordResetToken?
-  verificationToken  VerificationToken?
+  passwordResetToken  PasswordResetToken?
+  verificationToken   VerificationToken?
+  peddlerMergeRequest PeddlerMergeRequest[]
 }
 
 model Session {
@@ -107,8 +108,10 @@ model Peddler {
 
   createdAt DateTime @default(now())
 
-  disabilities PeddlerDisability[]
-  cases        Case[]
+  disabilities   PeddlerDisability[]
+  cases          Case[]
+  mergeRequestsA PeddlerMergeRequest[] @relation(name: "peddlerA")
+  mergeRequestsB PeddlerMergeRequest[] @relation(name: "peddlerB")
 }
 
 model PeddlerDisability {
@@ -142,4 +145,15 @@ model Case {
   firstInteraction Boolean
 
   peddlerId String
+}
+
+model PeddlerMergeRequest {
+  id            String  @id @default(uuid())
+  peddlerA      Peddler @relation(name: "peddlerA", fields: [peddlerAId], references: [id])
+  peddlerAId    String
+  peddlerB      Peddler @relation(name: "peddlerB", fields: [peddlerBId], references: [id])
+  peddlerBId    String
+  requestedBy   User    @relation(fields: [requestedById], references: [id])
+  requestedById String
+  notes         String
 }

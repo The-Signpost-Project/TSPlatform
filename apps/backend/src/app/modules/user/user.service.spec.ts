@@ -28,13 +28,13 @@ describe("UserService", () => {
 		expect(service).toBeDefined();
 	});
 
-	describe("getUserBySessionId", () => {
+	describe("getBySessionId", () => {
 		it("should throw an error if no token is provided", async () => {
-			await expect(service.getUserBySessionId(undefined)).rejects.toThrowError(AppError);
+			await expect(service.getBySessionId(undefined)).rejects.toThrowError(AppError);
 		});
 
 		it("should throw an error if the token is invalid", async () => {
-			await expect(service.getUserBySessionId("invalid-token")).rejects.toThrowError(AppError);
+			await expect(service.getBySessionId("invalid-token")).rejects.toThrowError(AppError);
 		});
 
 		it("should return the user if the token is valid", async () => {
@@ -44,35 +44,35 @@ describe("UserService", () => {
 			prisma.user.findUnique = mock(() => ({}));
 			// @ts-expect-error
 			service.cleanUserData = mock(() => ({}));
-			const user = await service.getUserBySessionId("valid-token");
+			const user = await service.getBySessionId("valid-token");
 			expect(user).toBeDefined();
 		});
 	});
 
-	describe("getUserById", () => {
+	describe("getById", () => {
 		it("should return the user if it exists", async () => {
 			// @ts-expect-error
 			prisma.user.findUnique = mock(() => ({}));
 			// @ts-expect-error
 			service.cleanUserData = mock(() => ({}));
-			const user = await service.getUserById(faker.string.uuid());
+			const user = await service.getById(faker.string.uuid());
 			expect(user).toBeDefined();
 		});
 
 		it("should throw an error if the user does not exist", async () => {
 			// @ts-expect-error
 			prisma.user.findUnique = mock(() => null);
-			await expect(service.getUserById(faker.string.uuid())).rejects.toThrowError(AppError);
+			await expect(service.getById(faker.string.uuid())).rejects.toThrowError(AppError);
 		});
 	});
 
-	describe("updateUserById", () => {
+	describe("updateById", () => {
 		it("should return the updated user", async () => {
 			// @ts-expect-error
 			prisma.user.update = mock(() => ({}));
 			// @ts-expect-error
 			service.cleanUserData = mock(() => ({}));
-			const user = await service.updateUserById(faker.string.uuid(), {});
+			const user = await service.updateById(faker.string.uuid(), {});
 			expect(user).toBeDefined();
 		});
 
@@ -80,15 +80,15 @@ describe("UserService", () => {
 			prisma.user.update = mock(() => {
 				throw new Error();
 			});
-			await expect(service.updateUserById(faker.string.uuid(), {})).rejects.toThrowError(AppError);
+			await expect(service.updateById(faker.string.uuid(), {})).rejects.toThrowError(AppError);
 		});
 	});
 
-	describe("deleteUserById", () => {
+	describe("deleteById", () => {
 		it("should throw an error if the user does not exist", async () => {
 			// @ts-expect-error
 			prisma.user.findUnique = mock(() => null);
-			await expect(service.deleteUserById(faker.string.uuid())).rejects.toThrowError(AppError);
+			await expect(service.deleteById(faker.string.uuid())).rejects.toThrowError(AppError);
 		});
 
 		it("should delete the user if it exists", async () => {
@@ -96,7 +96,7 @@ describe("UserService", () => {
 			prisma.user.findUnique = mock(() => ({}));
 			// @ts-expect-error
 			prisma.user.delete = mock(() => {});
-			expect(service.deleteUserById(faker.string.uuid())).resolves.toBeUndefined();
+			expect(service.deleteById(faker.string.uuid())).resolves.toBeUndefined();
 		});
 	});
 });

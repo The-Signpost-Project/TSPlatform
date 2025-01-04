@@ -36,7 +36,8 @@
 			"@interceptors": ["./src/app/interceptors"],
 			"@pipes": ["./src/app/pipes"],
 			"@filters": ["./src/app/filters"],
-			"@utils/*": ["./src/utils/*"]
+			"@utils/*": ["./src/utils/*"],
+			"@base": ["./src/app/base"]
 		}
 	},
 	"include": ["src/**/*.ts"],

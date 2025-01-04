@@ -86,5 +86,10 @@ export const AppErrorTypes = {
 		code: 429,
 		cause: `Rate limit exceeded. Try again in ${timetoBlockExpire}s. Limit: ${limit} request${limit === 1 ? "" : "s"} per ${ttl}s.`,
 	}),
+	NotFound: {
+		name: "NotFound",
+		code: 404,
+		cause: "Not found",
+	},
 	// biome-ignore lint/suspicious/noExplicitAny: allow the use of any in this context
 } as const satisfies Record<string, ((...args: any[]) => AppErrorType) | AppErrorType>;
