@@ -20,15 +20,15 @@ model User {
   // preference
   allowEmailNotifications Boolean @default(false)
 
-  sessions     Session[]
-  oauthAccount OAuthAccount[]
-  roles        UserRole[]
-  createdCases Case[]
+  sessions      Session[]
+  oauthAccounts OAuthAccount[]
+  roles         UserRole[]
+  createdCases  Case[]
 
   // one time tokens
-  passwordResetToken  PasswordResetToken?
-  verificationToken   VerificationToken?
-  peddlerMergeRequest PeddlerMergeRequest[]
+  passwordResetToken   PasswordResetToken?
+  verificationToken    VerificationToken?
+  peddlerMergeRequests PeddlerMergeRequest[]
 }
 
 model Session {
@@ -64,12 +64,20 @@ model VerificationToken {
 }
 
 model Policy {
-  id        String      @id @default(uuid())
-  action    String
-  resource  String
-  condition Condition[]
-  role      Role        @relation(fields: [roleId], references: [id])
-  roleId    String
+  id         String       @id @default(uuid())
+  name       String       @unique
+  action     String
+  resource   String
+  conditions Condition[]
+  roles      PolicyRole[]
+}
+
+model PolicyRole {
+  id       String @id @default(uuid())
+  policy   Policy @relation(fields: [policyId], references: [id])
+  role     Role   @relation(fields: [roleId], references: [id])
+  policyId String
+  roleId   String
 }
 
 model Condition {
@@ -82,9 +90,9 @@ model Condition {
 }
 
 model Role {
-  id       String     @id @default(uuid())
-  name     String     @unique
-  policies Policy[]
+  id       String       @id @default(uuid())
+  name     String       @unique
+  policies PolicyRole[]
   users    UserRole[]
 }
 
@@ -108,10 +116,10 @@ model Peddler {
 
   createdAt DateTime @default(now())
 
-  disabilities   PeddlerDisability[]
-  cases          Case[]
-  mergeRequestsA PeddlerMergeRequest[] @relation(name: "peddlerA")
-  mergeRequestsB PeddlerMergeRequest[] @relation(name: "peddlerB")
+  disabilities     PeddlerDisability[]
+  cases            Case[]
+  mergeRequestsNew PeddlerMergeRequest[] @relation(name: "peddlerNew")
+  mergeRequestsOld PeddlerMergeRequest[] @relation(name: "peddlerOld")
 }
 
 model PeddlerDisability {
@@ -149,10 +157,10 @@ model Case {
 
 model PeddlerMergeRequest {
   id            String  @id @default(uuid())
-  peddlerA      Peddler @relation(name: "peddlerA", fields: [peddlerAId], references: [id])
-  peddlerAId    String
-  peddlerB      Peddler @relation(name: "peddlerB", fields: [peddlerBId], references: [id])
-  peddlerBId    String
+  peddlerNew    Peddler @relation(name: "peddlerNew", fields: [peddlerNewId], references: [id])
+  peddlerNewId  String
+  peddlerOld    Peddler @relation(name: "peddlerOld", fields: [peddlerOldId], references: [id])
+  peddlerOldId  String
   requestedBy   User    @relation(fields: [requestedById], references: [id])
   requestedById String
   notes         String

@@ -23,7 +23,7 @@ export class UserService extends CrudService<SafeUser> {
 		verified: true,
 		allowEmailNotifications: true,
 		passwordHash: true,
-		oauthAccount: {
+		oauthAccounts: {
 			select: {
 				providerId: true,
 			},
@@ -32,11 +32,11 @@ export class UserService extends CrudService<SafeUser> {
 
 	private cleanUserData(
 		data: Prisma.UserGetPayload<{
-			include: { oauthAccount: { select: { providerId: true } } };
+			include: { oauthAccounts: { select: { providerId: true } } };
 		}>,
 	): SafeUser {
 		// find any oAuth providers that the user has connected
-		const oAuthProviders = data.oauthAccount.map(
+		const oAuthProviders = data.oauthAccounts.map(
 			(account) => account.providerId,
 		) as OAuthProvider[];
 
