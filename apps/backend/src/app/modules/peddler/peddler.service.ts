@@ -4,7 +4,7 @@ import type { CreatePeddlerInput, StrictPeddler, UpdatePeddlerInput } from "@sha
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { CrudService } from "@base";
-import type { Prisma, Peddler, PeddlerDisability } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { DisabilityService } from "./disability.service";
 
 @Injectable()

@@ -16,7 +16,7 @@ export function Header() {
 	const { theme, setTheme, isMobile } = useContext(ClientContext);
 
 	return (
-		<header className="flex items-center justify-between p-4 border-b border-gray-800/20 dark:border-gray-50/20 sticky top-0 backdrop-blur-xl z-50">
+		<header className="flex items-center justify-between px-4 py-1 border-b border-gray-800/20 dark:border-gray-50/20 sticky top-0 backdrop-blur-xl z-50">
 			<div
 				className="flex items-center cursor-pointer"
 				onClick={() => router.push("/")}

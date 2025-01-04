@@ -1,13 +1,20 @@
+"use client";
 import { Image } from "@lib/components";
 import { twMerge } from "tailwind-merge";
 import type { LogoProps } from "./types";
+import { useContext } from "react";
+import { ClientContext } from "@lib/providers";
 
 export function Logo(props: LogoProps) {
+	const { theme } = useContext(ClientContext);
+
 	return (
-		<div {...props} className={twMerge("flex gap-1 h-6 w-full items-center", props.className)}>
-			<div className="relative h-8 w-8">
-				<Image src="/logo.svg" alt="Logo" />
-			</div>
+		<div className={twMerge("relative w-16 h-16", props.className)} {...props}>
+			{theme === "dark" ? (
+				<Image src="/logo-dark.png" alt="Logo" />
+			) : (
+				<Image src="/logo.png" alt="Logo" />
+			)}
 		</div>
 	);
 }
