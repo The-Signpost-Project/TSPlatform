@@ -14,6 +14,9 @@ export class DisabilityService extends CrudService<Disability> {
 
 	async create(data: CreateDisabilityInput) {
 		try {
+			if (!data.name) {
+				throw new AppError(AppErrorTypes.EmptyInput);
+			}
 			return await this.prisma.disability.create({ data });
 		} catch (error) {
 			handleDatabaseError(error);

@@ -91,5 +91,10 @@ export const AppErrorTypes = {
 		code: 404,
 		cause: "Not found",
 	},
+	EmptyInput: {
+		name: "EmptyInput",
+		code: 400,
+		cause: "Empty input",
+	},
 	// biome-ignore lint/suspicious/noExplicitAny: allow the use of any in this context
 } as const satisfies Record<string, ((...args: any[]) => AppErrorType) | AppErrorType>;
