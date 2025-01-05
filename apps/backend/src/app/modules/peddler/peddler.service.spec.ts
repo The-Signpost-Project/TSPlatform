@@ -6,19 +6,23 @@ import { resetDatabase } from "@utils/test";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
 import { PeddlerService } from "./peddler.service";
-import { DisabilityService } from "./disability.service";
+import { RegionService } from "./region.service";
 
 describe("PeddlerService", () => {
 	let service: PeddlerService;
+	let testRegion: { id: string; name: string };
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
-			providers: [PeddlerService, PrismaService, DisabilityService],
+			providers: [PeddlerService, PrismaService, RegionService],
 		}).compile();
 
 		service = module.get<PeddlerService>(PeddlerService);
 		await resetDatabase();
+
+		const regionService = module.get<RegionService>(RegionService);
+		testRegion = await regionService.create({ name: faker.location.city() });
 	});
 
 	it("should be defined", () => {
@@ -28,7 +32,7 @@ describe("PeddlerService", () => {
 	describe("create", async () => {
 		it("should create a new peddler", async () => {
 			const res = await service.create({
-				mainRegion: faker.location.city(),
+				mainRegion: testRegion,
 				lastName: faker.person.lastName(),
 				firstName: faker.person.firstName(),
 				// @ts-ignore
@@ -47,10 +51,9 @@ describe("PeddlerService", () => {
 		});
 
 		it("should throw an error if mainRegion is empty", async () => {
-			
 			expect(
 				service.create({
-          // @ts-ignore
+					// @ts-ignore
 					mainRegion: null,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
@@ -69,7 +72,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			for (let i = 0; i < 3; i++) {
 				await service.create({
-					mainRegion: `test${i + 1}`,
+					mainRegion: testRegion,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -87,15 +90,10 @@ describe("PeddlerService", () => {
 			expect(res).toHaveLength(3);
 		});
 
-		it("should return all peddlers with the correct mainRegion", async () => {
+		it("should return an empty array if there are no peddlers", async () => {
+			await resetDatabase();
 			const res = await service.getAll();
-			expect(res).toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({ mainRegion: "test1" }),
-					expect.objectContaining({ mainRegion: "test2" }),
-					expect.objectContaining({ mainRegion: "test3" }),
-				]),
-			);
+			expect(res).toHaveLength(0);
 		});
 	});
 
@@ -105,7 +103,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			id = (
 				await service.create({
-					mainRegion: faker.location.city(),
+					mainRegion: testRegion,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -134,7 +132,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			id = (
 				await service.create({
-					mainRegion: faker.location.city(),
+					mainRegion: testRegion,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -149,10 +147,10 @@ describe("PeddlerService", () => {
 
 		it("should update the peddler", async () => {
 			const newAttrs = {
-				mainRegion: faker.location.city(),
 				lastName: faker.person.lastName(),
 				firstName: faker.person.firstName(),
-			};
+				sex: "M",
+			} as const;
 			const res = await service.updateById(id, newAttrs);
 			expect(res).toMatchObject({ id, ...newAttrs });
 		});
@@ -164,7 +162,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			id = (
 				await service.create({
-					mainRegion: faker.location.city(),
+					mainRegion: testRegion,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore

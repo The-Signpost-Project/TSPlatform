@@ -5,24 +5,21 @@ import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { CrudService } from "@base";
 import type { Prisma } from "@prisma/client";
-import { DisabilityService } from "./disability.service";
 
 @Injectable()
 export class PeddlerService extends CrudService<StrictPeddler> {
-	constructor(
-		private readonly prisma: PrismaService,
-		private readonly disabilityService: DisabilityService,
-	) {
+	constructor(private readonly prisma: PrismaService) {
 		super();
 	}
 
 	private cleanPeddlerData(
 		data: Prisma.PeddlerGetPayload<{
-			include: { disabilities: { include: { disability: true } } };
+			include: { disabilities: { include: { disability: true } }; mainRegion: true };
 		}>,
 	): StrictPeddler {
 		return {
-			...(data as Omit<StrictPeddler, "disabilities">),
+			...(data as Omit<StrictPeddler, "disabilities" | "mainRegion">),
+			mainRegion: { id: data.mainRegion.id, name: data.mainRegion.name },
 			disabilities: data.disabilities.map((d) => ({ id: d.id, name: d.disability.name })),
 		};
 	}
@@ -31,9 +28,11 @@ export class PeddlerService extends CrudService<StrictPeddler> {
 		// region_lastname_sex
 		const codename = `${data.mainRegion}_${data.lastName}_${data.sex}`;
 
-		const { disabilities, ...peddlerData } = data;
+		const { disabilities, mainRegion, ...peddlerData } = data;
 		try {
-			const newPeddler = await this.prisma.peddler.create({ data: { ...peddlerData, codename } });
+			const newPeddler = await this.prisma.peddler.create({
+				data: { codename, mainRegionId: mainRegion.id, ...peddlerData },
+			});
 			// create peddlerdisability records
 			const peddlerDisability = data.disabilities.map((d) => ({
 				disabilityId: d.id,
@@ -50,7 +49,7 @@ export class PeddlerService extends CrudService<StrictPeddler> {
 	async getAll() {
 		try {
 			const res = await this.prisma.peddler.findMany({
-				include: { disabilities: { include: { disability: true } } },
+				include: { disabilities: { include: { disability: true } }, mainRegion: true },
 			});
 			return res.map(this.cleanPeddlerData);
 		} catch (error) {
@@ -62,7 +61,7 @@ export class PeddlerService extends CrudService<StrictPeddler> {
 		try {
 			const peddler = await this.prisma.peddler.findUnique({
 				where: { id },
-				include: { disabilities: { include: { disability: true } } },
+				include: { disabilities: { include: { disability: true } }, mainRegion: true },
 			});
 			if (!peddler) {
 				throw new AppError(AppErrorTypes.NotFound);
@@ -79,10 +78,10 @@ export class PeddlerService extends CrudService<StrictPeddler> {
 			if (!peddler) {
 				throw new AppError(AppErrorTypes.NotFound);
 			}
-			const { disabilities, ...peddlerData } = data;
+			const { disabilities, mainRegion, ...peddlerData } = data;
 			const updatedPeddler = await this.prisma.peddler.update({
 				where: { id },
-				data: peddlerData,
+				data: { mainRegionId: mainRegion?.id, ...peddlerData },
 			});
 			// update peddlerdisability records
 			const peddlerDisability = data.disabilities?.map((d) => ({

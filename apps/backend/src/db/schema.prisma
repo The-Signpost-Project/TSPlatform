@@ -24,6 +24,7 @@ model User {
   oauthAccounts OAuthAccount[]
   roles         UserRole[]
   createdCases  Case[]
+  teams         UserTeam[]
 
   // one time tokens
   passwordResetToken   PasswordResetToken?
@@ -61,6 +62,21 @@ model VerificationToken {
   token     String   @unique
   expiresAt DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id   String @id @default(uuid())
+  name String @unique
+
+  members UserTeam[]
+}
+
+model UserTeam {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  team   Team   @relation(fields: [teamId], references: [id])
+  userId String
+  teamId String
 }
 
 model Policy {
@@ -105,18 +121,19 @@ model UserRole {
 }
 
 model Peddler {
-  id         String  @id @default(uuid())
-  codename   String  @unique
-  mainRegion String
-  firstName  String?
-  lastName   String
-  race       String
-  sex        String
-  birthYear  Int
+  id           String  @id @default(uuid())
+  codename     String
+  mainRegionId String
+  firstName    String?
+  lastName     String
+  race         String
+  sex          String
+  birthYear    Int
 
   createdAt DateTime @default(now())
 
   disabilities     PeddlerDisability[]
+  mainRegion       Region                @relation(fields: [mainRegionId], references: [id])
   cases            Case[]
   mergeRequestsNew PeddlerMergeRequest[] @relation(name: "peddlerNew")
   mergeRequestsOld PeddlerMergeRequest[] @relation(name: "peddlerOld")
@@ -137,6 +154,13 @@ model Disability {
   peddlers PeddlerDisability[]
 }
 
+model Region {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  peddlers Peddler[]
+  cases    Case[]
+}
+
 model Case {
   id               String   @id @default(uuid())
   peddler          Peddler  @relation(fields: [peddlerId], references: [id])
@@ -145,7 +169,8 @@ model Case {
   createdBy        User     @relation(fields: [createdById], references: [id])
   createdById      String
   interactionDate  DateTime
-  region           String
+  regionId         String
+  region           Region?  @relation(fields: [regionId], references: [id])
   location         String
   photoPath        String?
   notes            String

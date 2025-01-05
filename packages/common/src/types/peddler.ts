@@ -1,7 +1,10 @@
 export interface StrictPeddler {
 	id: string;
 	codename: `${string}_${string}_${"M" | "F"}`;
-	mainRegion: string;
+	mainRegion: {
+		id: string;
+		name: string;
+	};
 	firstName: string | null;
 	lastName: string;
 	race: "Chinese" | "Malay" | "Indian" | "Others";
@@ -15,7 +18,9 @@ export interface StrictPeddler {
 }
 
 export interface CreatePeddlerInput {
-	mainRegion: string;
+	mainRegion: {
+		id: string;
+	};
 	firstName: string | null;
 	lastName: string;
 	race: "Chinese" | "Malay" | "Indian" | "Others";
@@ -33,3 +38,9 @@ export type CreateDisabilityInput = {
 };
 
 export type UpdateDisabilityInput = Partial<CreateDisabilityInput>;
+
+export type CreateRegionInput = {
+	name: string;
+};
+
+export type UpdateRegionInput = Partial<CreateRegionInput>;

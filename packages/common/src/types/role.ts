@@ -25,11 +25,13 @@ export type Resource =
 	| "policy"
 	| "case"
 	| "peddlerMergeRequest"
-	| "user";
+	| "user"
+	| "region"
+	| "team";
 
 export interface StrictPolicy {
 	id: string;
-  name: string;
+	name: string;
 	action: "read" | "write";
 	resource: Resource;
 	conditions: StrictCondition[]; // if empty, then allow all
@@ -44,11 +46,13 @@ export type CreatePolicyInput = Prettify<
 export type UpdatePolicyInput = Prettify<Partial<CreatePolicyInput>>;
 
 export interface StrictRole {
-  id: string;
-  name: string;
-  policies: StrictPolicy[];
+	id: string;
+	name: string;
+	policies: StrictPolicy[];
 }
 
-export type CreateRoleInput = Prettify<Omit<StrictRole, "id" | "policies"> & { policies: StrictPolicy[] }>;
+export type CreateRoleInput = Prettify<
+	Omit<StrictRole, "id" | "policies"> & { policies: StrictPolicy[] }
+>;
 
 export type UpdateRoleInput = Prettify<Partial<CreateRoleInput>>;
