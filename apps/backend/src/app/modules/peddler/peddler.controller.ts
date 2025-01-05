@@ -3,6 +3,7 @@ import { UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@guards";
 import { PeddlerService } from "./peddler.service";
 import { DisabilityService } from "./disability.service";
+import { RegionService } from "./region.service";
 import { ValidationPipe } from "@pipes";
 import {
 	CreateDisabilityInputSchema,
@@ -11,12 +12,17 @@ import {
 	GetPeddlerInputSchema,
 	UpdateDisabilityInputSchema,
 	UpdatePeddlerInputSchema,
+  CreateRegionInputSchema,
+  UpdateRegionInputSchema,
+  GetRegionInputSchema
 } from "@shared/common/schemas";
 import type {
 	CreateDisabilityInput,
 	CreatePeddlerInput,
 	UpdateDisabilityInput,
 	UpdatePeddlerInput,
+  CreateRegionInput,
+  UpdateRegionInput
 } from "@shared/common/types";
 
 @Controller("user")
@@ -24,6 +30,7 @@ export class PeddlerController {
 	constructor(
 		private readonly peddlerService: PeddlerService,
 		private readonly disabilityService: DisabilityService,
+    private readonly regionService: RegionService,
 	) {}
 
 	@Post()
@@ -87,4 +94,36 @@ export class PeddlerController {
 	) {
 		return await this.disabilityService.deleteById(id);
 	}
+
+  @Get("region/all")
+  async getAllRegions() {
+    return await this.regionService.getAll();
+  }
+
+  @Get("region/:id")
+  async getRegionById(@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string) {
+    return await this.regionService.getById(id);
+  }
+
+  @Post("region")
+  async createRegion(
+    @Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput,
+  ) {
+    return await this.regionService.create(data);
+  }
+
+  @Patch("region/:id")
+  async updateRegionById(
+    @Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+    @Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
+  ) {
+    return await this.regionService.updateById(id, data);
+  }
+
+  @Delete("region/:id")
+  async deleteRegionById(
+    @Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+  ) {
+    return await this.regionService.deleteById(id);
+  }
 }
