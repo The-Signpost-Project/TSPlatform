@@ -1,0 +1,189 @@
+import { expect, it, describe, beforeEach } from "bun:test";
+import { Test, type TestingModule } from "@nestjs/testing";
+import { PrismaService } from "@db/client";
+import { AppError } from "@utils/appErrors";
+import { resetDatabase } from "@utils/test";
+import { faker } from "@faker-js/faker";
+import { ConfigModule } from "@nestjs/config";
+import { PeddlerService } from "./peddler.service";
+import { DisabilityService } from "./disability.service";
+
+describe("PeddlerService", () => {
+	let service: PeddlerService;
+
+	beforeEach(async () => {
+		const module: TestingModule = await Test.createTestingModule({
+			imports: [ConfigModule],
+			providers: [PeddlerService, PrismaService, DisabilityService],
+		}).compile();
+
+		service = module.get<PeddlerService>(PeddlerService);
+		await resetDatabase();
+	});
+
+	it("should be defined", () => {
+		expect(service).toBeDefined();
+	});
+
+	describe("create", async () => {
+		it("should create a new peddler", async () => {
+			const res = await service.create({
+				mainRegion: faker.location.city(),
+				lastName: faker.person.lastName(),
+				firstName: faker.person.firstName(),
+				// @ts-ignore
+				race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
+				// @ts-ignore
+				sex: ["M", "F"][Math.floor(Math.random() * 2)],
+				birthYear: faker.date.past().getFullYear(),
+				disabilities: [],
+			});
+			expect(res).toMatchObject({ id: expect.any(String) });
+		});
+
+		it("should throw an error if empty", async () => {
+			// @ts-ignore
+			expect(service.create({})).rejects.toThrow(AppError);
+		});
+
+		it("should throw an error if mainRegion is empty", async () => {
+			
+			expect(
+				service.create({
+          // @ts-ignore
+					mainRegion: null,
+					lastName: faker.person.lastName(),
+					firstName: faker.person.firstName(),
+					// @ts-ignore
+					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
+					// @ts-ignore
+					sex: ["M", "F"][Math.floor(Math.random() * 2)],
+					birthYear: faker.date.past().getFullYear(),
+					disabilities: [],
+				}),
+			).rejects.toThrow(AppError);
+		});
+	});
+
+	describe("getAll", async () => {
+		beforeEach(async () => {
+			for (let i = 0; i < 3; i++) {
+				await service.create({
+					mainRegion: `test${i + 1}`,
+					lastName: faker.person.lastName(),
+					firstName: faker.person.firstName(),
+					// @ts-ignore
+					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
+					// @ts-ignore
+					sex: ["M", "F"][Math.floor(Math.random() * 2)],
+					birthYear: faker.date.past().getFullYear(),
+					disabilities: [],
+				});
+			}
+		});
+
+		it("should return all peddlers", async () => {
+			const res = await service.getAll();
+			expect(res).toHaveLength(3);
+		});
+
+		it("should return all peddlers with the correct mainRegion", async () => {
+			const res = await service.getAll();
+			expect(res).toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({ mainRegion: "test1" }),
+					expect.objectContaining({ mainRegion: "test2" }),
+					expect.objectContaining({ mainRegion: "test3" }),
+				]),
+			);
+		});
+	});
+
+	describe("getById", async () => {
+		let id: string;
+
+		beforeEach(async () => {
+			id = (
+				await service.create({
+					mainRegion: faker.location.city(),
+					lastName: faker.person.lastName(),
+					firstName: faker.person.firstName(),
+					// @ts-ignore
+					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
+					// @ts-ignore
+					sex: ["M", "F"][Math.floor(Math.random() * 2)],
+					birthYear: faker.date.past().getFullYear(),
+					disabilities: [],
+				})
+			).id;
+		});
+
+		it("should return the correct peddler", async () => {
+			const res = await service.getById(id);
+			expect(res).toMatchObject({ id });
+		});
+
+		it("should throw an error if the peddler does not exist", async () => {
+			expect(service.getById("invalidId")).rejects.toThrow(AppError);
+		});
+	});
+
+	describe("updateById", async () => {
+		let id: string;
+
+		beforeEach(async () => {
+			id = (
+				await service.create({
+					mainRegion: faker.location.city(),
+					lastName: faker.person.lastName(),
+					firstName: faker.person.firstName(),
+					// @ts-ignore
+					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
+					// @ts-ignore
+					sex: ["M", "F"][Math.floor(Math.random() * 2)],
+					birthYear: faker.date.past().getFullYear(),
+					disabilities: [],
+				})
+			).id;
+		});
+
+		it("should update the peddler", async () => {
+			const newAttrs = {
+				mainRegion: faker.location.city(),
+				lastName: faker.person.lastName(),
+				firstName: faker.person.firstName(),
+			};
+			const res = await service.updateById(id, newAttrs);
+			expect(res).toMatchObject({ id, ...newAttrs });
+		});
+	});
+
+	describe("deleteById", async () => {
+		let id: string;
+
+		beforeEach(async () => {
+			id = (
+				await service.create({
+					mainRegion: faker.location.city(),
+					lastName: faker.person.lastName(),
+					firstName: faker.person.firstName(),
+					// @ts-ignore
+					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
+					// @ts-ignore
+					sex: ["M", "F"][Math.floor(Math.random() * 2)],
+					birthYear: faker.date.past().getFullYear(),
+					disabilities: [],
+				})
+			).id;
+		});
+
+		it("should delete the peddler", async () => {
+			await service.deleteById(id);
+			expect(service.getById(id)).rejects.toThrow(AppError);
+		});
+
+		it("should throw an error if the peddler does not exist", async () => {
+			expect(service.deleteById("invalidId")).rejects.toThrow(AppError);
+		});
+	});
+});
