@@ -12,5 +12,3 @@
 1. `cd apps/backend && bun run prisma:generate` to generate a prisma client.
 2. `bun run dev`
 
-## Known Issues
-'Failed to find server action' workaround: https://github.com/vercel/next.js/discussions/58431#issuecomment-2339327871

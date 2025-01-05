@@ -1,2 +1,2 @@
-export { getUser } from "./getUser";
-export { signOut } from "./signOut";
+export * from "./getUser";
+export * from "./signOut";
