@@ -5,7 +5,7 @@ import { RoleController } from "./role.controller";
 import { DbClientModule } from "@db/client";
 
 @Module({
-  imports: [DbClientModule],
+	imports: [DbClientModule],
 	providers: [RoleService, PolicyService],
 	controllers: [RoleController],
 })

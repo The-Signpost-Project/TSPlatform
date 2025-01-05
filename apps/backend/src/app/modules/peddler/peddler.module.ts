@@ -6,7 +6,7 @@ import { PeddlerController } from "./peddler.controller";
 import { RegionService } from "./region.service";
 
 @Module({
-  imports: [DbClientModule],
+	imports: [DbClientModule],
 	providers: [PeddlerService, DisabilityService, RegionService],
 	controllers: [PeddlerController],
 })

@@ -34,7 +34,10 @@ export class PolicyService extends CrudService<StrictPolicy> {
 			const policies = await this.prisma.policy.findMany({
 				include: { conditions: true },
 			});
-			return policies as StrictPolicy[];
+			return policies.map((p) => ({
+				...p,
+				conditions: p.conditions.map((c) => ({ ...c, value: JSON.parse(c.value) })),
+			})) as StrictPolicy[];
 		} catch (error) {
 			handleDatabaseError(error);
 		}
@@ -49,7 +52,10 @@ export class PolicyService extends CrudService<StrictPolicy> {
 			if (!policy) {
 				throw new AppError(AppErrorTypes.NotFound);
 			}
-			return policy as StrictPolicy;
+			return {
+				...policy,
+				conditions: policy.conditions.map((c) => ({ ...c, value: JSON.parse(c.value) })),
+			} as StrictPolicy;
 		} catch (error) {
 			handleDatabaseError(error);
 		}
