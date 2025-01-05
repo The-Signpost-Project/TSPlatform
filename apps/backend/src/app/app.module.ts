@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
-import { AuthModule, OpenAuthModule, UserModule, EmailModule, PeddlerModule } from "./modules";
+import { AuthModule, OpenAuthModule, UserModule, EmailModule, PeddlerModule, RoleModule } from "./modules";
 import { RateLimitGuard } from "@guards";
 import { ConfigModule } from "@nestjs/config";
 import { z } from "zod";
@@ -46,6 +46,7 @@ const envSchema = z.object({
 		UserModule,
 		EmailModule,
 		PeddlerModule,
+    RoleModule,
 		ConfigModule.forRoot({
 			envFilePath: [envFilePath, ".env.local"],
 			isGlobal: true,

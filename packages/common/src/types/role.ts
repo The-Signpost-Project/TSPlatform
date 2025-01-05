@@ -37,6 +37,12 @@ export interface StrictPolicy {
 	conditions: StrictCondition[]; // if empty, then allow all
 }
 
+export interface StrictRole {
+	id: string;
+	name: string;
+	policies: StrictPolicy[];
+}
+
 export type CreatePolicyInput = Prettify<
 	Omit<StrictPolicy, "id" | "conditions"> & {
 		conditions: Omit<StrictCondition, "id" | "policyId">[];
@@ -45,14 +51,9 @@ export type CreatePolicyInput = Prettify<
 
 export type UpdatePolicyInput = Prettify<Partial<CreatePolicyInput>>;
 
-export interface StrictRole {
-	id: string;
-	name: string;
-	policies: StrictPolicy[];
-}
 
 export type CreateRoleInput = Prettify<
-	Omit<StrictRole, "id" | "policies"> & { policies: StrictPolicy[] }
+	Omit<StrictRole, "id" | "policies"> & { policies: {id: string}[] }
 >;
 
 export type UpdateRoleInput = Prettify<Partial<CreateRoleInput>>;

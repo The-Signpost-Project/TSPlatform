@@ -12,25 +12,25 @@ import {
 	GetPeddlerInputSchema,
 	UpdateDisabilityInputSchema,
 	UpdatePeddlerInputSchema,
-  CreateRegionInputSchema,
-  UpdateRegionInputSchema,
-  GetRegionInputSchema
+	CreateRegionInputSchema,
+	UpdateRegionInputSchema,
+	GetRegionInputSchema,
 } from "@shared/common/schemas";
 import type {
 	CreateDisabilityInput,
 	CreatePeddlerInput,
 	UpdateDisabilityInput,
 	UpdatePeddlerInput,
-  CreateRegionInput,
-  UpdateRegionInput
+	CreateRegionInput,
+	UpdateRegionInput,
 } from "@shared/common/types";
 
-@Controller("user")
+@Controller("peddler")
 export class PeddlerController {
 	constructor(
 		private readonly peddlerService: PeddlerService,
 		private readonly disabilityService: DisabilityService,
-    private readonly regionService: RegionService,
+		private readonly regionService: RegionService,
 	) {}
 
 	@Post()
@@ -95,35 +95,31 @@ export class PeddlerController {
 		return await this.disabilityService.deleteById(id);
 	}
 
-  @Get("region/all")
-  async getAllRegions() {
-    return await this.regionService.getAll();
-  }
+	@Get("region/all")
+	async getAllRegions() {
+		return await this.regionService.getAll();
+	}
 
-  @Get("region/:id")
-  async getRegionById(@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string) {
-    return await this.regionService.getById(id);
-  }
+	@Get("region/:id")
+	async getRegionById(@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string) {
+		return await this.regionService.getById(id);
+	}
 
-  @Post("region")
-  async createRegion(
-    @Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput,
-  ) {
-    return await this.regionService.create(data);
-  }
+	@Post("region")
+	async createRegion(@Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput) {
+		return await this.regionService.create(data);
+	}
 
-  @Patch("region/:id")
-  async updateRegionById(
-    @Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
-    @Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
-  ) {
-    return await this.regionService.updateById(id, data);
-  }
+	@Patch("region/:id")
+	async updateRegionById(
+		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+		@Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
+	) {
+		return await this.regionService.updateById(id, data);
+	}
 
-  @Delete("region/:id")
-  async deleteRegionById(
-    @Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
-  ) {
-    return await this.regionService.deleteById(id);
-  }
+	@Delete("region/:id")
+	async deleteRegionById(@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string) {
+		return await this.regionService.deleteById(id);
+	}
 }
