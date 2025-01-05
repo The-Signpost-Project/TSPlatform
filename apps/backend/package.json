@@ -12,7 +12,8 @@
 		"lint": "bunx biome lint --write ./src",
 		"prisma:generate": "dotenv -e .env.development -- prisma generate --schema src/db/schema.prisma",
 		"prisma:migrate": "dotenv -e .env.development -- prisma migrate dev --schema src/db/schema.prisma",
-		"prisma:format": "prisma format --schema src/db/schema.prisma"
+		"prisma:format": "prisma format --schema src/db/schema.prisma",
+    "turso:migrate": "f() { turso db shell tsproject < src/db/migrations/${1}/migration.sql; }; f"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^9.3.0",
