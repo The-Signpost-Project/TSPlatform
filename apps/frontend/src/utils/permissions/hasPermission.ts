@@ -1,5 +1,5 @@
 import { OPERATOR } from "./constants";
-import type { StrictPolicy } from "@shared/common/types";
+import type { Resource, StrictPolicy } from "@shared/common/types";
 
 function evaluateCondition(
 	// biome-ignore lint/suspicious/noExplicitAny: any is required here
@@ -42,29 +42,57 @@ function evaluateCondition(
 			if (typeof fieldValue !== "string") {
 				throw new Error("Field value must be a string for 'starts_with' operator");
 			}
-			return (fieldValue as string).startsWith(value as string);
+			return fieldValue.startsWith(value as string);
 		case OPERATOR.ENDS_WITH:
 			if (typeof fieldValue !== "string") {
 				throw new Error("Field value must be a string for 'ends_with' operator");
 			}
-			return (fieldValue as string).endsWith(value as string);
+			return fieldValue.endsWith(value as string);
 		default:
 			throw new Error(`Unsupported operator: ${operator}`);
 	}
 }
 
+function checkAction(policy: StrictPolicy, action: StrictPolicy["action"]): boolean {
+  // if the policy action is readWrite, then allow all actions
+  if (policy.action === "readWrite") {
+    return true;
+  }
+  // else check if the policy (read) matches the action (read/readwrite)
+  return policy.action === action;
+}
+
 // biome-ignore lint/suspicious/noExplicitAny: any is required here
-export function hasPermission(resourceObj: Record<string, any>, policy: StrictPolicy): boolean {
+export function hasPermission(
+	policy: StrictPolicy,
+	resource: Resource,
+	action: StrictPolicy["action"],
+	resourceObj?: Record<string, any>,
+): boolean {
+
+
+	// if no conditions are specified, then allow all given resource and action match
 	if (policy.conditions.length === 0) {
-		return true;
+		return policy.resource === resource && checkAction(policy, action);
+	}
+	// if conditions are specified, then check if all conditions are met
+
+	// if resource object is not provided, there is no way to evaluate the conditions so deny
+	if (!resourceObj) {
+		return false;
 	}
 
-	return policy.conditions.every((condition) => {
-		try {
-			return evaluateCondition(resourceObj, condition.field, condition.operator, condition.value);
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
-	});
+	// check if the resource and action match and all conditions are met
+	return (
+		policy.resource === resource &&
+		checkAction(policy, action) &&
+		policy.conditions.every((condition) => {
+			try {
+				return evaluateCondition(resourceObj, condition.field, condition.operator, condition.value);
+			} catch (error) {
+				console.error(error);
+				return false;
+			}
+		})
+	);
 }

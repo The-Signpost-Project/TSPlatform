@@ -21,11 +21,12 @@ export const RESOURCES = {
 	POLICY: "policy",
 	CASE: "case",
 	PEDDLER_MERGE_REQUEST: "peddlerMergeRequest",
+	ALL_USERS: "allUsers",
 	REGION: "region",
 	TEAM: "team",
 } as const satisfies Record<string, Resource>;
 
 export const ACTION = {
 	READ: "read",
-	WRITE: "write",
+	READ_WRITE: "readWrite",
 } as const satisfies Record<string, StrictPolicy["action"]>;

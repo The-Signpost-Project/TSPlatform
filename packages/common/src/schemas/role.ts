@@ -9,35 +9,40 @@ import type {
 	StrictRole,
 } from "@shared/common/types";
 
+const resourceSchema = z.enum([
+  "peddler",
+  "disability",
+  "role",
+  "policy",
+  "case",
+  "peddlerMergeRequest",
+  "region",
+  "team",
+  "allUsers",
+]);
+
+const operatorSchema = z.enum([
+  "eq",
+  "ne",
+  "lt",
+  "lte",
+  "gt",
+  "gte",
+  "in",
+  "nin",
+  "contains",
+  "startsWith",
+  "endsWith",
+]);
+
 export const CreatePolicyInputSchema = z.object({
 	name: z.string(),
-	action: z.enum(["read", "write"]),
-	resource: z.enum([
-		"peddler",
-		"disability",
-		"role",
-		"policy",
-		"case",
-		"peddlerMergeRequest",
-		"region",
-		"team",
-	]),
+	action: z.enum(["read", "readWrite"]),
+	resource: resourceSchema,
 	conditions: z.array(
 		z.object({
 			field: z.string(),
-			operator: z.enum([
-				"eq",
-				"ne",
-				"lt",
-				"lte",
-				"gt",
-				"gte",
-				"in",
-				"nin",
-				"contains",
-				"startsWith",
-				"endsWith",
-			]),
+			operator: operatorSchema,
 			value: z.union([
 				z.string(),
 				z.number(),
@@ -68,19 +73,7 @@ export const GetRoleInputSchema = z.string();
 export const StrictConditionSchema = z.object({
 	id: z.string(),
 	field: z.string(),
-	operator: z.enum([
-		"eq",
-		"ne",
-		"lt",
-		"lte",
-		"gt",
-		"gte",
-		"in",
-		"nin",
-		"contains",
-		"startsWith",
-		"endsWith",
-	]),
+	operator: operatorSchema,
 	value: z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.array(z.number())]),
 	policyId: z.string(),
 }) satisfies z.ZodType<StrictCondition>;
@@ -88,17 +81,8 @@ export const StrictConditionSchema = z.object({
 export const StrictPolicySchema = z.object({
 	id: z.string(),
 	name: z.string(),
-	action: z.enum(["read", "write"]),
-	resource: z.enum([
-		"peddler",
-		"disability",
-		"role",
-		"policy",
-		"case",
-		"peddlerMergeRequest",
-		"region",
-		"team",
-	]),
+	action: z.enum(["read", "readWrite"]),
+	resource: resourceSchema,
 	conditions: z.array(StrictConditionSchema),
 }) satisfies z.ZodType<StrictPolicy>;
 

@@ -26,12 +26,13 @@ export type Resource =
 	| "case"
 	| "peddlerMergeRequest"
 	| "region"
-	| "team";
+	| "team"
+	| "allUsers";
 
 export interface StrictPolicy {
 	id: string;
 	name: string;
-	action: "read" | "write";
+	action: "read" | "readWrite";
 	resource: Resource;
 	conditions: StrictCondition[]; // if empty, then allow all
 }

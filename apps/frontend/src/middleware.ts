@@ -1,15 +1,36 @@
 import { getUser } from "@lib/actions";
 import { NextResponse, type NextRequest } from "next/server";
-
-const protectedRoutes = ["/settings"];
+import { protectedPages, hasPermission, RESOURCES, MUST_LOGIN } from "@utils";
+import { unauthorized } from "next/navigation";
 
 export async function middleware(request: NextRequest) {
-	if (!protectedRoutes.includes(request.nextUrl.pathname)) {
+	if (!Object.keys(protectedPages).includes(request.nextUrl.pathname)) {
 		return NextResponse.next();
 	}
 	const { data } = await getUser();
 
-	if (!data) {
-		return NextResponse.redirect(new URL("/auth/signin", request.url));
+	// if the page is protected and the user is not logged in, redirect to the login page
+	if (data === null) {
+		return NextResponse.redirect(new URL("/error/unauthorized", request.url));
+	}
+
+	const availablePolicies = data.roles.flatMap((role) => role.policies);
+	// read access is the minimum access level required to access a page
+	const requiredResource = protectedPages[request.nextUrl.pathname as keyof typeof protectedPages];
+
+	// if the required resource is MUST_LOGIN, then the user must be logged in, and no further checks are required
+	if (requiredResource === MUST_LOGIN) {
+		return NextResponse.next();
+	}
+
+	// check if the user has the required permission to access the page
+	const allowed = availablePolicies.some((policy) =>
+		hasPermission(policy, requiredResource, "read"),
+	);
+
+	if (allowed) {
+		return NextResponse.next();
+	} else {
+		return NextResponse.redirect(new URL("/error/forbidden", request.url));
 	}
 }
