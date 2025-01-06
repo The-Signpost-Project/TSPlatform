@@ -1,5 +1,6 @@
 import type { Prettify, ErrorResponse } from "@shared/common/types";
-import { type ZodType, z } from "zod";
+import { type ZodType, ZodError, z } from "zod";
+import { getSessionCookieHeader } from "./getSessionCookieHeader";
 
 export type QueryResult<T> = {
 	status: number;
@@ -43,17 +44,20 @@ export async function query<T = void>({
 		? process.env.NEXT_PUBLIC_API_URL_SERVER
 		: process.env.NEXT_PUBLIC_API_URL_CLIENT;
 	const url = path.startsWith("/") ? baseURL + path : path;
+	const sessionCookieHeader = await getSessionCookieHeader();
 
 	return fetch(url, {
 		...init,
 		credentials: "include",
 		headers: {
 			"content-type": "application/json",
+			...sessionCookieHeader,
 			...init?.headers,
 		},
 	}).then(async (res) => {
+		let body: unknown;
 		try {
-			const body: unknown = await res.json();
+			body = await res.json();
 			const schema = getBaseValidator(validator);
 
 			const parsed = schema.parse(body);
@@ -67,6 +71,9 @@ export async function query<T = void>({
 			};
 		} catch (error) {
 			console.warn("Failed fetch call:", error);
+			if (typeof error === "object" && error instanceof ZodError) {
+				console.warn("Validation error. Received: ", body);
+			}
 			return {
 				status: res.status,
 				data: null,

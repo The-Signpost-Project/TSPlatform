@@ -1,5 +1,5 @@
 import { OPERATOR } from "./constants";
-import type { Resource, StrictPolicy } from "@shared/common/types";
+import type { Action, Resource, StrictPolicy } from "@shared/common/types";
 
 function evaluateCondition(
 	// biome-ignore lint/suspicious/noExplicitAny: any is required here
@@ -65,7 +65,7 @@ function checkAction(policy: StrictPolicy, action: StrictPolicy["action"]): bool
 export function hasPermission(
 	policy: StrictPolicy,
 	resource: Resource,
-	action: StrictPolicy["action"],
+	action: Action,
 	// biome-ignore lint/suspicious/noExplicitAny: any is required here
 	resourceObj?: Record<string, any>,
 ): boolean {

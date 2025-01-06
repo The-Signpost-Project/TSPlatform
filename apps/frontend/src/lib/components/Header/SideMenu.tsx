@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback, useContext, type ReactNode } from "react";
 import { AuthContext, ClientContext } from "@lib/providers";
 import { Image } from "@lib/components";
 import { toast } from "react-hot-toast";
@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 import { SideMenuButton } from "./SideMenuButton";
 import { useRouter } from "next/navigation";
 import type { SideMenuProps } from "./types";
+import { hasPermission } from "@shared/common/abac";
+import type { Action, Resource, StrictRole } from "@shared/common/types";
 
 export function SideMenu({ navLinks }: SideMenuProps) {
 	const { user, loading, signOut } = useContext(AuthContext);
@@ -16,6 +18,15 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 	const [open, setOpen] = useState(false);
 
 	const router = useRouter();
+
+	const checkUserPermissions = useCallback(
+		(roles: StrictRole[], resource: Resource, action: Action) => {
+			return roles
+				.flatMap((role) => role.policies)
+				.some((policy) => hasPermission(policy, resource, action));
+		},
+		[],
+	);
 
 	const signOutResponse = useCallback(() => {
 		signOut().then((status) => {
@@ -80,6 +91,23 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 		);
 	}, [user, loading, signOutResponse, router]);
 
+	const renderRestrictedButtons = useCallback(() => {
+		if (loading || !user) return null;
+		const { roles } = user;
+		const result: ReactNode[] = [];
+		if (checkUserPermissions(roles, "allUsers", "read")) {
+			result.push(
+				<SideMenuButton
+					key="allUsers"
+					icon="/common/user.svg"
+					text="Admin Dashboard"
+					onClick={() => router.push("/admin")}
+				/>,
+			);
+		}
+		return result;
+	}, [user, loading, checkUserPermissions, router]);
+
 	return (
 		<Popover
 			isOpen={open}
@@ -98,6 +126,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 					{renderNavButtons()}
 
 					{renderAuthButtons()}
+					{renderRestrictedButtons()}
 				</motion.div>
 			}
 		>

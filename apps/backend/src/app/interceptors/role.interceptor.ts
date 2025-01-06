@@ -63,14 +63,14 @@ export class RoleInterceptor implements NestInterceptor {
 		const tokenId = request.cookies[sessionCookieName] as string | undefined;
 
 		if (!tokenId) {
-			request.user = null;
+			request.roles = [];
 			return next.handle();
 		}
 
 		const { user } = await this.luciaService.validateSessionToken(tokenId);
 
 		if (!user) {
-			request.user = null;
+			request.roles = [];
 			return next.handle();
 		}
 

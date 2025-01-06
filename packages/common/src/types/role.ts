@@ -29,10 +29,12 @@ export type Resource =
 	| "team"
 	| "allUsers";
 
+export type Action = "read" | "readWrite";
+
 export interface StrictPolicy {
 	id: string;
 	name: string;
-	action: "read" | "readWrite";
+	action: Action;
 	resource: Resource;
 	conditions: StrictCondition[]; // if empty, then allow all
 }
