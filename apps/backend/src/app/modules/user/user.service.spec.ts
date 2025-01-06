@@ -72,6 +72,9 @@ describe("UserService", () => {
 			prisma.user.update = mock(() => ({}));
 			// @ts-expect-error
 			service.cleanUserData = mock(() => ({}));
+			// @ts-expect-error
+			service.getById = mock(() => []);
+
 			const user = await service.updateById(faker.string.uuid(), {});
 			expect(user).toBeDefined();
 		});

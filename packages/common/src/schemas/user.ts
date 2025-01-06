@@ -4,6 +4,7 @@ import type {
 	SafeUser,
 	DeleteUserInput,
 } from "@shared/common/types";
+import { StrictRoleSchema } from "./role";
 import { z } from "zod";
 
 export const GetUserInputSchema = z.string() satisfies z.ZodType<GetUserInput>;
@@ -15,6 +16,7 @@ export const UpdateUserInputSchema = z.object({
 	theme: z.string().optional(),
 	reducedMotion: z.boolean().optional(),
 	timezone: z.string().optional(),
+  roles: z.array(z.object({ roleId: z.string() })).optional(),
 }) satisfies z.ZodType<UpdateUserInput>;
 
 export const DeleteUserInputSchema = z.object({
@@ -30,4 +32,5 @@ export const SafeUserSchema = z.object({
 	hasPassword: z.boolean(),
 	allowEmailNotifications: z.boolean(),
 	createdAt: z.coerce.date(),
+	roles: z.array(StrictRoleSchema),
 }) satisfies z.ZodType<SafeUser>;
