@@ -16,5 +16,6 @@ export interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
 		| "7xl"
 		| "8xl"
 		| "9xl";
+	description?: boolean;
 	className?: string;
 }

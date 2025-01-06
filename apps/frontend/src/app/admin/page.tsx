@@ -27,7 +27,7 @@ export default async function AdminPage() {
 		<section className="p-4 flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
 				<Title order={2}>Admin Dashboard</Title>
-				<Text className="text-gray-600 dark:text-gray-400">Manage users and roles here.</Text>
+				<Text description>Manage users and roles here.</Text>
 			</div>
 
 			<div className="overflow-x-auto">
