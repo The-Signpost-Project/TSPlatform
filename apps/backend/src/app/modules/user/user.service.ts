@@ -171,4 +171,21 @@ export class UserService extends CrudService<SafeUser> {
 			handleDatabaseError(error);
 		}
 	}
+
+	async getAll(): Promise<SafeUser[]> {
+		const rawUsers = await this.prisma.user.findMany({
+			select: this.rawUserFindFields,
+		});
+
+		return Promise.all(
+			rawUsers.map(async (rawUser) => {
+				const roles = await this.getUserRoles(rawUser.id);
+
+				return {
+					...this.cleanUserData(rawUser),
+					roles,
+				};
+			}),
+		);
+	}
 }

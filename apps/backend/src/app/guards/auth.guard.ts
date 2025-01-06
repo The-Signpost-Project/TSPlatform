@@ -3,18 +3,22 @@ import { Request } from "express";
 import { LuciaService } from "@db/client";
 import { sessionCookieName } from "@shared/common/constants";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
+import { type RequestSource, CheckRequestGuard } from "@base";
 
-type RequestSource = "params" | "query" | "body" | "headers";
-
+/**
+ * This function creates a guard that checks if the user is authenticated and has the correct permissions.
+ */
 export const AuthGuard = (source: RequestSource, key: string) => {
 	@Injectable()
-	class AuthGuardMixin implements CanActivate {
-		constructor(private readonly luciaService: LuciaService) {}
+	class AuthGuardMixin extends CheckRequestGuard implements CanActivate {
+		constructor(private readonly luciaService: LuciaService) {
+			super();
+		}
 
 		async canActivate(context: ExecutionContext): Promise<true> {
 			const request = context.switchToHttp().getRequest<Request>();
 			const tokenId = request.cookies[sessionCookieName] as string | undefined;
-			const userId = this.getUserIdFromRequest(request, source, key);
+			const userId = this.getValueFromRequest(request, source, key);
 
 			if (!tokenId) {
 				throw new AppError(AppErrorTypes.Unauthorized);
@@ -31,31 +35,6 @@ export const AuthGuard = (source: RequestSource, key: string) => {
 			}
 
 			return true;
-		}
-
-		private getUserIdFromRequest(
-			request: Request,
-			source: RequestSource,
-			key: string,
-		): string | null {
-			switch (source) {
-				case "params":
-					return request.params[key];
-				case "query":
-					if (typeof request.query[key] === "string") {
-						return request.query[key];
-					}
-					return null;
-				case "body":
-					return request.body[key];
-				case "headers":
-					if (typeof request.headers[key] === "string") {
-						return request.headers[key];
-					}
-					return null;
-				default:
-					return null;
-			}
 		}
 	}
 	return mixin(AuthGuardMixin);

@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Query, Req } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Query,
+	Req,
+	UseInterceptors,
+} from "@nestjs/common";
 import type { Request } from "express";
 import { sessionCookieName } from "@shared/common/constants";
 import { UseGuards } from "@nestjs/common";
@@ -7,6 +17,9 @@ import { UserService } from "./user.service";
 import { ValidationPipe } from "@pipes";
 import { GetUserInputSchema, UpdateUserInputSchema } from "@shared/common/schemas";
 import type { UpdateUserInput } from "@shared/common/types";
+import { RoleInterceptor, Roles } from "@interceptors";
+import type { StrictRole } from "@shared/common/types";
+import { AppError, AppErrorTypes } from "@/utils/appErrors";
 
 @Controller("user")
 export class UserController {
@@ -36,5 +49,21 @@ export class UserController {
 	@UseGuards(AuthGuard("params", "id"))
 	async deleteById(@Param("id", new ValidationPipe(GetUserInputSchema)) id: string) {
 		return await this.userService.deleteById(id);
+	}
+
+	@Get("all")
+	@UseInterceptors(RoleInterceptor)
+	async getAll(@Roles() roles: StrictRole[]) {
+		// at the moment, only allow unconditional access if the role has a policy that allows all users and has no conditions
+		if (
+			roles.some((role) =>
+				role.policies.some(
+					(policy) => policy.resource === "allUsers" && policy.conditions.length === 0,
+				),
+			)
+		) {
+			return await this.userService.getAll();
+		}
+		throw new AppError(AppErrorTypes.InvalidCredentials);
 	}
 }

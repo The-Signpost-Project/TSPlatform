@@ -1,6 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
-import { UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@guards";
 import { PeddlerService } from "./peddler.service";
 import { DisabilityService } from "./disability.service";
 import { RegionService } from "./region.service";
@@ -39,7 +37,6 @@ export class PeddlerController {
 	}
 
 	@Patch(":id")
-	@UseGuards(AuthGuard("params", "id"))
 	async updateById(
 		@Param("id", new ValidationPipe(GetPeddlerInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePeddlerInputSchema)) data: UpdatePeddlerInput,
@@ -48,7 +45,6 @@ export class PeddlerController {
 	}
 
 	@Delete(":id")
-	@UseGuards(AuthGuard("params", "id"))
 	async deleteById(@Param("id", new ValidationPipe(GetPeddlerInputSchema)) id: string) {
 		return await this.peddlerService.deleteById(id);
 	}

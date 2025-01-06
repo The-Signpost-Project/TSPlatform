@@ -1,6 +1,6 @@
 import { getUser } from "@lib/actions";
 import { NextResponse, type NextRequest } from "next/server";
-import { protectedPages, hasPermission, MUST_LOGIN } from "@utils";
+import { protectedPages, hasPermission, MUST_LOGIN } from "@shared/common/abac";
 
 export async function middleware(request: NextRequest) {
 	if (!Object.keys(protectedPages).includes(request.nextUrl.pathname)) {

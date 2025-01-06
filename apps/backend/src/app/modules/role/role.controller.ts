@@ -1,6 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
-import { UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@guards";
 import { RoleService } from "./role.service";
 import { PolicyService } from "./policy.service";
 import { ValidationPipe } from "@pipes";
@@ -32,7 +30,6 @@ export class RoleController {
 	}
 
 	@Patch(":id")
-	@UseGuards(AuthGuard("params", "id"))
 	async updateById(
 		@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRoleInputSchema)) data: UpdateRoleInput,
@@ -41,7 +38,6 @@ export class RoleController {
 	}
 
 	@Delete(":id")
-	@UseGuards(AuthGuard("params", "id"))
 	async deleteById(@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string) {
 		return await this.roleService.deleteById(id);
 	}
