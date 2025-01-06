@@ -25,7 +25,6 @@ export type Resource =
 	| "policy"
 	| "case"
 	| "peddlerMergeRequest"
-	| "user"
 	| "region"
 	| "team";
 
@@ -51,9 +50,8 @@ export type CreatePolicyInput = Prettify<
 
 export type UpdatePolicyInput = Prettify<Partial<CreatePolicyInput>>;
 
-
 export type CreateRoleInput = Prettify<
-	Omit<StrictRole, "id" | "policies"> & { policies: {id: string}[] }
+	Omit<StrictRole, "id" | "policies"> & { policies: { id: string }[] }
 >;
 
 export type UpdateRoleInput = Prettify<Partial<CreateRoleInput>>;

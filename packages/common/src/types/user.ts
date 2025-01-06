@@ -1,5 +1,6 @@
 import type { Prettify } from "./utils";
 import type { OAuthProvider } from "./auth";
+import type { StrictRole } from "./role";
 
 export type SafeUser = {
 	id: string;
@@ -12,10 +13,21 @@ export type SafeUser = {
 
 	// User preferences
 	allowEmailNotifications: boolean;
+
+	// Roles
+	roles: StrictRole[];
 };
 
 export type GetUserInput = string;
-export type UpdateUserInput = Prettify<Partial<Omit<SafeUser, "id">>>;
+export type UpdateUserInput = Prettify<
+	Partial<
+		Omit<SafeUser, "id" | "createdAt" | "oAuthProviders" | "hasPassword" | "roles"> & {
+			roles: {
+				roleId: string;
+			}[];
+		}
+	>
+>;
 export type DeleteUserInput = {
 	username: string;
 };
