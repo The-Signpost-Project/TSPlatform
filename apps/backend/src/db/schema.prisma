@@ -49,7 +49,7 @@ model OAuthAccount {
 }
 
 model PasswordResetToken {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid(7))
   userId    String   @unique
   token     String   @unique
   expiresAt DateTime
@@ -57,7 +57,7 @@ model PasswordResetToken {
 }
 
 model VerificationToken {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid(7))
   userId    String   @unique
   token     String   @unique
   expiresAt DateTime
@@ -65,14 +65,14 @@ model VerificationToken {
 }
 
 model Team {
-  id   String @id @default(uuid())
+  id   String @id @default(uuid(7))
   name String @unique
 
   members UserTeam[]
 }
 
 model UserTeam {
-  id     String @id @default(uuid())
+  id     String @id @default(uuid(7))
   user   User   @relation(fields: [userId], references: [id])
   team   Team   @relation(fields: [teamId], references: [id])
   userId String
@@ -80,7 +80,7 @@ model UserTeam {
 }
 
 model Policy {
-  id         String       @id @default(uuid())
+  id         String       @id @default(uuid(7))
   name       String       @unique
   action     String
   resource   String
@@ -89,7 +89,7 @@ model Policy {
 }
 
 model PolicyRole {
-  id       String @id @default(uuid())
+  id       String @id @default(uuid(7))
   policy   Policy @relation(fields: [policyId], references: [id])
   role     Role   @relation(fields: [roleId], references: [id])
   policyId String
@@ -97,7 +97,7 @@ model PolicyRole {
 }
 
 model Condition {
-  id       String @id @default(uuid())
+  id       String @id @default(uuid(7))
   field    String
   operator String
   value    String
@@ -106,14 +106,14 @@ model Condition {
 }
 
 model Role {
-  id       String       @id @default(uuid())
+  id       String       @id @default(uuid(7))
   name     String       @unique
   policies PolicyRole[]
   users    UserRole[]
 }
 
 model UserRole {
-  id     String @id @default(uuid())
+  id     String @id @default(uuid(7))
   user   User   @relation(fields: [userId], references: [id])
   role   Role   @relation(fields: [roleId], references: [id])
   userId String
@@ -121,7 +121,7 @@ model UserRole {
 }
 
 model Peddler {
-  id           String  @id @default(uuid())
+  id           String  @id @default(uuid(7))
   codename     String
   mainRegionId String
   firstName    String?
@@ -140,7 +140,7 @@ model Peddler {
 }
 
 model PeddlerDisability {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid(7))
   peddler      Peddler    @relation(fields: [peddlerId], references: [id])
   disability   Disability @relation(fields: [disabilityId], references: [id])
   peddlerId    String
@@ -148,21 +148,21 @@ model PeddlerDisability {
 }
 
 model Disability {
-  id   String @id @default(uuid())
+  id   String @id @default(uuid(7))
   name String @unique
 
   peddlers PeddlerDisability[]
 }
 
 model Region {
-  id       String    @id @default(uuid())
+  id       String    @id @default(uuid(7))
   name     String    @unique
   peddlers Peddler[]
   cases    Case[]
 }
 
 model Case {
-  id               String   @id @default(uuid())
+  id               String   @id @default(uuid(7))
   peddler          Peddler  @relation(fields: [peddlerId], references: [id])
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -181,7 +181,7 @@ model Case {
 }
 
 model PeddlerMergeRequest {
-  id            String  @id @default(uuid())
+  id            String  @id @default(uuid(7))
   peddlerNew    Peddler @relation(name: "peddlerNew", fields: [peddlerNewId], references: [id])
   peddlerNewId  String
   peddlerOld    Peddler @relation(name: "peddlerOld", fields: [peddlerOldId], references: [id])

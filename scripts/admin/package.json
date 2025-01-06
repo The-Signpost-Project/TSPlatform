@@ -1,0 +1,14 @@
+{
+	"name": "@scripts/admin",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"scripts": {
+		"format": "bunx biome format --write .",
+		"lint": "bunx biome lint --write ./src",
+		"admin:generate": "bun run ./src/defaultAdmin.ts"
+	},
+	"dependencies": {
+		"find-up": "^7.0.0"
+	}
+}
