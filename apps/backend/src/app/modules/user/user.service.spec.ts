@@ -85,6 +85,28 @@ describe("UserService", () => {
 			});
 			await expect(service.updateById(faker.string.uuid(), {})).rejects.toThrowError(AppError);
 		});
+
+		it("should update the user roles if they are provided", async () => {
+			const role = await prisma.role.create({ data: { name: faker.lorem.word() } });
+
+			// @ts-expect-error
+			prisma.user.update = mock(() => ({}));
+			// @ts-expect-error
+			prisma.userRole.createMany = mock(() => {});
+			// @ts-expect-error
+			prisma.user.findUnique = mock(() => ({ id: faker.string.uuid() }));
+			// @ts-expect-error
+			service.cleanUserData = mock(() => {});
+
+			// @ts-ignore
+			prisma.userRole.deleteMany = mock(() => {});
+			// @ts-ignore
+			prisma.userRole.createMany = mock(() => {});
+
+			await service.updateById(faker.string.uuid(), { roles: [{ roleId: role.id }] });
+			expect(prisma.userRole.deleteMany).toHaveBeenCalled();
+			expect(prisma.userRole.createMany).toHaveBeenCalled();
+		});
 	});
 
 	describe("deleteById", () => {

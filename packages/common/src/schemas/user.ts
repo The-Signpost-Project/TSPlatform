@@ -16,7 +16,7 @@ export const UpdateUserInputSchema = z.object({
 	theme: z.string().optional(),
 	reducedMotion: z.boolean().optional(),
 	timezone: z.string().optional(),
-  roles: z.array(z.object({ roleId: z.string() })).optional(),
+	roles: z.array(z.object({ roleId: z.string() })).optional(),
 }) satisfies z.ZodType<UpdateUserInput>;
 
 export const DeleteUserInputSchema = z.object({
