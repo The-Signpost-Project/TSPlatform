@@ -1,7 +1,6 @@
 import { getUser } from "@lib/actions";
 import { NextResponse, type NextRequest } from "next/server";
-import { protectedPages, hasPermission, RESOURCES, MUST_LOGIN } from "@utils";
-import { unauthorized } from "next/navigation";
+import { protectedPages, hasPermission, MUST_LOGIN } from "@utils";
 
 export async function middleware(request: NextRequest) {
 	if (!Object.keys(protectedPages).includes(request.nextUrl.pathname)) {
@@ -11,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
 	// if the page is protected and the user is not logged in, redirect to the login page
 	if (data === null) {
-		return NextResponse.redirect(new URL("/error/unauthorized", request.url));
+		return NextResponse.redirect(new URL("/error/unauthorised", request.url));
 	}
 
 	const availablePolicies = data.roles.flatMap((role) => role.policies);
@@ -30,7 +29,6 @@ export async function middleware(request: NextRequest) {
 
 	if (allowed) {
 		return NextResponse.next();
-	} else {
-		return NextResponse.redirect(new URL("/error/forbidden", request.url));
 	}
+	return NextResponse.redirect(new URL("/error/forbidden", request.url));
 }

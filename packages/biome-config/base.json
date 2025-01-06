@@ -17,7 +17,7 @@
 				"noConsole": {
 					"level": "warn",
 					"options": {
-						"allow": ["assert", "error", "info", "warn"]
+						"allow": ["assert", "error", "info", "warn", "dir"]
 					}
 				}
 			},

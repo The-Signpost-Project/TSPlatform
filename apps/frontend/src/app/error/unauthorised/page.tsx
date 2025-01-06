@@ -1,5 +1,3 @@
-import { unauthorized } from "next/navigation";
-
-export default function ForbiddenPage() {
-	unauthorized();
+export default function UnauthorisedPage() {
+	return <div>unauthorised page</div>;
 }

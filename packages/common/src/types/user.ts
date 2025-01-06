@@ -18,6 +18,16 @@ export type SafeUser = {
 	roles: StrictRole[];
 };
 
+export type RawUser = {
+	id: string;
+	username: string;
+	email: string | null;
+	passwordHash: string | null;
+	createdAt: string;
+	verified: boolean;
+	allowEmailNotifications: boolean;
+};
+
 export type GetUserInput = string;
 export type UpdateUserInput = Prettify<
 	Partial<

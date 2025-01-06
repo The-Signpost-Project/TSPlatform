@@ -54,23 +54,21 @@ function evaluateCondition(
 }
 
 function checkAction(policy: StrictPolicy, action: StrictPolicy["action"]): boolean {
-  // if the policy action is readWrite, then allow all actions
-  if (policy.action === "readWrite") {
-    return true;
-  }
-  // else check if the policy (read) matches the action (read/readwrite)
-  return policy.action === action;
+	// if the policy action is readWrite, then allow all actions
+	if (policy.action === "readWrite") {
+		return true;
+	}
+	// else check if the policy (read) matches the action (read/readwrite)
+	return policy.action === action;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: any is required here
 export function hasPermission(
 	policy: StrictPolicy,
 	resource: Resource,
 	action: StrictPolicy["action"],
+	// biome-ignore lint/suspicious/noExplicitAny: any is required here
 	resourceObj?: Record<string, any>,
 ): boolean {
-
-
 	// if no conditions are specified, then allow all given resource and action match
 	if (policy.conditions.length === 0) {
 		return policy.resource === resource && checkAction(policy, action);

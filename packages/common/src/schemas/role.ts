@@ -10,29 +10,29 @@ import type {
 } from "@shared/common/types";
 
 const resourceSchema = z.enum([
-  "peddler",
-  "disability",
-  "role",
-  "policy",
-  "case",
-  "peddlerMergeRequest",
-  "region",
-  "team",
-  "allUsers",
+	"peddler",
+	"disability",
+	"role",
+	"policy",
+	"case",
+	"peddlerMergeRequest",
+	"region",
+	"team",
+	"allUsers",
 ]);
 
 const operatorSchema = z.enum([
-  "eq",
-  "ne",
-  "lt",
-  "lte",
-  "gt",
-  "gte",
-  "in",
-  "nin",
-  "contains",
-  "startsWith",
-  "endsWith",
+	"eq",
+	"ne",
+	"lt",
+	"lte",
+	"gt",
+	"gte",
+	"in",
+	"nin",
+	"contains",
+	"startsWith",
+	"endsWith",
 ]);
 
 export const CreatePolicyInputSchema = z.object({
