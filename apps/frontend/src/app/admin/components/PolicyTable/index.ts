@@ -1,1 +1,1 @@
-export * from './PolicyTable'
+export * from "./PolicyTable";

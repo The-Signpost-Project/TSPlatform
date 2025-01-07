@@ -41,6 +41,7 @@ export default async function PolicyPage() {
 					Manage policies that can be attached to roles. Use policies to define fine-grained
 					permissions to allow actions based on resource attributes.
 				</Text>
+				<Text description>Click on each row to expand and manage conditions for each policy.</Text>
 			</div>
 
 			<div className="overflow-x-auto">

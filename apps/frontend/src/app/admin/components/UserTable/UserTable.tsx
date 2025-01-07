@@ -1,7 +1,7 @@
 "use client";
 import { Table, Text, Pill } from "@lib/components";
 import type { UserTableProps } from "./types";
-import { BooleanText } from "./BooleanText";
+import { BooleanText } from "../BooleanText";
 
 // TODO: add role editing, delete user
 
