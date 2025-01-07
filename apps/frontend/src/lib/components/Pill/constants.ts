@@ -3,9 +3,9 @@ import type { PillColor } from "./types";
 export const twPillStyles: Record<PillColor, string> = {
 	info: `
   py-2 px-4 shadow-md no-underline rounded-full 
-  bg-blue-700 text-white font-medium text-xs 
-  border-blue btn-primary 
-  dark:bg-blue-500 
+  bg-orange-700 text-white font-medium text-xs 
+  border-orange btn-primary 
+  dark:bg-orange-500 
   `,
 	danger: `
   py-2 px-4 shadow-md no-underline rounded-full

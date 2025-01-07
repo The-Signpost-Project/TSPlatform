@@ -12,10 +12,7 @@ export default function ForgotPassword() {
 
 			<ForgotPasswordForm />
 			<Text>
-				Go back to:{" "}
-				<Link href="/auth/signup" className="text-blue-500">
-					Sign In
-				</Link>
+				Go back to: <Link href="/auth/signup">Sign In</Link>
 			</Text>
 		</>
 	);

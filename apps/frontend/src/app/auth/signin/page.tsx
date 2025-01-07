@@ -20,16 +20,10 @@ export default function SignIn() {
 			<SignInForm />
 			<div className="flex flex-col gap-2">
 				<Text>
-					Don't have an account?{" "}
-					<Link href="/auth/signup" className="text-blue-500">
-						Sign up
-					</Link>
+					Don't have an account? <Link href="/auth/signup">Sign up</Link>
 				</Text>
 				<Text>
-					Forgot your password?{" "}
-					<Link href="/auth/forgot-password" className="text-blue-500">
-						Reset it
-					</Link>
+					Forgot your password? <Link href="/auth/forgot-password">Reset it</Link>
 				</Text>
 			</div>
 		</>

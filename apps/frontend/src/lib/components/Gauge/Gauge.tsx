@@ -2,7 +2,7 @@ import type { GaugeProps } from "./types";
 import { twMerge } from "tailwind-merge";
 import { motion } from "framer-motion";
 
-const infoStyles = "text-blue-600 dark:text-blue-500";
+const infoStyles = "text-orange-600 dark:text-orange-500";
 const dangerStyles = "text-red-600 dark:text-red-500";
 const warningStyles = "text-yellow-600 dark:text-yellow-500";
 const successStyles = "text-green-600 dark:text-green-500";

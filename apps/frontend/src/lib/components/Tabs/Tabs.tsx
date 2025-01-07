@@ -11,7 +11,7 @@ import type { ComponentType } from "react";
 import { motion } from "framer-motion";
 
 const defaultTabStyles = "px-4 py-2 cursor-pointer dark:border-gray-600 dark:text-gray-300";
-const defaultActiveTabStyles = "h-1 bg-blue-500";
+const defaultActiveTabStyles = "h-1 bg-orange-500";
 const defaultTabListStyles = "flex border-b dark:border-gray-600";
 const defaultTabsStyles = "w-full";
 

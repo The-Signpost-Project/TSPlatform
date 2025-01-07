@@ -19,10 +19,7 @@ export default function SignIn() {
 			</div>
 			<SignUpForm />
 			<Text>
-				Already have an account?{" "}
-				<Link href="/auth/signin" className="text-blue-500">
-					Sign in
-				</Link>
+				Already have an account? <Link href="/auth/signin">Sign in</Link>
 			</Text>
 		</>
 	);

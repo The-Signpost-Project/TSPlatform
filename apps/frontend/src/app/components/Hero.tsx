@@ -8,7 +8,7 @@ export function Hero() {
 				<Logo className="relative w-64 h-64 sm:w-32 sm:h-32" />
 
 				<div className="flex flex-col gap-2">
-					<Title className="bg-gradient-to-r from-purple-500 to-blue-700 inline-block text-transparent bg-clip-text">
+					<Title className="bg-gradient-to-r from-orange-400 to-red-700 inline-block text-transparent bg-clip-text">
 						TSPlatform
 					</Title>
 					<Text>The Signpost Project's internal platform to handle peddlers and their data.</Text>
