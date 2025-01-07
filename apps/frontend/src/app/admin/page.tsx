@@ -3,6 +3,7 @@ import { z } from "zod";
 import { SafeUserSchema } from "@shared/common/schemas";
 import { UserTable } from "./components";
 import { Text, Title } from "@lib/components";
+import { getSessionCookieHeader } from "@utils";
 
 const SafeUserListSchema = z.array(SafeUserSchema);
 
@@ -11,14 +12,20 @@ export default async function AdminPage() {
 		path: "/user/all",
 		init: {
 			method: "GET",
+			headers: await getSessionCookieHeader(),
 		},
 		validator: SafeUserListSchema,
 	});
 	if (!data || error) {
 		return (
-			<div>
-				<Title>Admin Dashboard</Title>
-				<Text>Something went wrong. Users failed to load with error: {JSON.stringify(error)}</Text>
+			<div className="p-4 flex flex-col gap-1">
+				<Title order={2}>Admin Dashboard</Title>
+				<Text description>Manage users and roles here.</Text>
+				<div className="mt-4">
+					<Text description>
+						There was an error fetching the users. Error: {JSON.stringify(error)}
+					</Text>
+				</div>
 			</div>
 		);
 	}

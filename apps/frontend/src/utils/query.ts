@@ -1,6 +1,5 @@
 import type { Prettify, ErrorResponse } from "@shared/common/types";
 import { type ZodType, ZodError, z } from "zod";
-import { getSessionCookieHeader } from "./getSessionCookieHeader";
 
 export type QueryResult<T> = {
 	status: number;
@@ -44,43 +43,53 @@ export async function query<T = void>({
 		? process.env.NEXT_PUBLIC_API_URL_SERVER
 		: process.env.NEXT_PUBLIC_API_URL_CLIENT;
 	const url = path.startsWith("/") ? baseURL + path : path;
-	const sessionCookieHeader = await getSessionCookieHeader();
+	console.debug("isSSR", isSSR, url);
 
 	return fetch(url, {
 		...init,
 		credentials: "include",
 		headers: {
 			"content-type": "application/json",
-			...sessionCookieHeader,
 			...init?.headers,
 		},
-	}).then(async (res) => {
-		let body: unknown;
-		try {
-			body = await res.json();
-			const schema = getBaseValidator(validator);
+	})
+		.then(async (res) => {
+			let body: unknown;
+			try {
+				body = await res.json();
+				const schema = getBaseValidator(validator);
 
-			const parsed = schema.parse(body);
-			return {
-				status: res.status,
-				// biome-ignore lint/style/noNonNullAssertion: data is guaranteed to be valid if success is true
-				data: parsed.success ? parsed.data! : null,
-				error: parsed.success ? null : parsed.error,
-				headers: res.headers,
-				timeStamp: parsed.timestamp,
-			};
-		} catch (error) {
-			console.warn("Failed fetch call:", error);
-			if (typeof error === "object" && error instanceof ZodError) {
-				console.warn("Validation error. Received: ", body);
+				const parsed = schema.parse(body);
+				return {
+					status: res.status,
+					// biome-ignore lint/style/noNonNullAssertion: data is guaranteed to be valid if success is true
+					data: parsed.success ? parsed.data! : null,
+					error: parsed.success ? null : parsed.error,
+					headers: res.headers,
+					timeStamp: parsed.timestamp,
+				};
+			} catch (error) {
+				console.warn("Failed fetch call:", JSON.stringify(error));
+				if (typeof error === "object" && error instanceof ZodError) {
+					console.warn("Validation error. Received: ", body);
+				}
+				return {
+					status: res.status,
+					data: null,
+					error: { path: url, name: "Failed to parse response", cause: JSON.stringify(error) },
+					headers: res.headers,
+					timeStamp: new Date().toISOString(),
+				};
 			}
+		})
+		.catch((error) => {
+			console.warn("Failed fetch call:", JSON.stringify(error));
 			return {
-				status: res.status,
+				status: 500,
 				data: null,
-				error: { path: url, name: "Failed to parse response", cause: JSON.stringify(error) },
-				headers: res.headers,
+				error: { path: url, name: "Failed to fetch", cause: JSON.stringify(error) },
+				headers: new Headers(),
 				timeStamp: new Date().toISOString(),
 			};
-		}
-	});
+		});
 }

@@ -88,10 +88,14 @@ export class LuciaService {
 
 	setSessionCookie(res: Response, cookieName: string, token: TokenCookie): void {
 		res.cookie(cookieName, token.value, {
-			expires: token.expiresAt,
 			httpOnly: true,
 			secure: this.configService.get<string>("NODE_ENV") === "production",
-			sameSite: "lax",
+			sameSite: this.configService.get<string>("NODE_ENV") === "production" ? "none" : "lax",
+			expires: new Date(Date.now() + 1000 * 60 * 5),
+			domain:
+				this.configService.get<string>("NODE_ENV") === "production"
+					? (this.configService.get<string>("COOKIE_DOMAIN") as string)
+					: undefined,
 		});
 	}
 }

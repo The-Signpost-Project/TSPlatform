@@ -32,6 +32,8 @@ const envSchema = z.object({
 	FRONTEND_URL: z.string().url(),
 	BACKEND_INTERNAL_URL: z.string().url(),
 	BACKEND_PUBLIC_URL: z.string().url(),
+	COOKIE_DOMAIN: z.string().optional(),
+
 	DATABASE_URL: z.string(),
 	DATABASE_TOKEN: z.string().optional(),
 

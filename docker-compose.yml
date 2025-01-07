@@ -19,6 +19,22 @@ services:
     networks:
       - TSPlatform-network
 
+  nginx:
+    container_name: TSPlatform-nginx
+    build: 
+      context: ./external/nginx
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - TSPlatform-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 networks:
   TSPlatform-network:
     driver: bridge

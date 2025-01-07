@@ -14,6 +14,7 @@ export const onRequestError: Instrumentation.onRequestError = async (error, requ
 					request,
 					context,
 				});
+				console.error(error);
 			});
 	}
 };
