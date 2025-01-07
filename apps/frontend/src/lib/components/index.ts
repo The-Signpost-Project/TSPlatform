@@ -22,3 +22,4 @@ export * from "./Autocomplete";
 export * from "./ModalCloseButton";
 export * from "./Gauge";
 export * from "./Sidebar";
+export * from "./Accordion";

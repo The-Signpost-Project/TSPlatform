@@ -3,6 +3,7 @@ import type { ReactNode, HTMLAttributes } from "react";
 export interface TableCellProps extends HTMLAttributes<HTMLTableCellElement> {
 	children: ReactNode;
 	className?: string;
+	colSpan?: number;
 }
 
 export interface TableHeaderProps extends HTMLAttributes<HTMLTableCellElement> {

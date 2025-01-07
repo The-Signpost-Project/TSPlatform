@@ -3,6 +3,7 @@ import { z } from "zod";
 import { StrictPolicySchema } from "@shared/common/schemas";
 import { Text, Title } from "@lib/components";
 import { getSessionCookieHeader } from "@utils";
+import { PolicyTable } from "../components";
 
 const SafeUserListSchema = z.array(StrictPolicySchema);
 
@@ -42,7 +43,9 @@ export default async function PolicyPage() {
 				</Text>
 			</div>
 
-			<div className="overflow-x-auto">{JSON.stringify(data)}</div>
+			<div className="overflow-x-auto">
+				<PolicyTable policies={data} />
+			</div>
 		</section>
 	);
 }

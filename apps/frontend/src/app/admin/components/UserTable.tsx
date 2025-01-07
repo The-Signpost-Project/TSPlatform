@@ -1,6 +1,7 @@
 "use client";
 import { Table, Text, Pill } from "@lib/components";
 import type { UserTableProps } from "./types";
+import { BooleanText } from "./BooleanText";
 
 // TODO: add role editing, delete user
 
@@ -37,7 +38,7 @@ export function UserTable({ users }: UserTableProps) {
 							<Text>{new Date(user.createdAt).toLocaleString("en-br")}</Text>
 						</Table.TableCell>
 						<Table.TableCell>
-							<Text>{user.verified ? "Yes" : "No"}</Text>
+							<BooleanText value={user.verified} />
 						</Table.TableCell>
 					</Table.TableRow>
 				))}
