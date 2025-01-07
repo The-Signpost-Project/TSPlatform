@@ -91,7 +91,7 @@ export class LuciaService {
 			httpOnly: true,
 			secure: this.configService.get<string>("NODE_ENV") === "production",
 			sameSite: this.configService.get<string>("NODE_ENV") === "production" ? "none" : "lax",
-			expires: new Date(Date.now() + 1000 * 60 * 5),
+			expires: new Date(Date.now() + this.sessionDuration),
 			domain:
 				this.configService.get<string>("NODE_ENV") === "production"
 					? (this.configService.get<string>("COOKIE_DOMAIN") as string)

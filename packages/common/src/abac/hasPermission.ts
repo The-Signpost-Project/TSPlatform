@@ -10,6 +10,10 @@ function evaluateCondition(
 ): boolean {
 	const fieldValue = resourceObj[field];
 
+	if (fieldValue === undefined) {
+		return false;
+	}
+
 	switch (operator) {
 		case OPERATOR.EQ:
 			return fieldValue === value;

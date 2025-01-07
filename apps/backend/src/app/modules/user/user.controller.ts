@@ -64,6 +64,6 @@ export class UserController {
 		) {
 			return await this.userService.getAll();
 		}
-		throw new AppError(AppErrorTypes.InvalidCredentials);
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 }

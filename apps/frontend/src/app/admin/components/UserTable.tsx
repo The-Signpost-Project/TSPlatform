@@ -1,12 +1,12 @@
 "use client";
-import { Table, Text } from "@lib/components";
+import { Table, Text, Pill } from "@lib/components";
 import type { UserTableProps } from "./types";
 
 // TODO: add role editing, delete user
 
 export function UserTable({ users }: UserTableProps) {
 	return (
-		<Table.Table className="overflow-x-auto">
+		<Table.Table>
 			<Table.TableHead>
 				<Table.TableRow>
 					<Table.TableHeader>Name</Table.TableHeader>
@@ -27,11 +27,11 @@ export function UserTable({ users }: UserTableProps) {
 							<Text>{user.email}</Text>
 						</Table.TableCell>
 						<Table.TableCell>
-							<Text>
-								{user.roles.reduce((prev, role) => {
-									return `${prev + role.name},`;
-								}, "")}
-							</Text>
+							{user.roles.map((r) => (
+								<Pill key={r.id} color="info" className="mr-1">
+									{r.name}
+								</Pill>
+							))}
 						</Table.TableCell>
 						<Table.TableCell>
 							<Text>{new Date(user.createdAt).toLocaleString("en-br")}</Text>

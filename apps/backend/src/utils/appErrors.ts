@@ -31,6 +31,11 @@ export const AppErrorTypes = {
 		code,
 		cause,
 	}),
+	NoPermission: {
+		name: "NoPermission",
+		code: 403,
+		cause: "You do not have permission to access this resource",
+	},
 	InvalidCredentials: {
 		name: "InvalidCredentials",
 		code: 403,

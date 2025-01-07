@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from "@nestjs/common";
 import { RoleService } from "./role.service";
 import { PolicyService } from "./policy.service";
 import { ValidationPipe } from "@pipes";
@@ -15,7 +15,11 @@ import type {
 	CreateRoleInput,
 	UpdatePolicyInput,
 	UpdateRoleInput,
+	StrictRole,
 } from "@shared/common/types";
+import { RoleInterceptor, Roles } from "@interceptors";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
+import { hasPermission } from "@shared/common/abac";
 
 @Controller("role")
 export class RoleController {
@@ -43,31 +47,65 @@ export class RoleController {
 	}
 
 	@Get("all")
-	async getAll() {
-		return await this.roleService.getAll();
+	@UseInterceptors(RoleInterceptor)
+	async getAll(@Roles() roles: StrictRole[]) {
+		if (
+			roles.some((role) => role.policies.some((policy) => hasPermission(policy, "role", "read")))
+		) {
+			return await this.roleService.getAll();
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Get(":id")
-	async getById(@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string) {
-		return await this.roleService.getById(id);
+	@UseInterceptors(RoleInterceptor)
+	async getById(
+		@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (
+			roles.some((role) =>
+				role.policies.some((policy) => hasPermission(policy, "role", "read", { id })),
+			)
+		) {
+			return await this.roleService.getById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-	@Get("policies/all")
-	async getAllPolicies() {
-		return await this.policyService.getAll();
+	@Get("policy/all")
+	@UseInterceptors(RoleInterceptor)
+	async getAllPolicies(@Roles() roles: StrictRole[]) {
+		if (
+			roles.some((role) => role.policies.some((policy) => hasPermission(policy, "policy", "read")))
+		) {
+			return await this.policyService.getAll();
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-	@Get("policies/:id")
-	async getPolicyById(@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string) {
-		return await this.policyService.getById(id);
+	@Get("policy/:id")
+	@UseInterceptors(RoleInterceptor)
+	async getPolicyById(
+		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (
+			roles.some((role) =>
+				role.policies.some((policy) => hasPermission(policy, "policy", "read", { id })),
+			)
+		) {
+			return await this.policyService.getById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-	@Post("policies")
+	@Post("policy")
 	async createPolicy(@Body(new ValidationPipe(CreatePolicyInputSchema)) data: CreatePolicyInput) {
 		return await this.policyService.create(data);
 	}
 
-	@Patch("policies/:id")
+	@Patch("policy/:id")
 	async updatePolicyById(
 		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePolicyInputSchema)) data: UpdatePolicyInput,
@@ -75,7 +113,7 @@ export class RoleController {
 		return await this.policyService.updateById(id, data);
 	}
 
-	@Delete("policies/:id")
+	@Delete("policy/:id")
 	async deletePolicyById(@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string) {
 		return await this.policyService.deleteById(id);
 	}

@@ -19,8 +19,8 @@ export default async function AdminPage() {
 	if (!data || error) {
 		return (
 			<div className="p-4 flex flex-col gap-1">
-				<Title order={2}>Admin Dashboard</Title>
-				<Text description>Manage users and roles here.</Text>
+				<Title order={2}>Manage Users</Title>
+				<Text description>Manage users and their roles here.</Text>
 				<div className="mt-4">
 					<Text description>
 						There was an error fetching the users. Error: {JSON.stringify(error)}
@@ -31,10 +31,10 @@ export default async function AdminPage() {
 	}
 
 	return (
-		<section className="p-4 flex flex-col gap-4">
+		<section className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
-				<Title order={2}>Admin Dashboard</Title>
-				<Text description>Manage users and roles here.</Text>
+				<Title order={2}>Manage Users</Title>
+				<Text description>Manage users and their roles here.</Text>
 			</div>
 
 			<div className="overflow-x-auto">
