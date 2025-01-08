@@ -1,7 +1,7 @@
 "use client";
 import { TextInput, Button } from "@lib/components";
 import { useKeybinds } from "@lib/hooks";
-import { useTransition } from "react";
+import { useState } from "react";
 import { useForm, type DefaultValues, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,7 +20,8 @@ export function TextField<T extends string>({
 			handleSubmit(submitCb)();
 		},
 	});
-	const [isPending, startTransition] = useTransition();
+	const [isPending, setIsPending] = useState(false);
+
 	const { register, handleSubmit, formState } = useForm<Record<typeof fieldKey, string>>({
 		resolver: zodResolver(
 			z.object({
@@ -32,10 +33,15 @@ export function TextField<T extends string>({
 		} as DefaultValues<Record<T, string>>,
 	});
 
-	const submitCb = (data: Record<T, string>) => {
-		startTransition(async () => {
+	const submitCb = async (data: Record<T, string>) => {
+		setIsPending(true);
+		try {
 			await onSubmit(data);
-		});
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsPending(false);
+		}
 	};
 	return (
 		<form onSubmit={handleSubmit(submitCb)}>

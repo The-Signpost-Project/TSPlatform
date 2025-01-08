@@ -32,17 +32,18 @@ export function Account() {
 		});
 	}
 
-	function changePasswordCallback(id: string, data: ChangePasswordInput) {
-		changePassword(id, data).then(({ error }) => {
+	async function changePasswordCallback(id: string, data: ChangePasswordInput) {
+		return await changePassword(id, data).then(({ error }) => {
 			setChangePasswordModalOpen(false);
 			if (error) {
 				toast.error(error.cause);
 
-				return;
+				return false;
 			}
 			toast.success("Password changed successfully");
 
 			router.refresh();
+			return true;
 		});
 	}
 
@@ -57,12 +58,13 @@ export function Account() {
 	}
 
 	async function changeEmailCallback(id: string, email: string) {
-		updateUser({ id, email }).then(({ error }) => {
+		return await updateUser({ id, email }).then(({ error }) => {
 			if (error) {
 				toast.error(error);
-				return;
+				return false;
 			}
 			toast.success("Email changed successfully");
+			return true;
 		});
 	}
 

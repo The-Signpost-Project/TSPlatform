@@ -1,6 +1,6 @@
 import type { GaugeProps } from "./types";
 import { twMerge } from "tailwind-merge";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const infoStyles = "text-orange-600 dark:text-orange-500";
 const dangerStyles = "text-red-600 dark:text-red-500";

@@ -1,6 +1,6 @@
 "use client";
 import { Popover } from "react-tiny-popover";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useState, useDeferredValue, useRef } from "react";
 import { TextInput, Text } from "@lib/components";
 import { AutocompleteChoice } from "./AutocompleteChoice";

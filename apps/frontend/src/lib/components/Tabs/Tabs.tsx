@@ -8,7 +8,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import type { TabProps, TabsProps, TabListProps, TabPanelProps } from "./types";
 import type { ComponentType } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const defaultTabStyles = "px-4 py-2 cursor-pointer dark:border-gray-600 dark:text-gray-300";
 const defaultActiveTabStyles = "h-1 bg-orange-500";

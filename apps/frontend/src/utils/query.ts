@@ -43,7 +43,6 @@ export async function query<T = void>({
 		? process.env.NEXT_PUBLIC_API_URL_SERVER
 		: process.env.NEXT_PUBLIC_API_URL_CLIENT;
 	const url = path.startsWith("/") ? baseURL + path : path;
-	console.debug("isSSR", isSSR, url);
 
 	return fetch(url, {
 		...init,

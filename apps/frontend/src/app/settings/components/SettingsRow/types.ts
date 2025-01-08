@@ -19,7 +19,7 @@ export interface TextSettingsRowProps {
 	description?: string;
 	value?: string;
 	schema: ZodString;
-	onSubmit: (value: Record<string, string>) => Promise<void>;
+	onSubmit: (value: Record<string, string>) => Promise<boolean>; // true if successful
 	reducedMotion?: boolean;
 }
 

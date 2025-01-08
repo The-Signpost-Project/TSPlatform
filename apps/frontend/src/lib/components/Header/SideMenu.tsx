@@ -5,7 +5,7 @@ import { Image } from "@lib/components";
 import { toast } from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 import { Popover } from "react-tiny-popover";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SideMenuButton } from "./SideMenuButton";
 import { useRouter } from "next/navigation";
 import type { SideMenuProps } from "./types";

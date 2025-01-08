@@ -21,8 +21,8 @@ export async function getUser() {
 		validator: SafeUserSchema,
 	});
 
-	console.info("I am: ");
-	console.dir(data, { depth: null });
+	//console.info("I am: ");
+	//console.dir(data, { depth: null });
 
 	return {
 		status,

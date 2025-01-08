@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import type { TextSettingsRowProps } from "./types";
 import { Text, Button, Modal, Title, ModalCloseButton } from "@lib/components";
 import { TextField } from "../TextField";
@@ -54,7 +54,12 @@ export function TextSettingsRow({
 					fieldKey={fieldKey}
 					placeholder={`No ${label.toLowerCase()} provided`}
 					value={value}
-					onSubmit={async (val) => onSubmit(val).then(() => setOpen(false))}
+					onSubmit={async (val) => {
+						const success = await onSubmit(val);
+						if (success) {
+							setOpen(false);
+						}
+					}}
 					zodSchema={schema}
 				/>
 			</Modal>

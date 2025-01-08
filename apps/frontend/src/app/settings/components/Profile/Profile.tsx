@@ -1,6 +1,6 @@
 "use client";
 import { UpdateUserInputSchema } from "@shared/common/schemas";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "@lib/providers";
 import { toast } from "react-hot-toast";
 import { TextSettingsRow } from "..";
@@ -13,13 +13,15 @@ export function Profile() {
 	}
 
 	async function changeUsernameCallback(id: string, username: string) {
-		updateUser({ id, username }).then(({ error }) => {
+		const success = await updateUser({ id, username }).then(({ error }) => {
 			if (error) {
 				toast.error(error);
-				return;
+				return false;
 			}
 			toast.success("Username changed successfully");
+			return true;
 		});
+		return success;
 	}
 
 	return (

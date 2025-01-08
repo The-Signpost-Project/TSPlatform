@@ -13,7 +13,7 @@ export function Preferences() {
 	}
 
 	async function changeAllowEmailCallback(id: string, allowEmailNotifications: boolean) {
-		updateUser({ id, allowEmailNotifications }).then(({ error }) => {
+		await updateUser({ id, allowEmailNotifications }).then(({ error }) => {
 			if (error) {
 				toast.error(error);
 				return;
