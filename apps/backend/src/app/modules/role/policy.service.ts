@@ -11,26 +11,45 @@ export class PolicyService extends CrudService<StrictPolicy> {
 		super();
 	}
 
-	private evaluateValue(input: string) {
-		// Try to parse the input using JSON.parse
-		try {
-			const parsed = JSON.parse(input);
+	evaluateValue(input: string) {
+		// Trim input to remove leading and trailing inverted commas
+		const value = input.replace(/^"(.*)"$/, "$1");
 
-			// Check for specific types after parsing
-			if (typeof parsed === "number") return parsed; // Number
-			if (typeof parsed === "boolean") return parsed; // Boolean
-			if (Array.isArray(parsed)) {
-				// Check if the array is of strings or numbers
-				if (parsed.every((item) => typeof item === "string")) return parsed; // String[]
-				if (parsed.every((item) => typeof item === "number")) return parsed; // Number[]
-			}
-		} catch (e) {
-			// If JSON.parse fails, treat it as a plain string
-			return input;
+		// Coerce to boolean
+		if (value.toLowerCase() === "true") {
+			return true;
+		}
+		if (value.toLowerCase() === "false") {
+			return false;
 		}
 
-		// Default case: return as-is
-		return input;
+		// Coerce to number
+		const numberVal = Number(value);
+		if (!Number.isNaN(numberVal)) {
+			return numberVal;
+		}
+
+		if (value.startsWith("[") && value.endsWith("]")) {
+			try {
+				// Remove extra backslashes from escaped strings
+				const sanitizedValue = value.replace(/\\/g, "");
+				const arrayVal = JSON.parse(sanitizedValue);
+
+				if (Array.isArray(arrayVal)) {
+					// Check if it's a number array
+					if (arrayVal.every((v) => typeof v === "number" || !Number.isNaN(Number(v)))) {
+						return arrayVal.map((v) => (typeof v === "number" ? v : Number(v)));
+					}
+					// Check if it's a string array
+					if (arrayVal.every((v) => typeof v === "string")) {
+						return arrayVal;
+					}
+				}
+			} catch (_error) {}
+		}
+
+		// Default case: return the string itself
+		return value;
 	}
 
 	async create(data: CreatePolicyInput) {

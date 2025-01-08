@@ -125,7 +125,18 @@ export class RoleController {
 	}
 
 	@Delete("policy/:id")
-	async deletePolicyById(@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string) {
-		return await this.policyService.deleteById(id);
+	@UseInterceptors(RoleInterceptor)
+	async deletePolicyById(
+		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (
+			roles.some((role) =>
+				role.policies.some((policy) => hasPermission(policy, "policy", "readWrite", { id })),
+			)
+		) {
+			return await this.policyService.deleteById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 }
