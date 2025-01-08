@@ -9,7 +9,7 @@ export function AddButton({ subject, onClick }: AddButtonProps) {
 			className="flex items-center space-x-2 p-2 rounded-md bg-gray-200 dark:bg-gray-800 h-12 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
 		>
 			<svg
-				className="w-6 h-6 text-gray-800 dark:text-gray-200"
+				className="w-6 h-6 text-gray-700 dark:text-gray-200"
 				aria-hidden="true"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"

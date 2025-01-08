@@ -7,4 +7,5 @@ export interface ModalProps {
 	className?: string;
 	modalClassName?: string;
 	reducedMotion?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLDialogElement>) => void;
 }

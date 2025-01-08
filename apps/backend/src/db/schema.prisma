@@ -90,8 +90,8 @@ model Policy {
 
 model PolicyRole {
   id       String @id @default(uuid(7))
-  policy   Policy @relation(fields: [policyId], references: [id])
-  role     Role   @relation(fields: [roleId], references: [id])
+  policy   Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   policyId String
   roleId   String
 }
@@ -101,7 +101,7 @@ model Condition {
   field    String
   operator String
   value    String
-  policy   Policy @relation(fields: [policyId], references: [id])
+  policy   Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
   policyId String
 }
 
@@ -114,8 +114,8 @@ model Role {
 
 model UserRole {
   id     String @id @default(uuid(7))
-  user   User   @relation(fields: [userId], references: [id])
-  role   Role   @relation(fields: [roleId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   userId String
   roleId String
 }

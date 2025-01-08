@@ -25,6 +25,7 @@ export function Modal({
 	className,
 	onClose,
 	modalClassName,
+  onClick
 }: ModalProps) {
 	const modalRef = useRef<HTMLDialogElement>(null);
 	const modalStyles = twMerge(modalDefaultStyles, modalClassName);
@@ -70,6 +71,7 @@ export function Modal({
 						onClick={onClose}
 					/>
 					<motion.dialog
+            onClick={onClick}
 						initial={reducedMotion ? false : { opacity: 0, scale: 0.95 }}
 						animate={{ opacity: 1, scale: 1 }}
 						exit={reducedMotion ? undefined : { opacity: 0, scale: 0.95 }}

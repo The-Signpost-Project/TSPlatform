@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 
 export function AddPolicy() {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState, setValue, watch, control } =
+	const { register, handleSubmit, formState, setValue, watch, control, reset } =
 		useForm<CreatePolicyInput>({
 			resolver: zodResolver(CreatePolicyInputSchema),
 			defaultValues: {
@@ -42,6 +42,7 @@ export function AddPolicy() {
 			toast.success(`Policy ${response?.name} created.`);
 			setModalOpen(false);
 			router.refresh();
+			reset();
 			return;
 		}
 

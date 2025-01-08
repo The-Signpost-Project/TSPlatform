@@ -11,7 +11,7 @@ export class PolicyService extends CrudService<StrictPolicy> {
 		super();
 	}
 
-	evaluateValue(input: string) {
+	private evaluateValue(input: string) {
 		// Trim input to remove leading and trailing inverted commas
 		const value = input.replace(/^"(.*)"$/, "$1");
 
