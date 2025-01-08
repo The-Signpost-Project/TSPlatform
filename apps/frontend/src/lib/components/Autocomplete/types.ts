@@ -8,6 +8,8 @@ export type AutocompleteProps = {
 	placeholder?: string;
 	parentElement?: HTMLElement;
 	disabled?: boolean;
+	helperText?: string;
+	variant?: "error" | "success";
 };
 
 export type AutocompleteChoiceProps = {

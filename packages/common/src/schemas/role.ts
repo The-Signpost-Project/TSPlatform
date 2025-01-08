@@ -36,12 +36,12 @@ const operatorSchema = z.enum([
 ]);
 
 export const CreatePolicyInputSchema = z.object({
-	name: z.string(),
+	name: z.string().min(1),
 	action: z.enum(["read", "readWrite"]),
 	resource: resourceSchema,
 	conditions: z.array(
 		z.object({
-			field: z.string(),
+			field: z.string().min(1),
 			operator: operatorSchema,
 			value: z.union([
 				z.string(),
@@ -50,7 +50,6 @@ export const CreatePolicyInputSchema = z.object({
 				z.array(z.string()),
 				z.array(z.number()),
 			]),
-			policyId: z.string(),
 		}),
 	),
 }) satisfies z.ZodType<CreatePolicyInput>;

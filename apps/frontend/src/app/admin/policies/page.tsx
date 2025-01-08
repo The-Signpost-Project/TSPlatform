@@ -3,7 +3,8 @@ import { z } from "zod";
 import { StrictPolicySchema } from "@shared/common/schemas";
 import { Text, Title } from "@lib/components";
 import { getSessionCookieHeader } from "@utils";
-import { PolicyTable } from "../components";
+import { PolicyTable, AddButton } from "../components";
+import { AddPolicy } from "./components";
 
 const SafeUserListSchema = z.array(StrictPolicySchema);
 
@@ -35,13 +36,18 @@ export default async function PolicyPage() {
 
 	return (
 		<section className="flex flex-col gap-4">
-			<div className="flex flex-col gap-1">
-				<Title order={2}>Manage Policies</Title>
-				<Text description>
-					Manage policies that can be attached to roles. Use policies to define fine-grained
-					permissions to allow actions based on resource attributes.
-				</Text>
-				<Text description>Click on each row to expand and manage conditions for each policy.</Text>
+			<div className="flex justify-between gap-6 items-center">
+				<div className="flex flex-col gap-1">
+					<Title order={2}>Manage Policies</Title>
+					<Text description>
+						Manage policies that can be attached to roles. Use policies to define fine-grained
+						permissions to allow actions based on resource attributes.
+					</Text>
+					<Text description>
+						Click on each row to expand and manage conditions for each policy.
+					</Text>
+				</div>
+				<AddPolicy />
 			</div>
 
 			<div className="overflow-x-auto">

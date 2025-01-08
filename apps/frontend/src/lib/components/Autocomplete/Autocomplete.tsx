@@ -17,6 +17,8 @@ export function Autocomplete({
 	className,
 	popoverClassName,
 	disabled,
+	helperText,
+	variant,
 }: AutocompleteProps) {
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState(value ?? "");
@@ -38,6 +40,7 @@ export function Autocomplete({
 			padding={5}
 			ref={ref}
 			parentElement={parentElement ?? document.body}
+			containerClassName="z-50"
 			content={
 				<motion.div
 					className={twMerge(
@@ -77,6 +80,8 @@ export function Autocomplete({
 				className={className}
 				placeholder={placeholder}
 				disabled={disabled}
+				helperText={helperText}
+				variant={variant}
 				icon={
 					<button onClick={() => setOpen((o) => !o)} type="button" className="cursor-pointer">
 						<svg

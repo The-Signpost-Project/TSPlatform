@@ -11,6 +11,28 @@ export class PolicyService extends CrudService<StrictPolicy> {
 		super();
 	}
 
+  private evaluateValue(input: string) {
+    // Try to parse the input using JSON.parse
+    try {
+      const parsed = JSON.parse(input);
+  
+      // Check for specific types after parsing
+      if (typeof parsed === 'number') return parsed; // Number
+      if (typeof parsed === 'boolean') return parsed; // Boolean
+      if (Array.isArray(parsed)) {
+        // Check if the array is of strings or numbers
+        if (parsed.every(item => typeof item === 'string')) return parsed; // String[]
+        if (parsed.every(item => typeof item === 'number')) return parsed; // Number[]
+      }
+    } catch (e) {
+      // If JSON.parse fails, treat it as a plain string
+      return input;
+    }
+  
+    // Default case: return as-is
+    return input;
+  }
+
 	async create(data: CreatePolicyInput) {
 		try {
 			const { conditions, ...policyData } = data;
@@ -36,7 +58,7 @@ export class PolicyService extends CrudService<StrictPolicy> {
 			});
 			return policies.map((p) => ({
 				...p,
-				conditions: p.conditions.map((c) => ({ ...c, value: JSON.parse(c.value) })),
+				conditions: p.conditions.map((c) => ({ ...c, value: this.evaluateValue(c.value) })),
 			})) as StrictPolicy[];
 		} catch (error) {
 			handleDatabaseError(error);
@@ -54,7 +76,7 @@ export class PolicyService extends CrudService<StrictPolicy> {
 			}
 			return {
 				...policy,
-				conditions: policy.conditions.map((c) => ({ ...c, value: JSON.parse(c.value) })),
+				conditions: policy.conditions.map((c) => ({ ...c, value: this.evaluateValue(c.value) })),
 			} as StrictPolicy;
 		} catch (error) {
 			handleDatabaseError(error);
