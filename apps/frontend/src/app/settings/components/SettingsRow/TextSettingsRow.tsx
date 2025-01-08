@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import type { TextSettingsRowProps } from "./types";
 import { Text, Button, Modal, Title, ModalCloseButton } from "@lib/components";
 import { TextField } from "../TextField";

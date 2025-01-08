@@ -86,9 +86,9 @@ export function Account() {
 					onClick={() => setChangePasswordModalOpen(true)}
 				/>
 				<VerifyAccountRow
-          onClick={() => sendVerifyEmailCallback(user.id)}
-          isVerified={user.verified}
-        />
+					onClick={() => sendVerifyEmailCallback(user.id)}
+					isVerified={user.verified}
+				/>
 				<ButtonSettingsRow
 					label="Delete Account"
 					buttonLabel="Delete"

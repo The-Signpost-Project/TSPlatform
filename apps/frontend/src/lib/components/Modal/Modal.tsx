@@ -67,7 +67,7 @@ export function Modal({
 						className="fixed w-full h-full top-0 left-0 bg-black bg-opacity-50 z-50"
 						key="backdrop"
 						onClick={onClose}
-					></motion.div>
+					/>
 					<motion.dialog
 						initial={reducedMotion ? false : { opacity: 0, scale: 0.95 }}
 						animate={{ opacity: 1, scale: 1 }}

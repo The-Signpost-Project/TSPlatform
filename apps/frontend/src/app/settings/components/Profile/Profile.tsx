@@ -1,9 +1,10 @@
 "use client";
 import { UpdateUserInputSchema } from "@shared/common/schemas";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "@lib/providers";
 import { toast } from "react-hot-toast";
 import { TextSettingsRow } from "..";
+import { Text } from "@lib/components";
 
 export function Profile() {
 	const { updateUser, user, loading } = useContext(AuthContext);
@@ -34,6 +35,7 @@ export function Profile() {
 				onSubmit={({ username }) => changeUsernameCallback(user?.id, username)}
 				schema={UpdateUserInputSchema.required().shape.username}
 			/>
+			<Text>(placeholder) {JSON.stringify(user.roles)}</Text>
 		</div>
 	);
 }
