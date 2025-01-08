@@ -11,40 +11,45 @@ export class PolicyService extends CrudService<StrictPolicy> {
 		super();
 	}
 
-  private evaluateValue(input: string) {
-    // Try to parse the input using JSON.parse
-    try {
-      const parsed = JSON.parse(input);
-  
-      // Check for specific types after parsing
-      if (typeof parsed === 'number') return parsed; // Number
-      if (typeof parsed === 'boolean') return parsed; // Boolean
-      if (Array.isArray(parsed)) {
-        // Check if the array is of strings or numbers
-        if (parsed.every(item => typeof item === 'string')) return parsed; // String[]
-        if (parsed.every(item => typeof item === 'number')) return parsed; // Number[]
-      }
-    } catch (e) {
-      // If JSON.parse fails, treat it as a plain string
-      return input;
-    }
-  
-    // Default case: return as-is
-    return input;
-  }
+	private evaluateValue(input: string) {
+		// Try to parse the input using JSON.parse
+		try {
+			const parsed = JSON.parse(input);
+
+			// Check for specific types after parsing
+			if (typeof parsed === "number") return parsed; // Number
+			if (typeof parsed === "boolean") return parsed; // Boolean
+			if (Array.isArray(parsed)) {
+				// Check if the array is of strings or numbers
+				if (parsed.every((item) => typeof item === "string")) return parsed; // String[]
+				if (parsed.every((item) => typeof item === "number")) return parsed; // Number[]
+			}
+		} catch (e) {
+			// If JSON.parse fails, treat it as a plain string
+			return input;
+		}
+
+		// Default case: return as-is
+		return input;
+	}
 
 	async create(data: CreatePolicyInput) {
 		try {
 			const { conditions, ...policyData } = data;
 			const policy = await this.prisma.policy.create({ data: policyData });
 
-			const policyConditions = conditions.map((c) => ({
+			const policyConditionsToInsert = conditions.map((c) => ({
 				...c,
 				policyId: policy.id,
 				value: JSON.stringify(c.value),
 			}));
 
-			await this.prisma.condition.createMany({ data: policyConditions });
+			await this.prisma.condition.createMany({ data: policyConditionsToInsert });
+			const policyConditions = await this.prisma.condition.findMany({
+				where: {
+					policyId: policy.id,
+				},
+			});
 			return { ...policy, conditions: policyConditions } as StrictPolicy;
 		} catch (error) {
 			handleDatabaseError(error);

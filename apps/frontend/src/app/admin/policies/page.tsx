@@ -3,7 +3,7 @@ import { z } from "zod";
 import { StrictPolicySchema } from "@shared/common/schemas";
 import { Text, Title } from "@lib/components";
 import { getSessionCookieHeader } from "@utils";
-import { PolicyTable, AddButton } from "../components";
+import { PolicyTable } from "../components";
 import { AddPolicy } from "./components";
 
 const SafeUserListSchema = z.array(StrictPolicySchema);

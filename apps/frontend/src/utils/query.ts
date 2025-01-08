@@ -70,7 +70,8 @@ export async function query<T = void>({
 			} catch (error) {
 				console.warn("Failed fetch call:", JSON.stringify(error));
 				if (typeof error === "object" && error instanceof ZodError) {
-					console.warn("Validation error. Received: ", body);
+					console.warn("Validation error. Received:");
+					console.dir(JSON.parse(String(body)));
 				}
 				return {
 					status: res.status,

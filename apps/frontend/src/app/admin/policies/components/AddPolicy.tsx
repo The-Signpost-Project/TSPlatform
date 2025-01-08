@@ -1,5 +1,4 @@
 "use client";
-import { query } from "@utils";
 import {
 	Modal,
 	TextInput,
@@ -16,6 +15,9 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { CreatePolicyInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreatePolicyInput, Resource, StrictCondition } from "@shared/common/types";
+import { createPolicy } from "./actions";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export function AddPolicy() {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -32,7 +34,19 @@ export function AddPolicy() {
 		name: "conditions",
 	});
 	const [isPending, startTransition] = useTransition();
-	console.log(formState.errors);
+	const router = useRouter();
+
+	async function onSubmit(data: CreatePolicyInput) {
+		const { status, error, data: response } = await createPolicy(data);
+		if (status === 201) {
+			toast.success(`Policy ${response?.name} created.`);
+			setModalOpen(false);
+			router.refresh();
+			return;
+		}
+
+		toast.error(error?.cause);
+	}
 
 	return (
 		<>
@@ -51,7 +65,7 @@ export function AddPolicy() {
 					assigned to users.
 				</Text>
 				<form
-					onSubmit={handleSubmit((args) => startTransition(() => console.log(args)))}
+					onSubmit={handleSubmit((args) => startTransition(() => onSubmit(args)))}
 					className="flex flex-col justify-center gap-4 mt-4"
 				>
 					<TextInput
@@ -179,6 +193,7 @@ export function AddPolicy() {
 												"endsWith",
 											] as const satisfies StrictCondition["operator"][]
 										}
+										value="eq"
 										label="Operator"
 										handleChange={(val) =>
 											setValue(`conditions.${index}.operator`, val as StrictCondition["operator"])

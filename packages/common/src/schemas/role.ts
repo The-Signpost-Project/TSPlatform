@@ -71,7 +71,7 @@ export const GetRoleInputSchema = z.string();
 
 export const StrictConditionSchema = z.object({
 	id: z.string(),
-	field: z.string(),
+	field: z.string().min(1),
 	operator: operatorSchema,
 	value: z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.array(z.number())]),
 	policyId: z.string(),
@@ -79,7 +79,7 @@ export const StrictConditionSchema = z.object({
 
 export const StrictPolicySchema = z.object({
 	id: z.string(),
-	name: z.string(),
+	name: z.string().min(1),
 	action: z.enum(["read", "readWrite"]),
 	resource: resourceSchema,
 	conditions: z.array(StrictConditionSchema),
