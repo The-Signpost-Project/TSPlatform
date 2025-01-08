@@ -5,6 +5,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "@lib/providers";
 import { DeleteAccountModal } from "./DeleteAccountModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { VerifyAccountRow } from "./VerifyAccountRow";
 import { changePassword, sendVerifyEmail, deleteAccount } from "./actions";
 import { toast } from "react-hot-toast";
 import type { ChangePasswordInput } from "@shared/common/types";
@@ -84,11 +85,10 @@ export function Account() {
 					buttonLabel="Change"
 					onClick={() => setChangePasswordModalOpen(true)}
 				/>
-				<ButtonSettingsRow
-					label="Verify Email"
-					buttonLabel="Verify"
-					onClick={() => sendVerifyEmailCallback(user.id)}
-				/>
+				<VerifyAccountRow
+          onClick={() => sendVerifyEmailCallback(user.id)}
+          isVerified={user.verified}
+        />
 				<ButtonSettingsRow
 					label="Delete Account"
 					buttonLabel="Delete"

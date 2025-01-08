@@ -8,3 +8,8 @@ export type DeleteAccountModalProps = Omit<ModalProps, "children"> & {
 export type ChangePasswordModalProps = Omit<ModalProps, "children"> & {
 	onSubmit: (data: ChangePasswordInput) => void;
 };
+
+export type VerifyAccountRowProps = {
+	onClick: () => void;
+	isVerified: boolean;
+};
