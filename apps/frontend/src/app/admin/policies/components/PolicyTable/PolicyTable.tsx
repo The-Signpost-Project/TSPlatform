@@ -1,10 +1,11 @@
 "use client";
-import { Button, List, Table, Text, Code } from "@lib/components";
+import { List, Table, Text, Code } from "@lib/components";
 import type { PolicyTableProps } from "./types";
 import { CollapsibleRow } from "./CollapsibleRow";
 import { BooleanText } from "../../../components/BooleanText";
 import { DeletePolicy } from "../DeletePolicy";
 import type { StrictCondition } from "@shared/common/types";
+import { EditPolicy } from "../EditPolicy";
 
 // TODO: add role editing, delete user
 
@@ -53,7 +54,7 @@ export function PolicyTable({ policies }: PolicyTableProps) {
 								</Table.TableCell>
 								<Table.TableCell>
 									<div className="flex gap-2">
-										<Button color="warning">Edit</Button>
+										<EditPolicy {...policy} />
 										<DeletePolicy id={policy.id} name={policy.name} />
 									</div>
 								</Table.TableCell>

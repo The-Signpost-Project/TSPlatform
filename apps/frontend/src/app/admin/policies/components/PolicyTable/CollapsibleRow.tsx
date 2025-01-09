@@ -14,7 +14,7 @@ export function CollapsibleRow({ data, children }: CollapsibleRowProps) {
 			<AnimatePresence>
 				{isOpen && (
 					<Table.TableRow>
-						<Table.TableCell colSpan={4} className="p-0">
+						<Table.TableCell colSpan={5} className="p-0">
 							<motion.div
 								initial={{ opacity: 0, height: 0 }}
 								animate={{ opacity: 1, height: "auto" }}

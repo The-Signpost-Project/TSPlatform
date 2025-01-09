@@ -117,11 +117,20 @@ export class RoleController {
 	}
 
 	@Patch("policy/:id")
+	@UseInterceptors(RoleInterceptor)
 	async updatePolicyById(
 		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePolicyInputSchema)) data: UpdatePolicyInput,
+		@Roles() roles: StrictRole[],
 	) {
-		return await this.policyService.updateById(id, data);
+		if (
+			roles.some((role) =>
+				role.policies.some((policy) => hasPermission(policy, "policy", "readWrite", { id })),
+			)
+		) {
+			return await this.policyService.updateById(id, data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Delete("policy/:id")

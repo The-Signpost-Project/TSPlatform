@@ -9,23 +9,33 @@ import {
 	Button,
 	Toggle,
 } from "@lib/components";
-import { AddButton } from "../../../components";
 import { useState, useTransition } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { CreatePolicyInputSchema } from "@shared/common/schemas";
+import { UpdatePolicyInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { CreatePolicyInput, Resource, StrictCondition } from "@shared/common/types";
-import { createPolicy } from "./actions";
+import type { UpdatePolicyInput, Resource, StrictCondition } from "@shared/common/types";
+import { updatePolicy } from "./actions";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { diffChanges } from "@utils";
+import type { EditPolicyProps } from "./types";
 
-export function AddPolicy() {
+export function EditPolicy(props: EditPolicyProps) {
 	const [modalOpen, setModalOpen] = useState(false);
 	const { register, handleSubmit, formState, setValue, watch, control, reset } =
-		useForm<CreatePolicyInput>({
-			resolver: zodResolver(CreatePolicyInputSchema),
+		useForm<UpdatePolicyInput>({
+			resolver: zodResolver(UpdatePolicyInputSchema),
 			defaultValues: {
-				action: "read",
+				...props,
+				conditions: props.conditions.map((condition) => ({
+					...condition,
+					value: (() => {
+						if (typeof condition.value === "string") return condition.value;
+						if (typeof condition.value === "number") return condition.value.toString();
+						if (typeof condition.value === "boolean") return condition.value.toString();
+						if (Array.isArray(condition.value)) return JSON.stringify(condition.value);
+					})(),
+				})),
 			},
 		});
 
@@ -36,10 +46,15 @@ export function AddPolicy() {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
-	async function onSubmit(data: CreatePolicyInput) {
-		const { status, error, data: response } = await createPolicy(data);
-		if (status === 201) {
-			toast.success(`Policy ${response?.name} created.`);
+	async function onSubmit(data: UpdatePolicyInput) {
+		const changes = await diffChanges(props, data);
+		const {
+			status,
+			error,
+			data: response,
+		} = await updatePolicy(props.id, changes as Required<UpdatePolicyInput>);
+		if (status === 200) {
+			toast.success(`Policy ${response?.name} updated.`);
 			setModalOpen(false);
 			router.refresh();
 			reset();
@@ -51,14 +66,24 @@ export function AddPolicy() {
 
 	return (
 		<>
-			<AddButton onClick={() => setModalOpen(true)} subject="Policy" />
+			<Button
+				color="warning"
+				onClick={(e) => {
+					e.stopPropagation();
+					setModalOpen(true);
+				}}
+			>
+				Edit
+			</Button>
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
 				className="min-w-72 sm:min-w-96"
+				onClick={(e) => e.stopPropagation()}
+				modalClassName="cursor-default"
 			>
 				<div className="flex justify-between">
-					<Title order={5}>Add a policy</Title>
+					<Title order={5}>Edit policy {props.name}</Title>
 					<ModalCloseButton onClick={() => setModalOpen(false)} />
 				</div>
 				<Text order="sm" description>
@@ -86,6 +111,7 @@ export function AddPolicy() {
 								{watch("action") === "read" ? "Read only" : "Read + Write"}
 							</Text>
 							<Toggle
+								defaultChecked={watch("action") === "readWrite"}
 								onChange={(e) => setValue("action", e.target.checked ? "readWrite" : "read")}
 								disabled={isPending}
 								className={formState.errors.action ? "ring-red-500" : ""}
@@ -107,6 +133,7 @@ export function AddPolicy() {
 								"allUsers",
 							] as const satisfies Resource[]
 						}
+						value={watch("resource")}
 						label="Resource"
 						handleChange={(val) => setValue("resource", val as Resource)}
 						placeholder="Select a resource"
@@ -194,7 +221,7 @@ export function AddPolicy() {
 												"endsWith",
 											] as const satisfies StrictCondition["operator"][]
 										}
-										value="eq"
+										value={watch(`conditions.${index}.operator` as const)}
 										label="Operator"
 										handleChange={(val) =>
 											setValue(`conditions.${index}.operator`, val as StrictCondition["operator"])
@@ -227,7 +254,7 @@ export function AddPolicy() {
 					)}
 
 					<Button type="submit" color="success" disabled={isPending}>
-						Create Policy
+						Update Policy
 					</Button>
 				</form>
 			</Modal>
