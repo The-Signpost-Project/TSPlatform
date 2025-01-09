@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, MouseEvent } from "react";
 
 export interface ModalProps {
 	isOpen: boolean;
@@ -7,5 +7,5 @@ export interface ModalProps {
 	className?: string;
 	modalClassName?: string;
 	reducedMotion?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLDialogElement>) => void;
+	onClick?: (e: MouseEvent<HTMLDialogElement>) => void;
 }

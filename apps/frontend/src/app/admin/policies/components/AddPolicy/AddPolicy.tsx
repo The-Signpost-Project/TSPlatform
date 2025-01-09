@@ -9,7 +9,7 @@ import {
 	Button,
 	Toggle,
 } from "@lib/components";
-import { AddButton } from "../../components";
+import { AddButton } from "../../../components";
 import { useState, useTransition } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { CreatePolicyInputSchema } from "@shared/common/schemas";

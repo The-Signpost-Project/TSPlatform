@@ -1,7 +1,7 @@
 import { query } from "@utils";
 import { z } from "zod";
 import { StrictRoleSchema } from "@shared/common/schemas";
-import { RoleTable } from "../components";
+import { RoleTable } from "./components";
 import { Text, Title } from "@lib/components";
 import { getSessionCookieHeader } from "@utils";
 
