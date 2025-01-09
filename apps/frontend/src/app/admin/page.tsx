@@ -33,8 +33,10 @@ export default async function AdminPage() {
 	return (
 		<section className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
-				<Title order={2}>Manage Users</Title>
-				<Text description>Manage users and their roles here.</Text>
+				<Title className="text-lg sm:text-3xl">Manage Users</Title>
+				<Text description className="text-sm sm:text-base">
+					Manage users and their roles here.
+				</Text>
 			</div>
 
 			<div className="overflow-x-auto">

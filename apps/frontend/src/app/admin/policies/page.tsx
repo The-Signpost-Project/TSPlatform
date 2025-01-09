@@ -35,14 +35,14 @@ export default async function PolicyPage() {
 
 	return (
 		<section className="flex flex-col gap-4">
-			<div className="flex justify-between gap-6 items-center">
+			<div className="flex justify-between gap-6 sm:items-center sm:flex-row flex-col">
 				<div className="flex flex-col gap-1">
-					<Title order={2}>Manage Policies</Title>
-					<Text description>
+					<Title className="text-lg sm:text-3xl">Manage Policies</Title>
+					<Text description className="text-sm sm:text-base">
 						Manage policies that can be attached to roles. Use policies to define fine-grained
 						permissions to allow actions based on resource attributes.
 					</Text>
-					<Text description>
+					<Text description className="text-sm sm:text-base">
 						Click on each row to expand and manage conditions for each policy.
 					</Text>
 				</div>

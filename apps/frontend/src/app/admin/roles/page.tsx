@@ -45,10 +45,10 @@ export default async function RolePage() {
 
 	return (
 		<section className="flex flex-col gap-4">
-			<div className="flex justify-between gap-6 items-center">
+			<div className="flex justify-between gap-6 sm:items-center sm:flex-row flex-col">
 				<div className="flex flex-col gap-1">
-					<Title order={2}>Manage Roles</Title>
-					<Text description>
+					<Title className="text-lg sm:text-3xl">Manage Roles</Title>
+					<Text description className="text-sm sm:text-base">
 						Manage roles and attach policies onto them. Use roles to group users and give them
 						permissions to perform actions around the app.
 					</Text>

@@ -8,7 +8,7 @@ export function Sidebar({ children, ...props }: SidebarProps) {
 			{...props}
 			id="default-sidebar"
 			className={twMerge(
-				"w-24 min-w-24 sm:min-w-48 sm:w-48 block overflow-auto transition-transform sm:translate-x-0",
+				"w-16 min-w-16 sm:min-w-48 sm:w-48 block overflow-auto transition-transform sm:translate-x-0",
 				props.className,
 			)}
 			aria-label="Sidebar"
