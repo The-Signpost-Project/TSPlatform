@@ -87,6 +87,6 @@ export const StrictPolicySchema = z.object({
 
 export const StrictRoleSchema = z.object({
 	id: z.string(),
-	name: z.string(),
+	name: z.string().min(1),
 	policies: z.array(StrictPolicySchema),
 }) satisfies z.ZodType<StrictRole>;

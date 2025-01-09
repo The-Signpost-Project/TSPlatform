@@ -16,6 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateRoleInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
 import type { AddRoleProps } from "./types";
+import { createRole } from "./actions";
+import { toast } from "react-hot-toast";
 
 export function AddRole({ policies }: AddRoleProps) {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -28,10 +30,9 @@ export function AddRole({ policies }: AddRoleProps) {
 	const router = useRouter();
 
 	async function onSubmit(data: CreateRoleInput) {
-		console.log(data);
-		/*const { status, error, data: response } = await createPolicy(data);
+		const { status, error, data: response } = await createRole(data);
 		if (status === 201) {
-			toast.success(`Policy ${response?.name} created.`);
+			toast.success(`Role ${response?.name} created.`);
 			setModalOpen(false);
 			router.refresh();
 			reset();
@@ -39,7 +40,7 @@ export function AddRole({ policies }: AddRoleProps) {
 		}
 
 		toast.error(error?.cause);
-    */
+    
 	}
 
 	return (
