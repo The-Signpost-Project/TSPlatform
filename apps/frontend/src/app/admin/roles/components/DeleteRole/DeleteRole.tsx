@@ -11,17 +11,15 @@ export function DeleteRole({ id, name }: DeleteRoleProps) {
 	const router = useRouter();
 
 	async function onSubmit() {
-		
 		const { status, error } = await deleteRole(id);
 		if (status === 200) {
-			toast.success(`Role ${name} deleted successfully`);
+			toast.success(`Role ${name} deleted.`);
 			setModalOpen(false);
 			router.refresh();
 			return;
 		}
 
 		toast.error(error?.cause);
-    
 	}
 
 	return (

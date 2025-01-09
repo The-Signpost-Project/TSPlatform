@@ -17,8 +17,9 @@ export function MultiSelect({
 	variant,
 	onChange,
 	parentElement,
+	initialSelectedItems,
 }: MultiSelectProps) {
-	const [selectedItems, setSelectedItems] = useState<string[]>([]);
+	const [selectedItems, setSelectedItems] = useState<string[]>(initialSelectedItems ?? []);
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
@@ -144,7 +145,7 @@ export function MultiSelect({
 				{selectedItems.map((item) => (
 					<div
 						key={item}
-						className="flex items-center gap-1 bg-gray-200 dark:bg-gray-700 px-2 py-1.5 rounded"
+						className="flex items-center justify-center gap-1 bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded"
 					>
 						<Text order="sm">{item}</Text>
 						<Button

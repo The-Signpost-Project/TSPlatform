@@ -2,10 +2,11 @@
 import { Table, Text, Pill } from "@lib/components";
 import type { RoleTableProps } from "./types";
 import { DeleteRole } from "../DeleteRole";
+import { EditRole } from "../EditRole";
 
 // TODO: add role editing, delete user
 
-export function RoleTable({ roles }: RoleTableProps) {
+export function RoleTable({ roles, allPolicies }: RoleTableProps) {
 	return (
 		<Table.Table>
 			<Table.TableHead>
@@ -31,10 +32,20 @@ export function RoleTable({ roles }: RoleTableProps) {
 								</Pill>
 							))}
 						</Table.TableCell>
-            <Table.TableCell>
-              <DeleteRole name={role.name} id={role.id} />
-            </Table.TableCell>
-
+						<Table.TableCell>
+							<div className="flex gap-2">
+								<EditRole
+									name={role.name}
+									id={role.id}
+									policies={allPolicies.map((p) => ({
+										id: p.id,
+										name: p.name,
+										selected: role.policies.some((rp) => rp.id === p.id),
+									}))}
+								/>
+								<DeleteRole name={role.name} id={role.id} />
+							</div>
+						</Table.TableCell>
 					</Table.TableRow>
 				))}
 			</Table.TableBody>

@@ -9,4 +9,5 @@ export interface MultiSelectProps {
 	variant?: "success" | "error";
 	onChange: (selectedItems: string[]) => void;
 	parentElement?: HTMLElement;
+	initialSelectedItems?: string[];
 }

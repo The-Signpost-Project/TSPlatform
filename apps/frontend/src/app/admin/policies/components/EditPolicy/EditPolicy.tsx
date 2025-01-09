@@ -57,7 +57,6 @@ export function EditPolicy(props: EditPolicyProps) {
 			toast.success(`Policy ${response?.name} updated.`);
 			setModalOpen(false);
 			router.refresh();
-			reset();
 			return;
 		}
 
@@ -77,7 +76,10 @@ export function EditPolicy(props: EditPolicyProps) {
 			</Button>
 			<Modal
 				isOpen={modalOpen}
-				onClose={() => setModalOpen(false)}
+				onClose={() => {
+					setModalOpen(false);
+					reset();
+				}}
 				className="min-w-72 sm:min-w-96"
 				onClick={(e) => e.stopPropagation()}
 				modalClassName="cursor-default"

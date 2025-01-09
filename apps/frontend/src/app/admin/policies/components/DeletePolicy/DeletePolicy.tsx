@@ -13,7 +13,7 @@ export function DeletePolicy({ id, name }: DeletePolicyProps) {
 	async function onSubmit() {
 		const { status, error } = await deletePolicy(id);
 		if (status === 200) {
-			toast.success(`Policy ${name} deleted successfully`);
+			toast.success(`Policy ${name} deleted.`);
 			setModalOpen(false);
 			router.refresh();
 			return;

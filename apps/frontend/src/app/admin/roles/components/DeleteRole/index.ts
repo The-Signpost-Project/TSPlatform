@@ -1,1 +1,1 @@
-export * from './DeleteRole'
+export * from "./DeleteRole";

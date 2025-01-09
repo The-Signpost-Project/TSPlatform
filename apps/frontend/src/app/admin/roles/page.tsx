@@ -57,7 +57,7 @@ export default async function RolePage() {
 			</div>
 
 			<div className="overflow-x-auto">
-				<RoleTable roles={data} />
+				{policies && <RoleTable roles={data} allPolicies={policies} />}
 			</div>
 		</section>
 	);
