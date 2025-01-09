@@ -6,9 +6,9 @@ import { ClientContext } from "@lib/providers";
 import { SideMenu } from "./SideMenu";
 
 const mainNavLinks = [
-	{ title: "Product", href: "/" },
-	{ title: "Pricing", href: "/" },
-	{ title: "Contact", href: "/" },
+	{ title: "Cases", href: "/" },
+	{ title: "Peddlers", href: "/" },
+	{ title: "About", href: "/" },
 ];
 
 export function Header() {
