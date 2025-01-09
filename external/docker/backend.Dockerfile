@@ -1,4 +1,4 @@
-FROM imbios/bun-node:1.1.42-22.12.0-debian AS builder
+FROM imbios/bun-node:1.1.43-22.13.0-debian AS builder
 WORKDIR /usr/local
 
 ENV NODE_ENV=production
@@ -12,7 +12,7 @@ RUN cd apps/backend && bun run prisma:generate
 RUN bun run build
 
 
-FROM oven/bun:1.1.42 AS runner
+FROM oven/bun:1.1.43 AS runner
 WORKDIR /usr/local
 
 COPY --from=builder /usr/local/apps/backend/dist .

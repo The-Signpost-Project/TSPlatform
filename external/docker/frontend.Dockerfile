@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.42 AS builder
+FROM oven/bun:1.1.43 AS builder
 WORKDIR /usr/local
 
 ENV NODE_ENV=production
@@ -11,7 +11,7 @@ RUN bun i
 RUN bun run build
 
 
-FROM oven/bun:1.1.42 AS runner
+FROM oven/bun:1.1.43 AS runner
 WORKDIR /usr/local
 
 COPY --from=builder /usr/local/apps/frontend/.next ./.next
