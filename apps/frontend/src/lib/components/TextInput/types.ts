@@ -7,4 +7,5 @@ export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	disabled?: boolean;
 	className?: string;
 	icon?: ReactNode;
+	children?: ReactNode;
 }

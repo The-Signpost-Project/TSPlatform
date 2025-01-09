@@ -1,5 +1,6 @@
 "use server";
-import { deepStrictEqual } from "node:assert";
+// biome-ignore lint/style/useNodejsImportProtocol: this is an edge api
+import { deepStrictEqual } from "assert";
 
 /**
  * Compare two objects and return the changes.

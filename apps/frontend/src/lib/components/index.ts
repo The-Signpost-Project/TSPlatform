@@ -23,3 +23,4 @@ export * from "./ModalCloseButton";
 export * from "./Gauge";
 export * from "./Sidebar";
 export * from "./Accordion";
+export * from "./MultiSelect";

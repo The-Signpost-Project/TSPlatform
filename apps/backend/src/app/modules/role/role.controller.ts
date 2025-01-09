@@ -29,8 +29,19 @@ export class RoleController {
 	) {}
 
 	@Post()
-	async create(@Body(new ValidationPipe(CreateRoleInputSchema)) data: CreateRoleInput) {
-		return await this.roleService.create(data);
+	@UseInterceptors(RoleInterceptor)
+	async create(
+		@Body(new ValidationPipe(CreateRoleInputSchema)) data: CreateRoleInput,
+		@Roles() roles: StrictRole[],
+	) {
+		if (
+			roles.some((role) =>
+				role.policies.some((policy) => hasPermission(policy, "role", "readWrite")),
+			)
+		) {
+			return await this.roleService.create(data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Patch(":id")

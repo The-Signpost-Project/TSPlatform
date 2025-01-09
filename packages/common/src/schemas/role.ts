@@ -58,7 +58,7 @@ export const UpdatePolicyInputSchema =
 	CreatePolicyInputSchema.partial() satisfies z.ZodType<UpdatePolicyInput>;
 
 export const CreateRoleInputSchema = z.object({
-	name: z.string(),
+	name: z.string().min(1),
 	policies: z.array(z.object({ id: z.string() })),
 }) satisfies z.ZodType<CreateRoleInput>;
 

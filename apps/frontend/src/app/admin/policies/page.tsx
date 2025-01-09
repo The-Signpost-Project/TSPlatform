@@ -5,7 +5,7 @@ import { Text, Title } from "@lib/components";
 import { getSessionCookieHeader } from "@utils";
 import { AddPolicy, PolicyTable } from "./components";
 
-const SafeUserListSchema = z.array(StrictPolicySchema);
+const StrictPolicyListSchema = z.array(StrictPolicySchema);
 
 export default async function PolicyPage() {
 	const { data, error } = await query({
@@ -14,7 +14,7 @@ export default async function PolicyPage() {
 			method: "GET",
 			headers: await getSessionCookieHeader(),
 		},
-		validator: SafeUserListSchema,
+		validator: StrictPolicyListSchema,
 	});
 	if (!data || error) {
 		return (
