@@ -1,7 +1,7 @@
 "use client";
 import { useState, useDeferredValue, useRef } from "react";
 import { Popover } from "react-tiny-popover";
-import { Text, Button, TextInput, } from "@lib/components";
+import { Text, Button, TextInput } from "@lib/components";
 import type { MultiSelectProps } from "./types";
 import { motion } from "motion/react";
 import { twMerge } from "tailwind-merge";

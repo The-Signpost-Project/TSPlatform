@@ -10,7 +10,7 @@ import {
 } from "@lib/components";
 import { AddButton } from "../../../components";
 import { useState, useTransition } from "react";
-import { useForm, } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { CreateRoleInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateRoleInput } from "@shared/common/types";
@@ -21,10 +21,9 @@ import { toast } from "react-hot-toast";
 
 export function AddRole({ policies }: AddRoleProps) {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState, setValue, reset } =
-		useForm<CreateRoleInput>({
-			resolver: zodResolver(CreateRoleInputSchema),
-		});
+	const { register, handleSubmit, formState, setValue, reset } = useForm<CreateRoleInput>({
+		resolver: zodResolver(CreateRoleInputSchema),
+	});
 
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
@@ -40,7 +39,6 @@ export function AddRole({ policies }: AddRoleProps) {
 		}
 
 		toast.error(error?.cause);
-    
 	}
 
 	return (

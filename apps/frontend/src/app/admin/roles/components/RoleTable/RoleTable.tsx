@@ -1,6 +1,7 @@
 "use client";
 import { Table, Text, Pill } from "@lib/components";
 import type { RoleTableProps } from "./types";
+import { DeleteRole } from "../DeleteRole";
 
 // TODO: add role editing, delete user
 
@@ -30,6 +31,10 @@ export function RoleTable({ roles }: RoleTableProps) {
 								</Pill>
 							))}
 						</Table.TableCell>
+            <Table.TableCell>
+              <DeleteRole name={role.name} id={role.id} />
+            </Table.TableCell>
+
 					</Table.TableRow>
 				))}
 			</Table.TableBody>
