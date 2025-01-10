@@ -57,7 +57,7 @@ const envSchema = z.object({
 		PeddlerModule,
 		RoleModule,
 		ConfigModule.forRoot({
-			envFilePath: [envFilePath, ".env.local"],
+			envFilePath: [envFilePath],
 			isGlobal: true,
 			validate: (config) => {
 				const parsedConfig = envSchema.parse(config);
