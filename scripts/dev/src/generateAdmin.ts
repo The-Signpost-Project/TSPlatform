@@ -1,15 +1,11 @@
 import { password as bunPassword, randomUUIDv7 } from "bun";
 import { Database } from "bun:sqlite";
-import * as path from "node:path";
-import { findUp } from "find-up";
 import type { StrictPolicy, StrictRole, RawUser } from "@shared/common/types";
+import { getMonorepoRoot } from "./_utils";
+import * as path from "node:path";
 
 // WARNING: DO NOT USE THIS IN PRODUCTION
 
-async function getMonorepoRoot(): Promise<string | undefined> {
-	const packageJsonPath = await findUp("turbo.json");
-	return packageJsonPath ? path.dirname(packageJsonPath) : undefined;
-}
 const root = await getMonorepoRoot();
 if (root === undefined) {
 	throw new Error("Could not find monorepo root");

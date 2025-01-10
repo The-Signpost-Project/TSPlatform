@@ -6,9 +6,11 @@
 	"scripts": {
 		"format": "bunx biome format --write .",
 		"lint": "bunx biome lint --write ./src",
-		"admin:generate": "bun run ./src/defaultAdmin.ts"
+		"dev:generate-admin": "bun run ./src/generateAdmin.ts",
+		"dev:init-minio": "bun run ./src/initMinio.ts"
 	},
 	"dependencies": {
-		"find-up": "^7.0.0"
+		"find-up": "^7.0.0",
+		"minio": "^8.0.3"
 	}
 }

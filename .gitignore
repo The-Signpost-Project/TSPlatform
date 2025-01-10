@@ -48,3 +48,6 @@ yarn-error.log*
 # ssl
 *.key
 *.pem
+
+# minio
+.minio-data
