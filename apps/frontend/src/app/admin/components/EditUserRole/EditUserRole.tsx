@@ -1,29 +1,18 @@
 "use client";
-import {
-	Modal,
-	TextInput,
-	Title,
-	ModalCloseButton,
-	Text,
-	Button,
-	MultiSelect,
-} from "@lib/components";
+import { Modal, Title, ModalCloseButton, Text, Button, MultiSelect } from "@lib/components";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { CreateRoleInputSchema, UpdateUserInputSchema } from "@shared/common/schemas";
+import { UpdateUserInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UpdateUserInput, Prettify } from "@shared/common/types";
 import { useRouter } from "next/navigation";
 import type { EditUserRoleProps } from "./types";
-import { diffChanges } from "@utils";
 import { updateUserRole } from "./actions";
 import { toast } from "react-hot-toast";
 
 export function EditUserRole({ roles, id, name }: EditUserRoleProps) {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState, setValue, reset } = useForm<
-		Prettify<Pick<UpdateUserInput, "roles">>
-	>({
+	const { handleSubmit, setValue, reset } = useForm<Prettify<Pick<UpdateUserInput, "roles">>>({
 		resolver: zodResolver(
 			UpdateUserInputSchema.omit({
 				username: true,
