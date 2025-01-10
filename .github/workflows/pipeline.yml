@@ -6,6 +6,11 @@ on:
       - '**'
   workflow_dispatch:
 
+# for testing
+env:
+  FRONTEND_URL: http://localhost:3000
+  DATABASE_URL: file:./testing.db
+
 jobs:
   static-analysis:
     name: Static Analysis
