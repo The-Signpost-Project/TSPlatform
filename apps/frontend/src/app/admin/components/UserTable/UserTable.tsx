@@ -2,10 +2,11 @@
 import { Table, Text, Pill } from "@lib/components";
 import type { UserTableProps } from "./types";
 import { BooleanText } from "../BooleanText";
+import { EditUserRole } from "../EditUserRole";
 
 // TODO: add role editing, delete user
 
-export function UserTable({ users }: UserTableProps) {
+export function UserTable({ users, allRoles }: UserTableProps) {
 	return (
 		<Table.Table>
 			<Table.TableHead>
@@ -39,6 +40,17 @@ export function UserTable({ users }: UserTableProps) {
 						</Table.TableCell>
 						<Table.TableCell>
 							<BooleanText value={user.verified} />
+						</Table.TableCell>
+						<Table.TableCell>
+							<EditUserRole
+								roles={allRoles.map((role) => ({
+									id: role.id,
+									name: role.name,
+									selected: user.roles.some((ur) => ur.id === role.id),
+								}))}
+								id={user.id}
+								name={user.username}
+							/>
 						</Table.TableCell>
 					</Table.TableRow>
 				))}

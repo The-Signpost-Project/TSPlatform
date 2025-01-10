@@ -5,6 +5,7 @@ import {
 	Get,
 	Param,
 	Patch,
+	Put,
 	Query,
 	Req,
 	UseInterceptors,
@@ -19,7 +20,8 @@ import { GetUserInputSchema, UpdateUserInputSchema } from "@shared/common/schema
 import type { UpdateUserInput } from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import type { StrictRole } from "@shared/common/types";
-import { AppError, AppErrorTypes } from "@/utils/appErrors";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
+import { rolesHavePermission } from "@utils/rolesHavePermission";
 
 @Controller("user")
 export class UserController {
@@ -43,6 +45,29 @@ export class UserController {
 		@Body(new ValidationPipe(UpdateUserInputSchema)) data: UpdateUserInput,
 	) {
 		return await this.userService.updateById(id, data);
+	}
+
+	@Put(":id/role")
+	@UseInterceptors(RoleInterceptor)
+	async updateRole(
+		@Param("id") id: string,
+		@Body(
+			new ValidationPipe(
+				UpdateUserInputSchema.omit({
+					username: true,
+					email: true,
+					verified: true,
+					allowEmailNotifications: true,
+				}),
+			),
+		)
+		data: Pick<UpdateUserInput, "roles">,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "allUsers", "readWrite", { id })) {
+			return await this.userService.updateById(id, data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Delete(":id")

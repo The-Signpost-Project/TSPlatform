@@ -1,11 +1,12 @@
 import { query } from "@utils";
 import { z } from "zod";
-import { SafeUserSchema } from "@shared/common/schemas";
+import { SafeUserSchema, StrictRoleSchema } from "@shared/common/schemas";
 import { UserTable } from "./components";
 import { Text, Title } from "@lib/components";
 import { getSessionCookieHeader } from "@utils";
 
 const SafeUserListSchema = z.array(SafeUserSchema);
+const StrictRolesSchema = z.array(StrictRoleSchema);
 
 export default async function AdminPage() {
 	const { data, error } = await query({
@@ -16,6 +17,15 @@ export default async function AdminPage() {
 		},
 		validator: SafeUserListSchema,
 	});
+	const { data: roleData } = await query({
+		path: "/role/all",
+		init: {
+			method: "GET",
+			headers: await getSessionCookieHeader(),
+		},
+		validator: StrictRolesSchema,
+	});
+
 	if (!data || error) {
 		return (
 			<div className="p-4 flex flex-col gap-1">
@@ -40,7 +50,15 @@ export default async function AdminPage() {
 			</div>
 
 			<div className="overflow-x-auto">
-				<UserTable users={data} />
+				{roleData && (
+					<UserTable
+						users={data}
+						allRoles={roleData.map((role) => ({
+							id: role.id,
+							name: role.name,
+						}))}
+					/>
+				)}
 			</div>
 		</section>
 	);

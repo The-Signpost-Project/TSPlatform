@@ -12,7 +12,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { CreateRoleInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { CreateRoleInput, UpdateRoleInput } from "@shared/common/types";
+import type { UpdateRoleInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
 import type { EditRoleProps } from "./types";
 import { diffChanges } from "@utils";
@@ -21,7 +21,7 @@ import { toast } from "react-hot-toast";
 
 export function EditRole({ policies, id, name }: EditRoleProps) {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState, setValue, reset } = useForm<CreateRoleInput>({
+	const { register, handleSubmit, formState, setValue, reset } = useForm<UpdateRoleInput>({
 		resolver: zodResolver(CreateRoleInputSchema),
 		defaultValues: {
 			name,
