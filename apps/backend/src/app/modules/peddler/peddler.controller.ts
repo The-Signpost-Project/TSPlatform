@@ -37,6 +37,7 @@ import { RoleInterceptor, Roles } from "@interceptors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { FileInterceptor } from "@nestjs/platform-express";
+import type { Express } from "express";
 
 @Controller("peddler")
 @UseInterceptors(RoleInterceptor)

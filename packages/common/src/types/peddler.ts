@@ -39,6 +39,12 @@ export type CreateDisabilityInput = {
 
 export type UpdateDisabilityInput = Partial<CreateDisabilityInput>;
 
+export interface Region {
+	id: string;
+	name: string;
+	photoUrl: string | null;
+}
+
 export type CreateRegionInput = {
 	name: string;
 };
