@@ -6,6 +6,7 @@ import type {
 	StrictPolicy,
 	StrictRole,
 	UpdateUserInput,
+  UpdateUserRolesInput,
 } from "@shared/common/types";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
@@ -128,7 +129,7 @@ export class UserService extends CrudService<SafeUser> {
 		};
 	}
 
-	async updateById(id: string, data: UpdateUserInput): Promise<SafeUser> {
+	async updateById(id: string, data: UpdateUserInput & UpdateUserRolesInput): Promise<SafeUser> {
 		const { roles, ...userData } = data;
 		try {
 			await this.prisma.user.update({

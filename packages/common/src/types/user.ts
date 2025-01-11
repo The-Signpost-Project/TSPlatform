@@ -33,7 +33,7 @@ export type UpdateUserInput = Prettify<
 	Partial<Pick<SafeUser, "username" | "email" | "verified" | "allowEmailNotifications">>
 >;
 export type UpdateUserRolesInput = {
-	roles: { roleId: string }[];
+	roles?: { roleId: string }[];
 };
 export type DeleteUserInput = {
 	username: string;

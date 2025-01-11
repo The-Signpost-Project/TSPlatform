@@ -21,7 +21,7 @@ import {
 	UpdateUserInputSchema,
 	UpdateUserRolesInputSchema,
 } from "@shared/common/schemas";
-import type { UpdateUserInput } from "@shared/common/types";
+import type { UpdateUserInput, UpdateUserRolesInput } from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import type { StrictRole } from "@shared/common/types";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
@@ -46,7 +46,7 @@ export class UserController {
 	@UseGuards(AuthGuard("params", "id"))
 	async updateById(
 		@Param("id", new ValidationPipe(GetUserInputSchema)) id: string,
-		@Body(new ValidationPipe(UpdateUserInputSchema)) data: Omit<UpdateUserInput, "roles">,
+		@Body(new ValidationPipe(UpdateUserInputSchema)) data: UpdateUserInput,
 	) {
 		return await this.userService.updateById(id, data);
 	}
@@ -56,7 +56,7 @@ export class UserController {
 	async updateRole(
 		@Param("id") id: string,
 		@Body(new ValidationPipe(UpdateUserRolesInputSchema))
-		data: Pick<UpdateUserInput, "roles">,
+		data: UpdateUserRolesInput,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "allUsers", "readWrite", { id })) {
