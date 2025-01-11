@@ -6,9 +6,7 @@ import { toast } from "react-hot-toast";
 import { TextSettingsRow } from "..";
 import {
 	Text,
-	Title,
 	Table,
-	Pill,
 	AccordionContent,
 	AccordionRoot,
 	AccordionTrigger,

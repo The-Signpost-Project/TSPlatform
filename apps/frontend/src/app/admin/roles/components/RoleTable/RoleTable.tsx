@@ -4,7 +4,6 @@ import type { RoleTableProps } from "./types";
 import { DeleteRole } from "../DeleteRole";
 import { EditRole } from "../EditRole";
 
-
 export function RoleTable({ roles, allPolicies }: RoleTableProps) {
 	return (
 		<Table.Table>

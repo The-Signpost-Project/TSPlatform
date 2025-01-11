@@ -7,7 +7,6 @@ import { DeletePolicy } from "../DeletePolicy";
 import { operatorMapping } from "@shared/common/constants";
 import { EditPolicy } from "../EditPolicy";
 
-
 export function PolicyTable({ policies }: PolicyTableProps) {
 	return (
 		<Table.Table>
