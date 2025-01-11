@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from "@nestjs/common";
 import { PeddlerService } from "./peddler.service";
 import { DisabilityService } from "./disability.service";
 import { RegionService } from "./region.service";
@@ -21,9 +21,14 @@ import type {
 	UpdatePeddlerInput,
 	CreateRegionInput,
 	UpdateRegionInput,
+	StrictRole,
 } from "@shared/common/types";
+import { RoleInterceptor, Roles } from "@interceptors";
+import { rolesHavePermission } from "@utils/rolesHavePermission";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
 
 @Controller("peddler")
+@UseInterceptors(RoleInterceptor)
 export class PeddlerController {
 	constructor(
 		private readonly peddlerService: PeddlerService,
@@ -60,35 +65,56 @@ export class PeddlerController {
 	}
 
 	@Get("disability/all")
-	async getAllDisabilities() {
-		return await this.disabilityService.getAll();
+	async getAllDisabilities(@Roles() roles: StrictRole[]) {
+		if (rolesHavePermission(roles, "disability", "read")) {
+			return await this.disabilityService.getAll();
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Get("disability/:id")
-	async getDisabilityById(@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string) {
-		return await this.disabilityService.getById(id);
+	async getDisabilityById(
+		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "disability", "read", { id })) {
+			return await this.disabilityService.getById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Post("disability")
 	async createDisability(
 		@Body(new ValidationPipe(CreateDisabilityInputSchema)) data: CreateDisabilityInput,
+		@Roles() roles: StrictRole[],
 	) {
-		return await this.disabilityService.create(data);
+		if (rolesHavePermission(roles, "disability", "readWrite")) {
+			return await this.disabilityService.create(data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Patch("disability/:id")
 	async updateDisabilityById(
 		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdateDisabilityInputSchema)) data: UpdateDisabilityInput,
+		@Roles() roles: StrictRole[],
 	) {
-		return await this.disabilityService.updateById(id, data);
+		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
+			return await this.disabilityService.updateById(id, data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Delete("disability/:id")
 	async deleteDisabilityById(
 		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
 	) {
-		return await this.disabilityService.deleteById(id);
+		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
+			return await this.disabilityService.deleteById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Get("region/all")

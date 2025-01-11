@@ -6,7 +6,7 @@ import type {
 	StrictPolicy,
 	StrictRole,
 	UpdateUserInput,
-  UpdateUserRolesInput,
+	UpdateUserRolesInput,
 } from "@shared/common/types";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
