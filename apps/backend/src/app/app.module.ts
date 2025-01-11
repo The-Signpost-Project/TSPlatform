@@ -46,6 +46,11 @@ const envSchema = z.object({
 	EMAIL_SECURE: z.string().transform((val) => val.toLowerCase() === "true"),
 	EMAIL_USER: z.string(),
 	EMAIL_PASSWORD: z.string(),
+
+	S3_ACCESS_KEY: z.string(),
+	S3_SECRET_KEY: z.string(),
+	S3_BUCKET: z.string(),
+	S3_ENDPOINT: z.string().url(),
 });
 
 @Module({
