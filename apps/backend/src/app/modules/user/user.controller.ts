@@ -16,7 +16,11 @@ import { UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@guards";
 import { UserService } from "./user.service";
 import { ValidationPipe } from "@pipes";
-import { GetUserInputSchema, UpdateUserInputSchema } from "@shared/common/schemas";
+import {
+	GetUserInputSchema,
+	UpdateUserInputSchema,
+	UpdateUserRolesInputSchema,
+} from "@shared/common/schemas";
 import type { UpdateUserInput } from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import type { StrictRole } from "@shared/common/types";
@@ -42,7 +46,7 @@ export class UserController {
 	@UseGuards(AuthGuard("params", "id"))
 	async updateById(
 		@Param("id", new ValidationPipe(GetUserInputSchema)) id: string,
-		@Body(new ValidationPipe(UpdateUserInputSchema)) data: UpdateUserInput,
+		@Body(new ValidationPipe(UpdateUserInputSchema)) data: Omit<UpdateUserInput, "roles">,
 	) {
 		return await this.userService.updateById(id, data);
 	}
@@ -51,16 +55,7 @@ export class UserController {
 	@UseInterceptors(RoleInterceptor)
 	async updateRole(
 		@Param("id") id: string,
-		@Body(
-			new ValidationPipe(
-				UpdateUserInputSchema.omit({
-					username: true,
-					email: true,
-					verified: true,
-					allowEmailNotifications: true,
-				}),
-			),
-		)
+		@Body(new ValidationPipe(UpdateUserRolesInputSchema))
 		data: Pick<UpdateUserInput, "roles">,
 		@Roles() roles: StrictRole[],
 	) {
