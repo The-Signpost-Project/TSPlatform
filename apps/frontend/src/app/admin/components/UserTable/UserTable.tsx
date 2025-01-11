@@ -4,7 +4,6 @@ import type { UserTableProps } from "./types";
 import { BooleanText } from "../BooleanText";
 import { EditUserRole } from "../EditUserRole";
 
-// TODO: add role editing, delete user
 
 export function UserTable({ users, allRoles }: UserTableProps) {
 	return (

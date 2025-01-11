@@ -100,7 +100,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 				<SideMenuButton
 					key="allUsers"
 					icon="/common/user.svg"
-					text="Admin Dashboard"
+					text="Admin"
 					onClick={() => router.push("/admin")}
 				/>,
 			);
@@ -138,7 +138,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 				type="button"
 			>
 				<Image
-					src="/common/user.svg"
+					src="/common/burger.svg"
 					alt="menu"
 					className={twMerge("h6 w-6", theme === "light" ? undefined : "invert")}
 					height={24}

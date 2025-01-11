@@ -4,24 +4,9 @@ import type { PolicyTableProps } from "./types";
 import { CollapsibleRow } from "./CollapsibleRow";
 import { BooleanText } from "../../../components/BooleanText";
 import { DeletePolicy } from "../DeletePolicy";
-import type { StrictCondition } from "@shared/common/types";
+import { operatorMapping } from "@shared/common/constants";
 import { EditPolicy } from "../EditPolicy";
 
-// TODO: add role editing, delete user
-
-const operatorMapping: Record<StrictCondition["operator"], string> = {
-	eq: "equals",
-	ne: "does not equal",
-	gt: "is greater than",
-	lt: "is less than",
-	gte: "is greater than or equal to",
-	lte: "is less than or equal to",
-	in: "is in",
-	nin: "is not in",
-	contains: "contains",
-	startsWith: "starts with",
-	endsWith: "ends with",
-};
 
 export function PolicyTable({ policies }: PolicyTableProps) {
 	return (
@@ -73,7 +58,7 @@ export function PolicyTable({ policies }: PolicyTableProps) {
 									</Text>
 									<List.OrderedList>
 										{policy.conditions.map((condition) => (
-											<List.ListItem key={condition.id} className="flex flex-row gap-2 list-">
+											<List.ListItem key={condition.id} className="flex flex-row gap-2">
 												<Text description order="sm">
 													{condition.field}
 												</Text>
