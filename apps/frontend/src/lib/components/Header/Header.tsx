@@ -8,7 +8,8 @@ import { SideMenu } from "./SideMenu";
 const mainNavLinks = [
 	{ title: "Cases", href: "/" },
 	{ title: "Peddlers", href: "/" },
-	{ title: "About", href: "/" },
+	{ title: "Teams", href: "/" },
+	{ title: "Regions", href: "/" },
 ];
 
 export function Header() {
