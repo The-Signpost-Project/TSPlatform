@@ -8,7 +8,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
 	title: "TSPlatform",
-	description: "Fullstack starter template",
+	description: "The Signpost Project's internal platform to handle peddlers and their data.",
 };
 
 const inter = Inter({

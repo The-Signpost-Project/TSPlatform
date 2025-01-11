@@ -27,7 +27,7 @@ export function FileDrop({ optional, ...props }: FileDropProps) {
 		if (e.dataTransfer && inputRef.current) {
 			const files = e.dataTransfer.files;
 			const giveFiles = new DataTransfer();
-      
+
 			// if multiple files are not allowed, only the first file will be added
 			if (!props.multiple) giveFiles.items.add(files[0]);
 			else
