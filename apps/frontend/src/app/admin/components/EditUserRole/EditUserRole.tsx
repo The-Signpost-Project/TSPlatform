@@ -2,9 +2,9 @@
 import { Modal, Title, ModalCloseButton, Text, Button, MultiSelect } from "@lib/components";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { UpdateUserInputSchema } from "@shared/common/schemas";
+import { UpdateUserRolesInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { UpdateUserInput, Prettify } from "@shared/common/types";
+import type { UpdateUserRolesInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
 import type { EditUserRoleProps } from "./types";
 import { updateUserRole } from "./actions";
@@ -12,15 +12,8 @@ import { toast } from "react-hot-toast";
 
 export function EditUserRole({ roles, id, name }: EditUserRoleProps) {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { handleSubmit, setValue, reset } = useForm<Prettify<Pick<UpdateUserInput, "roles">>>({
-		resolver: zodResolver(
-			UpdateUserInputSchema.omit({
-				username: true,
-				email: true,
-				verified: true,
-				allowEmailNotifications: true,
-			}),
-		),
+	const { handleSubmit, setValue, reset } = useForm<UpdateUserRolesInput>({
+		resolver: zodResolver(UpdateUserRolesInputSchema),
 		defaultValues: {
 			roles: roles.filter((role) => role.selected).map((r) => ({ roleId: r.id })),
 		},
@@ -29,7 +22,7 @@ export function EditUserRole({ roles, id, name }: EditUserRoleProps) {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
-	async function onSubmit(data: Prettify<Pick<UpdateUserInput, "roles">>) {
+	async function onSubmit(data: UpdateUserRolesInput) {
 		const { status, error, data: response } = await updateUserRole(id, data);
 		if (status === 200) {
 			toast.success(`Roles for ${response?.username} updated.`);

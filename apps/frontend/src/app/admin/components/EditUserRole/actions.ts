@@ -1,9 +1,9 @@
 "use server";
 import { query, getSessionCookieHeader } from "@utils";
 import { SafeUserSchema } from "@shared/common/schemas";
-import type { UpdateUserInput } from "@shared/common/types";
+import type { UpdateUserRolesInput } from "@shared/common/types";
 
-export async function updateUserRole(id: string, input: Pick<UpdateUserInput, "roles">) {
+export async function updateUserRole(id: string, input: UpdateUserRolesInput) {
 	const { status, error, data } = await query({
 		path: `/user/${id}/role`,
 		init: {

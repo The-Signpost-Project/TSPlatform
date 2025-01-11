@@ -14,4 +14,5 @@ export const protectedPages = {
 	"/settings": MUST_LOGIN,
 	"/admin": RESOURCES.ALL_USERS,
 	"/admin/roles": RESOURCES.ROLE,
+	"/admin/policies": RESOURCES.POLICY,
 } as const;

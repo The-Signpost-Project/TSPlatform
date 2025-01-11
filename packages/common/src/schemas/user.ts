@@ -3,6 +3,7 @@ import type {
 	UpdateUserInput,
 	SafeUser,
 	DeleteUserInput,
+	UpdateUserRolesInput,
 } from "@shared/common/types";
 import { StrictRoleSchema } from "./role";
 import { z } from "zod";
@@ -18,7 +19,7 @@ export const UpdateUserInputSchema = z.object({
 
 export const UpdateUserRolesInputSchema = z.object({
 	roles: z.array(z.object({ roleId: z.string() })),
-}) satisfies z.ZodType<UpdateUserInput>;
+}) satisfies z.ZodType<UpdateUserRolesInput>;
 
 export const DeleteUserInputSchema = z.object({
 	username: z.string(),
