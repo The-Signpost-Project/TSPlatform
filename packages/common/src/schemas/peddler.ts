@@ -31,21 +31,21 @@ export const UpdatePeddlerInputSchema = z.object({
 export const GetPeddlerInputSchema = z.string();
 
 export const CreateDisabilityInputSchema = z.object({
-	name: z.string(),
+	name: z.string().min(1),
 }) satisfies z.ZodType<CreateDisabilityInput>;
 
 export const UpdateDisabilityInputSchema = z.object({
-	name: z.string().optional(),
+	name: z.string().min(1).optional(),
 }) satisfies z.ZodType<UpdateDisabilityInput>;
 
 export const GetDisabilityInputSchema = z.string();
 
 export const CreateRegionInputSchema = z.object({
-	name: z.string(),
+	name: z.string().min(1),
 }) satisfies z.ZodType<CreateRegionInput>;
 
 export const UpdateRegionInputSchema = z.object({
-	name: z.string().optional(),
+	name: z.string().min(1).optional(),
 }) satisfies z.ZodType<UpdateRegionInput>;
 
 export const GetRegionInputSchema = z.string();

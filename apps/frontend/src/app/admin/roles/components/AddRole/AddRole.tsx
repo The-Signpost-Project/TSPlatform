@@ -7,8 +7,8 @@ import {
 	Text,
 	Button,
 	MultiSelect,
+	AddButton,
 } from "@lib/components";
-import { AddButton } from "../../../components";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { CreateRoleInputSchema } from "@shared/common/schemas";

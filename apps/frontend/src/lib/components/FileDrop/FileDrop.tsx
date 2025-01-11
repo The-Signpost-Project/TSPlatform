@@ -3,7 +3,7 @@ import { Button, Text } from "@lib/components";
 import type { FileDropProps } from "./types";
 import { useRef, useEffect, useState } from "react";
 
-export function FileDrop(props: FileDropProps) {
+export function FileDrop({ optional, ...props }: FileDropProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
@@ -27,10 +27,16 @@ export function FileDrop(props: FileDropProps) {
 		if (e.dataTransfer && inputRef.current) {
 			const files = e.dataTransfer.files;
 			const giveFiles = new DataTransfer();
-			for (const file of files) {
-				giveFiles.items.add(file);
-			}
+      
+			// if multiple files are not allowed, only the first file will be added
+			if (!props.multiple) giveFiles.items.add(files[0]);
+			else
+				for (const file of files) {
+					giveFiles.items.add(file);
+				}
 			inputRef.current.files = giveFiles.files;
+
+			// trigger change event
 			const forcedChange = new Event("change", { bubbles: true });
 			inputRef.current.dispatchEvent(forcedChange);
 		}
@@ -44,7 +50,7 @@ export function FileDrop(props: FileDropProps) {
 	return (
 		<div
 			ref={containerRef}
-			className="w-full h-full border-2 border-dashed border-orange-500 dark:border-orange-400 rounded-lg flex flex-col items-center justify-center gap-2"
+			className="w-full h-full py-4 border-2 border-dashed border-orange-500 dark:border-orange-400 rounded-lg flex flex-col items-center justify-center gap-2"
 		>
 			<svg
 				className="w-1/5 h-1/5 text-gray-600 dark:text-gray-400"
@@ -59,7 +65,10 @@ export function FileDrop(props: FileDropProps) {
 				<path d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z" />
 			</svg>
 			{uploadedFiles === null ? (
-				<Text description>Drop files here, or</Text>
+				<Text description>
+					{optional && "(Optional) "}
+					Drop files here, or
+				</Text>
 			) : (
 				<div className="flex flex-col items-center justify-center gap-0.5">
 					<Text description>
@@ -78,7 +87,6 @@ export function FileDrop(props: FileDropProps) {
 				<input
 					ref={inputRef}
 					type="file"
-					multiple
 					className="hidden"
 					{...props}
 					onChange={(e) => {

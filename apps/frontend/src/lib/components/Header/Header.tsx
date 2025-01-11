@@ -9,7 +9,7 @@ const mainNavLinks = [
 	{ title: "Cases", href: "/" },
 	{ title: "Peddlers", href: "/" },
 	{ title: "Teams", href: "/" },
-	{ title: "Regions", href: "/" },
+	{ title: "Regions", href: "/regions" },
 ];
 
 export function Header() {

@@ -2,7 +2,6 @@ import { PipeTransform, type ArgumentMetadata } from "@nestjs/common";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 
 export class FileValidationPipe implements PipeTransform {
-	
 	private maxFileSize = 1024 * 1024 * 10; // 10MB
 	private acceptedMimeTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
 

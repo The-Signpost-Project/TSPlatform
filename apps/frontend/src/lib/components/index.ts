@@ -25,3 +25,4 @@ export * from "./Sidebar";
 export * from "./Accordion";
 export * from "./MultiSelect";
 export * from "./FileDrop";
+export * from "./AddButton";
