@@ -1,15 +1,15 @@
 import type { AddButtonProps } from "./types";
-import { Text } from "@lib/components";
+import { Button } from "@lib/components";
 
 export function AddButton({ subject, onClick }: AddButtonProps) {
 	return (
-		<button
+		<Button
 			onClick={onClick}
 			type="button"
-			className="flex items-center space-x-2 px-2 rounded-md bg-gray-200 dark:bg-gray-800 h-12 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+			className="flex items-center text-nowrap gap-2"
 		>
 			<svg
-				className="w-4 h-4 text-gray-600 dark:text-gray-200"
+				className="w-4 h-4 text-gray-700/80 dark:text-gray-100/80"
 				aria-hidden="true"
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
@@ -23,7 +23,7 @@ export function AddButton({ subject, onClick }: AddButtonProps) {
 					clipRule="evenodd"
 				/>
 			</svg>
-			<Text className="text-nowrap">Add {subject}</Text>
-		</button>
+			Add {subject}
+		</Button>
 	);
 }
