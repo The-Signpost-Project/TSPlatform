@@ -13,6 +13,7 @@ type QueryParams<T> = {
 	path: string;
 	init?: RequestInit;
 	validator: ZodType<T>;
+	withFiles?: boolean;
 };
 
 function getBaseValidator<T>(validator: ZodType<T>) {
@@ -34,6 +35,7 @@ export async function query<T = void>({
 	path,
 	init,
 	validator,
+	withFiles,
 }: QueryParams<T>): Promise<Prettify<QueryResult<T>>> {
 	// check if we are rendering on the server or the client
 	const isSSR = typeof window === "undefined";
@@ -44,11 +46,13 @@ export async function query<T = void>({
 		: process.env.NEXT_PUBLIC_API_URL_CLIENT;
 	const url = path.startsWith("/") ? baseURL + path : path;
 
+	const contentType = withFiles ? undefined : { "content-type": "application/json" };
+
 	return fetch(url, {
 		...init,
 		credentials: "include",
 		headers: {
-			"content-type": "application/json",
+			...contentType,
 			...init?.headers,
 		},
 	})

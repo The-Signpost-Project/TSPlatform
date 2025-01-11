@@ -1,8 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+	UseInterceptors,
+	UploadedFile,
+} from "@nestjs/common";
 import { PeddlerService } from "./peddler.service";
 import { DisabilityService } from "./disability.service";
 import { RegionService } from "./region.service";
-import { ValidationPipe } from "@pipes";
+import { ValidationPipe, FileValidationPipe } from "@pipes";
 import {
 	CreateDisabilityInputSchema,
 	CreatePeddlerInputSchema,
@@ -26,6 +36,7 @@ import type {
 import { RoleInterceptor, Roles } from "@interceptors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("peddler")
 @UseInterceptors(RoleInterceptor)
@@ -118,30 +129,61 @@ export class PeddlerController {
 	}
 
 	@Get("region/all")
-	async getAllRegions() {
-		return await this.regionService.getAll();
+	async getAllRegions(@Roles() roles: StrictRole[]) {
+		if (rolesHavePermission(roles, "region", "read")) {
+			return await this.regionService.getAll();
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Get("region/:id")
-	async getRegionById(@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string) {
-		return await this.regionService.getById(id);
+	async getRegionById(
+		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "region", "read", { id })) {
+			return await this.regionService.getById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Post("region")
-	async createRegion(@Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput) {
-		return await this.regionService.create(data);
+	async createRegion(
+		@Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "region", "readWrite")) {
+			return await this.regionService.create(data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Patch("region/:id")
 	async updateRegionById(
 		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
+		@Roles() roles: StrictRole[],
 	) {
-		return await this.regionService.updateById(id, data);
+		if (rolesHavePermission(roles, "region", "readWrite", { id })) {
+			return await this.regionService.updateById(id, data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Delete("region/:id")
-	async deleteRegionById(@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string) {
-		return await this.regionService.deleteById(id);
+	async deleteRegionById(
+		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "region", "readWrite", { id })) {
+			return await this.regionService.deleteById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
+	}
+
+	@Post("test")
+	@UseInterceptors(FileInterceptor("file"))
+	async test(@UploadedFile(new FileValidationPipe()) file: Express.Multer.File) {
+		return file;
 	}
 }
