@@ -1,6 +1,6 @@
 import { expect, it, describe, beforeEach } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { PrismaService } from "@db/client";
+import { PrismaService, S3Service } from "@db/client";
 import { AppError } from "@utils/appErrors";
 import { resetDatabase } from "@utils/test";
 import { faker } from "@faker-js/faker";
@@ -15,7 +15,7 @@ describe("PeddlerService", () => {
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
-			providers: [PeddlerService, PrismaService, RegionService],
+			providers: [PeddlerService, PrismaService, RegionService, S3Service],
 		}).compile();
 
 		service = module.get<PeddlerService>(PeddlerService);
