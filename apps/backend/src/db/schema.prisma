@@ -65,10 +65,10 @@ model VerificationToken {
 }
 
 model Team {
-  id       String     @id @default(uuid(7))
-  name     String     @unique
-  photoUrl String?
-  members  UserTeam[]
+  id        String     @id @default(uuid(7))
+  name      String     @unique
+  photoPath String?
+  members   UserTeam[]
 }
 
 model UserTeam {
@@ -155,11 +155,11 @@ model Disability {
 }
 
 model Region {
-  id       String    @id @default(uuid(7))
-  name     String    @unique
-  photoUrl String?
-  peddlers Peddler[]
-  cases    Case[]
+  id        String    @id @default(uuid(7))
+  name      String    @unique
+  photoPath String?
+  peddlers  Peddler[]
+  cases     Case[]
 }
 
 model Case {
@@ -173,7 +173,7 @@ model Case {
   regionId         String
   region           Region?  @relation(fields: [regionId], references: [id])
   location         String
-  photoUrl         String?
+  photoPath        String?
   notes            String
   importance       Int
   firstInteraction Boolean

@@ -22,7 +22,7 @@ describe("PeddlerService", () => {
 		await resetDatabase();
 
 		const regionService = module.get<RegionService>(RegionService);
-		testRegion = await regionService.create({ name: faker.location.city() });
+		testRegion = await regionService.create({ name: faker.location.city(), photo: null });
 	});
 
 	it("should be defined", () => {

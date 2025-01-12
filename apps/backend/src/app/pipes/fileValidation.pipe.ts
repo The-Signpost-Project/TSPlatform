@@ -1,11 +1,22 @@
 import { PipeTransform, type ArgumentMetadata } from "@nestjs/common";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 
+interface FileValidationPipeOptions {
+	optional?: boolean;
+}
+
 export class FileValidationPipe implements PipeTransform {
+	private optional: boolean;
 	private maxFileSize = 1024 * 1024 * 10; // 10MB
 	private acceptedMimeTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
 
+	constructor({ optional = false }: FileValidationPipeOptions = {}) {
+		this.optional = optional;
+	}
 	transform(value: unknown, _metadata: ArgumentMetadata) {
+		if (this.optional && !value) {
+			return null;
+		}
 		// check if value is a file
 		if (!value) {
 			throw new AppError(AppErrorTypes.FormValidationError("No file uploaded."));

@@ -15,10 +15,12 @@ import { CreateRegionInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateRegionInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
+import { createRegion } from "./actions";
+import { toast } from "react-hot-toast";
 
 export function AddRegion() {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState } = useForm<CreateRegionInput>({
+	const { register, handleSubmit, formState } = useForm<Omit<CreateRegionInput, "photo">>({
 		resolver: zodResolver(CreateRegionInputSchema),
 	});
 
@@ -27,8 +29,21 @@ export function AddRegion() {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
-	async function onSubmit(data: CreateRegionInput) {
+	async function onSubmit(data: Omit<CreateRegionInput, "photo">) {
 		console.log(data, uploadedFiles);
+		const formData = new FormData();
+		formData.append("name", data.name);
+		if (uploadedFiles) {
+			formData.append("photo", uploadedFiles[0]);
+		}
+		const { status, data: res, error } = await createRegion(formData);
+
+		if (status === 201) {
+			toast.success("Region created successfully");
+			router.refresh();
+			return;
+		}
+		toast.error(error?.cause || "An error occurred");
 	}
 
 	return (

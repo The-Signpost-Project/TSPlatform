@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "@db/client";
+import { PrismaService, S3Service } from "@db/client";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type { CreateRegionInput, UpdateRegionInput } from "@shared/common/types";
@@ -8,16 +8,23 @@ import type { Region } from "@prisma/client";
 
 @Injectable()
 export class RegionService extends CrudService<Region> {
-	constructor(private readonly prisma: PrismaService) {
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly s3: S3Service,
+	) {
 		super();
 	}
 
 	async create(data: CreateRegionInput) {
 		try {
-			if (!data.name) {
-				throw new AppError(AppErrorTypes.EmptyInput);
+			const { photo, ...rest } = data;
+			let photoPath: string | null = null;
+			if (photo) {
+				console.log(photo);
+				photoPath = await this.s3.upload(photo, { dir: "regions", contentType: photo.mimetype });
 			}
-			return await this.prisma.region.create({ data });
+			const res = await this.prisma.region.create({ data: { ...rest, photoPath } });
+			return { ...res, photoPath: photoPath ? await this.s3.getUrl(photoPath) : null };
 		} catch (error) {
 			handleDatabaseError(error);
 		}

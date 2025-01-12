@@ -1,3 +1,5 @@
+import type { Express } from "express";
+
 export interface StrictPeddler {
 	id: string;
 	codename: `${string}_${string}_${"M" | "F"}`;
@@ -42,11 +44,12 @@ export type UpdateDisabilityInput = Partial<CreateDisabilityInput>;
 export interface Region {
 	id: string;
 	name: string;
-	photoUrl: string | null;
+	photoPath: string | null;
 }
 
 export type CreateRegionInput = {
 	name: string;
+	photo: Express.Multer.File | null;
 };
 
 export type UpdateRegionInput = Partial<CreateRegionInput>;

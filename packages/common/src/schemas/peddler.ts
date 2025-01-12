@@ -6,6 +6,7 @@ import type {
 	UpdateDisabilityInput,
 	CreateRegionInput,
 	UpdateRegionInput,
+	Region,
 } from "@shared/common/types";
 
 export const CreatePeddlerInputSchema = z.object({
@@ -40,9 +41,15 @@ export const UpdateDisabilityInputSchema = z.object({
 
 export const GetDisabilityInputSchema = z.string();
 
+export const RegionSchema = z.object({
+	id: z.string(),
+	name: z.string(),
+	photoPath: z.string().nullable(),
+}) satisfies z.ZodType<Region>;
+
 export const CreateRegionInputSchema = z.object({
 	name: z.string().min(1),
-}) satisfies z.ZodType<CreateRegionInput>;
+}) satisfies z.ZodType<Omit<CreateRegionInput, "photo">>;
 
 export const UpdateRegionInputSchema = z.object({
 	name: z.string().min(1).optional(),

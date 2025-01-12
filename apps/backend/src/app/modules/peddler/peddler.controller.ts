@@ -149,12 +149,14 @@ export class PeddlerController {
 	}
 
 	@Post("region")
+	@UseInterceptors(FileInterceptor("photo"))
 	async createRegion(
 		@Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput,
+		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File | null,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "region", "readWrite")) {
-			return await this.regionService.create(data);
+			return await this.regionService.create({ ...data, photo });
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
