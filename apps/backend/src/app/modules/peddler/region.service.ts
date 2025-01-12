@@ -15,16 +15,22 @@ export class RegionService extends CrudService<Region> {
 		super();
 	}
 
+	private async parseRegion(region: Region) {
+		return {
+			...region,
+			photoPath: region.photoPath ? await this.s3.getUrl(region.photoPath) : null,
+		};
+	}
+
 	async create(data: CreateRegionInput) {
 		try {
 			const { photo, ...rest } = data;
 			let photoPath: string | null = null;
 			if (photo) {
-				console.log(photo);
 				photoPath = await this.s3.upload(photo, { dir: "regions", contentType: photo.mimetype });
 			}
 			const res = await this.prisma.region.create({ data: { ...rest, photoPath } });
-			return { ...res, photoPath: photoPath ? await this.s3.getUrl(photoPath) : null };
+			return this.parseRegion(res);
 		} catch (error) {
 			handleDatabaseError(error);
 		}
@@ -32,7 +38,8 @@ export class RegionService extends CrudService<Region> {
 
 	async getAll() {
 		try {
-			return await this.prisma.region.findMany();
+			const res = await this.prisma.region.findMany();
+			return Promise.all(res.map(this.parseRegion));
 		} catch (error) {
 			handleDatabaseError(error);
 		}
@@ -44,12 +51,13 @@ export class RegionService extends CrudService<Region> {
 			if (!region) {
 				throw new AppError(AppErrorTypes.NotFound);
 			}
-			return region;
+			return this.parseRegion(region);
 		} catch (error) {
 			handleDatabaseError(error);
 		}
 	}
 
+	// TODO
 	async updateById(id: string, data: UpdateRegionInput) {
 		try {
 			return await this.prisma.region.update({ where: { id }, data });
@@ -60,7 +68,13 @@ export class RegionService extends CrudService<Region> {
 
 	async deleteById(id: string) {
 		try {
-			await this.prisma.region.delete({ where: { id } });
+			const { photoPath } = await this.prisma.region.delete({
+				where: { id },
+				select: { photoPath: true },
+			});
+			if (photoPath) {
+				await this.s3.file(photoPath).delete();
+			}
 		} catch (error) {
 			handleDatabaseError(error);
 		}

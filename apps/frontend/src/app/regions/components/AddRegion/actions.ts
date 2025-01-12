@@ -13,6 +13,5 @@ export async function createRegion(input: FormData) {
 		validator: RegionSchema,
 		withFiles: true,
 	});
-	console.log(status, error, data);
 	return { status, error, data };
 }

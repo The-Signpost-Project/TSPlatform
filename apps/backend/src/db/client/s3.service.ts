@@ -33,8 +33,8 @@ export class S3Service extends S3Client {
 			await this.file(path).write(Buffer.from(file.buffer), { type: options.contentType });
 			return path;
 		} catch (error) {
-      // @ts-ignore
-      console.error(error, error.code);
+			// @ts-ignore
+			console.error(error, error.code);
 			throw new AppError(AppErrorTypes.Panic("Failed to upload file"));
 		}
 	}

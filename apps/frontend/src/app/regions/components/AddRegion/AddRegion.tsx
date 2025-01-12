@@ -30,13 +30,12 @@ export function AddRegion() {
 	const router = useRouter();
 
 	async function onSubmit(data: Omit<CreateRegionInput, "photo">) {
-		console.log(data, uploadedFiles);
 		const formData = new FormData();
 		formData.append("name", data.name);
 		if (uploadedFiles) {
 			formData.append("photo", uploadedFiles[0]);
 		}
-		const { status, data: res, error } = await createRegion(formData);
+		const { status, error } = await createRegion(formData);
 
 		if (status === 201) {
 			toast.success("Region created successfully");

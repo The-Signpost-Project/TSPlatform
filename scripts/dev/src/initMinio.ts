@@ -32,7 +32,7 @@ mkdir(minioDataPath, { recursive: true }, (err) => {
 });
 
 // run minio container
-await $`docker run -d -p 9000:9000 -p 9001:9001 ${process.platform === 'linux' ? '--network=host': ''} --name minio -v ${minioDataPath}:/data -e "MINIO_ROOT_USER=${ROOT_USER}" -e "MINIO_ROOT_PASSWORD=${ROOT_PASSWORD}" minio/minio server /data --console-address ":9001"`;
+await $`docker run -d -p 9000:9000 -p 9001:9001 ${process.platform === "linux" ? "--network=host" : ""} --name minio -v ${minioDataPath}:/data -e "MINIO_ROOT_USER=${ROOT_USER}" -e "MINIO_ROOT_PASSWORD=${ROOT_PASSWORD}" minio/minio server /data --console-address ":9001"`;
 
 // check if minio container is running
 // use exponential backoff to wait for minio to start
