@@ -58,7 +58,6 @@ export class RegionService extends CrudService<Region> {
 		}
 	}
 
-	// TODO
 	async updateById(id: string, data: UpdateRegionInput) {
 		try {
 			const { photo, ...rest } = data;

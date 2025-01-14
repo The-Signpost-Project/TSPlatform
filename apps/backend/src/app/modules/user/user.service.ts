@@ -39,9 +39,7 @@ export class UserService extends CrudService<SafeUser> {
 
 	private cleanUserData(
 		data: Prisma.UserGetPayload<{
-			include: {
-				oauthAccounts: { select: { providerId: true } };
-			};
+			select: InstanceType<typeof UserService>["rawUserFindFields"];
 		}>,
 	): Omit<SafeUser, "roles"> {
 		// find any oAuth providers that the user has connected

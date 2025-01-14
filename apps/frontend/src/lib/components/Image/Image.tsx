@@ -8,18 +8,18 @@ import { useState } from "react";
 const defaultSkeletonStyle = "w-full h-full animate-pulse bg-gray-300 dark:bg-gray-700";
 
 export function Image({ src, alt, skeletonClassName, ...rest }: ImageProps) {
-  const [error, setError] = useState(false);
+	const [error, setError] = useState(false);
 
 	return (
 		<Suspense fallback={<div className={twMerge(defaultSkeletonStyle, skeletonClassName)} />}>
 			<NextImage
-				src={error?'/common/empty-image.png' :src}
+				src={error ? "/common/empty-image.png" : src}
 				alt={alt ?? ""}
 				fill={!rest.height || !rest.width}
 				className={twMerge("object-contain", rest.className)}
 				onError={(e) => {
 					console.warn(e);
-          setError(true);
+					setError(true);
 				}}
 				{...rest}
 			/>

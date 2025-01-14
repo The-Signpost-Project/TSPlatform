@@ -163,22 +163,29 @@ model Region {
 }
 
 model Case {
-  id               String   @id @default(uuid(7))
-  peddler          Peddler  @relation(fields: [peddlerId], references: [id])
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  createdBy        User     @relation(fields: [createdById], references: [id])
+  id               String      @id @default(uuid(7))
+  peddler          Peddler     @relation(fields: [peddlerId], references: [id])
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  createdBy        User        @relation(fields: [createdById], references: [id])
   createdById      String
   interactionDate  DateTime
   regionId         String
-  region           Region?  @relation(fields: [regionId], references: [id])
+  region           Region      @relation(fields: [regionId], references: [id])
   location         String
-  photoPath        String?
+  photos           CasePhoto[]
   notes            String
   importance       Int
   firstInteraction Boolean
 
   peddlerId String
+}
+
+model CasePhoto {
+  id        String @id @default(uuid(7))
+  case      Case   @relation(fields: [caseId], references: [id])
+  caseId    String
+  photoPath String
 }
 
 model PeddlerMergeRequest {
