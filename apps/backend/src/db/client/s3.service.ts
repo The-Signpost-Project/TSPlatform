@@ -35,7 +35,17 @@ export class S3Service extends S3Client {
 		} catch (error) {
 			// @ts-ignore
 			console.error(error, error.code);
-			throw new AppError(AppErrorTypes.Panic("Failed to upload file"));
+			throw new AppError(AppErrorTypes.Panic(`Failed to upload file: ${path}`));
+		}
+	}
+
+	async remove(path: string) {
+		try {
+			await this.file(path).delete();
+		} catch (error) {
+			// @ts-ignore
+			console.error(error, error.code);
+			throw new AppError(AppErrorTypes.Panic(`Failed to remove file: ${path}`));
 		}
 	}
 

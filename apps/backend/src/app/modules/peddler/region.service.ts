@@ -13,6 +13,7 @@ export class RegionService extends CrudService<Region> {
 		private readonly s3: S3Service,
 	) {
 		super();
+		this.parseRegion = this.parseRegion.bind(this); // Bind the method to the correct context
 	}
 
 	private async parseRegion(region: Region) {
@@ -60,7 +61,25 @@ export class RegionService extends CrudService<Region> {
 	// TODO
 	async updateById(id: string, data: UpdateRegionInput) {
 		try {
-			return await this.prisma.region.update({ where: { id }, data });
+			const { photo, ...rest } = data;
+			if (photo) {
+				// get the previous photoPath
+				const { photoPath: prevPhotoPath } =
+					(await this.prisma.region.findUnique({ where: { id }, select: { photoPath: true } })) ??
+					{};
+				// delete the previous photo
+				if (prevPhotoPath) {
+					await this.s3.remove(prevPhotoPath);
+				}
+				// upload the new photo
+
+				const photoPath = await this.s3.upload(photo, {
+					dir: "regions",
+					contentType: photo.mimetype,
+				});
+				return await this.prisma.region.update({ where: { id }, data: { ...rest, photoPath } });
+			}
+			return await this.prisma.region.update({ where: { id }, data: rest });
 		} catch (error) {
 			handleDatabaseError(error);
 		}

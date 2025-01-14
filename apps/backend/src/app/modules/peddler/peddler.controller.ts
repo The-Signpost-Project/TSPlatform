@@ -162,13 +162,15 @@ export class PeddlerController {
 	}
 
 	@Patch("region/:id")
+	@UseInterceptors(FileInterceptor("photo"))
 	async updateRegionById(
 		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
+		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File | null,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "region", "readWrite", { id })) {
-			return await this.regionService.updateById(id, data);
+			return await this.regionService.updateById(id, { ...data, photo });
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
@@ -182,11 +184,5 @@ export class PeddlerController {
 			return await this.regionService.deleteById(id);
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
-	}
-
-	@Post("test")
-	@UseInterceptors(FileInterceptor("file"))
-	async test(@UploadedFile(new FileValidationPipe()) file: Express.Multer.File) {
-		return file;
 	}
 }

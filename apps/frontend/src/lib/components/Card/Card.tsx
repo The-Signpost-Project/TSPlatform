@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { Title, Text, Image } from "@lib/components";
 
 const defaultStyles =
-	"max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700";
+	"flex flex-col max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700";
 
 export function Card({
 	children,
@@ -19,21 +19,31 @@ export function Card({
 	return (
 		<div className={mergedStyles} {...rest}>
 			{imgSrc && (
-				<Image
-					src={imgSrc}
-					alt={title ?? imgSrc}
-					className="min-w-full max-h-64 object-cover object-center rounded-t-lg"
-					skeletonClassName="rounded-t-lg min-h-64"
-				/>
+				<div className="relative w-full h-48">
+					<Image
+						src={imgSrc}
+						alt={title ?? imgSrc}
+						className="w-full object-cover object-center rounded-t-lg"
+						skeletonClassName="rounded-t-lg min-h-64"
+					/>
+				</div>
 			)}
-			<div className="px-6 py-4 flex flex-col gap-4 items-center text-center">
+			<div className="px-6 py-2 flex flex-col gap-4 items-center text-center">
 				{date && (
 					<Text order="sm" data-testid="card-date">
 						{date}
 					</Text>
 				)}
-				{title && <Title order={2}>{title}</Title>}
-				{description && <Text order="base">{description}</Text>}
+				{title && (
+					<Title order={2} className="sm:text-xl text-lg">
+						{title}
+					</Title>
+				)}
+				{description && (
+					<Text className="sm:text-base text-sm" description>
+						{description}
+					</Text>
+				)}
 				{children}
 			</div>
 		</div>
