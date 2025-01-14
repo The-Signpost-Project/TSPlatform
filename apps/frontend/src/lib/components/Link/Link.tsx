@@ -8,8 +8,7 @@ underline sm:no-underline underline-offset-2
 hover:sm:underline
 hover:text-orange-600 dark:hover:text-orange-300 
 focus:text-orange-600 dark:focus:text-orange-300 
-active:text-orange-600 dark:active:text-orange-300
-`;
+active:text-orange-600 dark:active:text-orange-300`;
 export function Link({
 	children,
 	order = "base",
@@ -24,8 +23,28 @@ export function Link({
 
 	return (
 		<NextLink href={href} className={mergedStyles} {...rest}>
-			{children}
-			{external && " ⬈"}
-		</NextLink>
+      <span className="inline-flex items-center gap-1">
+        {children}
+        {external && (
+          <svg
+            className="w-4 h-4"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+            />
+          </svg>
+        )}
+      </span>
+    </NextLink>
 	);
 }

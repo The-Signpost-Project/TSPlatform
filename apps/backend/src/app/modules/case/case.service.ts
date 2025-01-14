@@ -2,10 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService, S3Service } from "@db/client";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
-import type {
-	CreateCaseInput,
-	UpdateCaseInput,
-} from "@shared/common/types";
+import type { CreateCaseInput, UpdateCaseInput } from "@shared/common/types";
 import { CrudService } from "@base";
 import type { StrictCase } from "@shared/common/types";
 import type { Prisma } from "@prisma/client";
@@ -99,13 +96,13 @@ export class CaseService extends CrudService<StrictCase> {
 	async getById(id: string) {
 		try {
 			const res = await this.prisma.case.findUnique({
-        where: { id },
-        select: this.rawCaseFindFields,
-      });
-      if (!res) {
-        throw new AppError(AppErrorTypes.NotFound);
-      }
-      return this.parseCase(res);
+				where: { id },
+				select: this.rawCaseFindFields,
+			});
+			if (!res) {
+				throw new AppError(AppErrorTypes.NotFound);
+			}
+			return this.parseCase(res);
 		} catch (error) {
 			handleDatabaseError(error);
 		}
