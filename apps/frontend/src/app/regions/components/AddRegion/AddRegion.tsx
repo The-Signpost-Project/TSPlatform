@@ -47,7 +47,7 @@ export function AddRegion() {
 
 	return (
 		<>
-			<AddButton onClick={() => setModalOpen(true)} subject="Role" />
+			<AddButton onClick={() => setModalOpen(true)} subject="Region" />
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}

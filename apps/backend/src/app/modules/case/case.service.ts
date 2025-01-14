@@ -4,9 +4,7 @@ import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type {
 	CreateCaseInput,
-	CreateRegionInput,
 	UpdateCaseInput,
-	UpdateRegionInput,
 } from "@shared/common/types";
 import { CrudService } from "@base";
 import type { StrictCase } from "@shared/common/types";
