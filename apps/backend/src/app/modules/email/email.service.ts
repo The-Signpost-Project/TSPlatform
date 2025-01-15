@@ -2,11 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PrismaService } from "@db/client";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
-import { createTransport, type Transporter } from "nodemailer";
+import { createTransport, } from "nodemailer";
 import { compile, type TemplateDelegate } from "handlebars";
 import { readdirSync, readFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import * as path from "node:path";
+import { google } from "googleapis";
 
 @Injectable()
 export class EmailService {
@@ -15,9 +16,9 @@ export class EmailService {
 		private readonly config: ConfigService,
 	) {}
 
-	private transporter!: Transporter;
 	private emailFrom!: string;
 	private emailTemplates!: Record<string, TemplateDelegate>;
+	private oAuth2Client!: InstanceType<typeof google.auth.OAuth2>;
 
 	private compileTemplatesFromDir(dir: string) {
 		const templates = readdirSync(dir);
@@ -33,17 +34,22 @@ export class EmailService {
 		);
 	}
 
-	onModuleInit() {
-		this.transporter = createTransport({
-			host: this.config.get<string>("EMAIL_HOST"),
-			port: this.config.get<number>("EMAIL_PORT"),
-			secure: this.config.get<boolean>("EMAIL_SECURE"),
-			auth: {
-				user: this.config.get<string>("EMAIL_USER"),
-				pass: this.config.get<string>("EMAIL_PASSWORD"),
-			},
+	private getOAuth2Client() {
+		const oauth2Client = new google.auth.OAuth2(
+			this.config.get<string>("GOOGLE_OAUTH_CLIENT_ID") ?? "",
+			this.config.get<string>("GOOGLE_OAUTH_CLIENT_SECRET") ?? "",
+			this.config.get<string>("GOOGLE_OAUTH_EMAIL_REDIRECT_URI") ?? "",
+		);
+		oauth2Client.setCredentials({
+			refresh_token: this.config.get<string>("GOOGLE_OAUTH_EMAIL_REFRESH_TOKEN") ?? "",
 		});
-		this.emailFrom = this.config.get<string>("EMAIL_USER") ?? "";
+		return oauth2Client;
+	}
+
+	onModuleInit() {
+		this.oAuth2Client = this.getOAuth2Client();
+
+		this.emailFrom = this.config.get<string>("GOOGLE_OAUTH_EMAIL_USER") ?? "";
 
 		this.emailTemplates = this.compileTemplatesFromDir(
 			path.join(process.cwd(), "src", "public", "emailTemplates"),
@@ -60,12 +66,52 @@ export class EmailService {
 			throw new AppError(AppErrorTypes.Panic(`Email template ${template} not found`));
 		}
 		const html = this.emailTemplates[template](context);
-		await this.transporter.sendMail({
-			from: this.emailFrom,
-			to,
-			subject,
-			html,
+
+		// get the access token (this is short-lived)
+		let accessToken: string | null | undefined;
+		try {
+			accessToken = (await this.oAuth2Client.getAccessToken()).token;
+		} catch (error) {
+			if (error instanceof Error) {
+				throw new AppError(AppErrorTypes.Panic(error.message));
+			}
+			throw new AppError(
+				AppErrorTypes.Panic("Failed to get access token, email not sent. Please try again later."),
+			);
+		}
+		if (!accessToken) {
+			throw new AppError(
+				AppErrorTypes.Panic("Failed to get access token, email not sent. Please try again later."),
+			);
+		}
+		// set the access token in the transporter options
+
+		const transporter = createTransport({
+			service: "gmail",
+			auth: {
+				type: "OAuth2",
+				user: this.config.get<string>("GOOGLE_OAUTH_EMAIL_USER") ?? "",
+				clientId: this.config.get<string>("GOOGLE_OAUTH_CLIENT_ID") ?? "",
+
+				clientSecret: this.config.get<string>("GOOGLE_OAUTH_CLIENT_SECRET") ?? "",
+				refreshToken: this.config.get<string>("GOOGLE_OAUTH_REFRESH_TOKEN") ?? "",
+				accessToken,
+			},
+			tls: {
+				rejectUnauthorized: false,
+			},
 		});
+		try {
+			await transporter.sendMail({
+				from: this.emailFrom,
+				to,
+				subject,
+				html,
+			});
+		} catch (error) {
+			console.error(error);
+			throw new AppError(AppErrorTypes.Panic("Failed to send email. Please try again later."));
+		}
 	}
 
 	async sendForgotPasswordEmail(email: string) {

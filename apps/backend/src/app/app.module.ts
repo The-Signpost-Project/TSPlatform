@@ -41,11 +41,9 @@ const envSchema = z.object({
 	GOOGLE_OAUTH_CLIENT_SECRET: z.string(),
 	GOOGLE_OAUTH_REDIRECT_URI: z.string(),
 
-	EMAIL_HOST: z.string(),
-	EMAIL_PORT: z.string().transform((val) => Number.parseInt(val, 10)),
-	EMAIL_SECURE: z.string().transform((val) => val.toLowerCase() === "true"),
-	EMAIL_USER: z.string(),
-	EMAIL_PASSWORD: z.string(),
+	GOOGLE_OAUTH_EMAIL_REDIRECT_URI: z.string(),
+	GOOGLE_OAUTH_EMAIL_REFRESH_TOKEN: z.string(),
+	GOOGLE_OAUTH_EMAIL_USER: z.string(),
 
 	S3_ACCESS_KEY: z.string(),
 	S3_SECRET_KEY: z.string(),
