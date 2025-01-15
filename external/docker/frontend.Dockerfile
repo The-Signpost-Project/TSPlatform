@@ -17,6 +17,7 @@ WORKDIR /usr/local
 COPY --from=builder /usr/local/apps/frontend/.next ./.next
 COPY --from=builder /usr/local/apps/frontend/public ./public
 COPY --from=builder /usr/local/apps/frontend/package.json .
+COPY --from=builder /usr/local/apps/frontend/next.config.ts .
 COPY --from=builder /usr/local/node_modules ./node_modules
 
 # copy .env files

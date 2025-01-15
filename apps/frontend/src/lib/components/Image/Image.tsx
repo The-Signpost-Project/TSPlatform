@@ -18,7 +18,7 @@ export function Image({ src, alt, skeletonClassName, ...rest }: ImageProps) {
 				fill={!rest.height || !rest.width}
 				className={twMerge("object-contain", rest.className)}
 				onError={(e) => {
-					console.warn(e);
+					console.warn("Image failed to load", e, src);
 					setError(true);
 				}}
 				{...rest}
