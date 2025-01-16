@@ -21,7 +21,6 @@ COPY --from=builder /usr/local/apps/frontend/next.config.ts .
 COPY --from=builder /usr/local/node_modules ./node_modules
 
 # copy .env files
-COPY --from=builder /usr/local/apps/frontend/.env.local .
 COPY --from=builder /usr/local/apps/frontend/.env.production .
 
 CMD ["bun", "run", "start"]

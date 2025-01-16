@@ -2,9 +2,9 @@
 	"name": "frontend",
 	"private": true,
 	"scripts": {
-		"dev": "bunx dotenv -e .env.local -e .env.development -- next dev --turbo -H 0.0.0.0 -p 3000",
-		"build": "bunx dotenv -e .env.local -e .env.production -- next build",
-		"start": "bunx dotenv -e .env.local -e .env.production -- next start -H 0.0.0.0",
+		"dev": "bunx dotenv -e .env.development -- next dev --turbo -H 0.0.0.0 -p 3000",
+		"build": "bunx dotenv -e .env.production -- next build",
+		"start": "bunx dotenv -e .env.production -- next start -H 0.0.0.0",
 		"format": "bunx biome format --write .",
 		"lint": "bunx biome lint --write ./src"
 	},

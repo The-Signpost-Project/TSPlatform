@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PrismaService } from "@db/client";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
-import { createTransport, } from "nodemailer";
+import { createTransport } from "nodemailer";
 import { compile, type TemplateDelegate } from "handlebars";
 import { readdirSync, readFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";

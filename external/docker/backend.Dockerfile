@@ -21,7 +21,6 @@ COPY --from=builder /usr/local/apps/backend/package.json .
 COPY --from=builder /usr/local/node_modules ./node_modules
 
 # copy .env files
-COPY --from=builder /usr/local/apps/backend/.env.local .
 COPY --from=builder /usr/local/apps/backend/.env.production .
 
 CMD ["bun", "run", "start"]
