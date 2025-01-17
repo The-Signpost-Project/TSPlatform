@@ -5,8 +5,7 @@ import { ValidationPipe } from "@pipes";
 import {
 	CreatePolicyInputSchema,
 	CreateRoleInputSchema,
-	GetPolicyInputSchema,
-	GetRoleInputSchema,
+	NonEmptyStringSchema,
 	UpdatePolicyInputSchema,
 	UpdateRoleInputSchema,
 } from "@shared/common/schemas";
@@ -42,7 +41,7 @@ export class RoleController {
 
 	@Patch(":id")
 	async updateById(
-		@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRoleInputSchema)) data: UpdateRoleInput,
 	) {
 		return await this.roleService.updateById(id, data);
@@ -50,7 +49,7 @@ export class RoleController {
 
 	@Delete(":id")
 	async deleteById(
-		@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "role", "readWrite", { id })) {
@@ -68,7 +67,7 @@ export class RoleController {
 
 	@Get(":id")
 	async getById(
-		@Param("id", new ValidationPipe(GetRoleInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "role", "read", { id })) {
@@ -87,7 +86,7 @@ export class RoleController {
 
 	@Get("policy/:id")
 	async getPolicyById(
-		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "policy", "read", { id })) {
@@ -109,7 +108,7 @@ export class RoleController {
 
 	@Patch("policy/:id")
 	async updatePolicyById(
-		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePolicyInputSchema)) data: UpdatePolicyInput,
 		@Roles() roles: StrictRole[],
 	) {
@@ -121,7 +120,7 @@ export class RoleController {
 
 	@Delete("policy/:id")
 	async deletePolicyById(
-		@Param("id", new ValidationPipe(GetPolicyInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "policy", "readWrite", { id })) {

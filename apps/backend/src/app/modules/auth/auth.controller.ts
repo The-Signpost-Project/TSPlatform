@@ -24,9 +24,8 @@ import {
 	SignInInputSchema,
 	TokenIdSchema,
 	ForgotPasswordResetSchema,
-	EmailVerificationTokenSchema,
 	ChangePasswordInputSchema,
-	UserIdSchema,
+	NonEmptyStringSchema,
 } from "@shared/common/schemas";
 import { ValidationPipe } from "@pipes";
 import { ConfigService } from "@nestjs/config";
@@ -70,7 +69,7 @@ export class AuthController {
 	@UseGuards(AuthGuard("params", "id"))
 	@HttpCode(201)
 	async changePassword(
-		@Param("id", new ValidationPipe(UserIdSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(ChangePasswordInputSchema)) input: ChangePasswordInput,
 	) {
 		await this.authService.changePassword(id, input);
@@ -86,7 +85,7 @@ export class AuthController {
 
 	@Get("verify/:token")
 	async verifyEmail(
-		@Param("token", new ValidationPipe(EmailVerificationTokenSchema)) token: string,
+		@Param("token", new ValidationPipe(NonEmptyStringSchema)) token: string,
 		@Res({ passthrough: true }) res: Response,
 	) {
 		await this.authService.verifyEmail(token);

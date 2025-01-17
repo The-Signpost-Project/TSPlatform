@@ -16,13 +16,11 @@ import { ValidationPipe, FileValidationPipe } from "@pipes";
 import {
 	CreateDisabilityInputSchema,
 	CreatePeddlerInputSchema,
-	GetDisabilityInputSchema,
-	GetPeddlerInputSchema,
 	UpdateDisabilityInputSchema,
 	UpdatePeddlerInputSchema,
 	CreateRegionInputSchema,
 	UpdateRegionInputSchema,
-	GetRegionInputSchema,
+	NonEmptyStringSchema,
 } from "@shared/common/schemas";
 import type {
 	CreateDisabilityInput,
@@ -55,14 +53,14 @@ export class PeddlerController {
 
 	@Patch(":id")
 	async updateById(
-		@Param("id", new ValidationPipe(GetPeddlerInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePeddlerInputSchema)) data: UpdatePeddlerInput,
 	) {
 		return await this.peddlerService.updateById(id, data);
 	}
 
 	@Delete(":id")
-	async deleteById(@Param("id", new ValidationPipe(GetPeddlerInputSchema)) id: string) {
+	async deleteById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
 		return await this.peddlerService.deleteById(id);
 	}
 
@@ -72,7 +70,7 @@ export class PeddlerController {
 	}
 
 	@Get(":id")
-	async getById(@Param("id", new ValidationPipe(GetPeddlerInputSchema)) id: string) {
+	async getById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
 		return await this.peddlerService.getById(id);
 	}
 
@@ -86,7 +84,7 @@ export class PeddlerController {
 
 	@Get("disability/:id")
 	async getDisabilityById(
-		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "disability", "read", { id })) {
@@ -108,7 +106,7 @@ export class PeddlerController {
 
 	@Patch("disability/:id")
 	async updateDisabilityById(
-		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateDisabilityInputSchema)) data: UpdateDisabilityInput,
 		@Roles() roles: StrictRole[],
 	) {
@@ -120,7 +118,7 @@ export class PeddlerController {
 
 	@Delete("disability/:id")
 	async deleteDisabilityById(
-		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
@@ -139,7 +137,7 @@ export class PeddlerController {
 
 	@Get("region/:id")
 	async getRegionById(
-		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "region", "read", { id })) {
@@ -164,7 +162,7 @@ export class PeddlerController {
 	@Patch("region/:id")
 	@UseInterceptors(FileInterceptor("photo"))
 	async updateRegionById(
-		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
 		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File | null,
 		@Roles() roles: StrictRole[],
@@ -177,7 +175,7 @@ export class PeddlerController {
 
 	@Delete("region/:id")
 	async deleteRegionById(
-		@Param("id", new ValidationPipe(GetRegionInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "region", "readWrite", { id })) {

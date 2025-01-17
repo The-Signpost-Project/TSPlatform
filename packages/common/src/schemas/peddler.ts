@@ -29,8 +29,6 @@ export const UpdatePeddlerInputSchema = z.object({
 	disabilities: z.array(z.object({ id: z.string() })).optional(),
 }) satisfies z.ZodType<UpdatePeddlerInput>;
 
-export const GetPeddlerInputSchema = z.string();
-
 export const CreateDisabilityInputSchema = z.object({
 	name: z.string().min(1),
 }) satisfies z.ZodType<CreateDisabilityInput>;
@@ -38,8 +36,6 @@ export const CreateDisabilityInputSchema = z.object({
 export const UpdateDisabilityInputSchema = z.object({
 	name: z.string().min(1).optional(),
 }) satisfies z.ZodType<UpdateDisabilityInput>;
-
-export const GetDisabilityInputSchema = z.string();
 
 export const RegionSchema = z.object({
 	id: z.string(),
@@ -54,5 +50,3 @@ export const CreateRegionInputSchema = z.object({
 export const UpdateRegionInputSchema = z.object({
 	name: z.string().min(1).optional(),
 }) satisfies z.ZodType<UpdateRegionInput>;
-
-export const GetRegionInputSchema = z.string();

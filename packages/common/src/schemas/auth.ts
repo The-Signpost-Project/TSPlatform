@@ -56,8 +56,6 @@ export const SignInInputSchema = z.object({
 	password: z.string(),
 }) satisfies z.ZodType<SignInInput>;
 
-export const UserIdSchema = z.string();
-
 export const TokenIdSchema = z.string().length(64);
 
 export const ForgotPasswordEmailSchema = z.object({
@@ -72,8 +70,6 @@ export const ForgotPasswordResetSchema = z.object({
 export const VerifyEmailSchema = z.object({
 	id: z.string(),
 }) satisfies z.ZodType<VerifyEmail>;
-
-export const EmailVerificationTokenSchema = z.string() satisfies z.ZodType<string>;
 
 export const ChangePasswordInputSchema = z
 	.object({

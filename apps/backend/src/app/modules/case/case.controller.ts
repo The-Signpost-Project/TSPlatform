@@ -83,7 +83,7 @@ export class CaseController {
 	/*
 	@Patch(":id")
 	async updateDisabilityById(
-		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateDisabilityInputSchema)) data: UpdateDisabilityInput,
 		@Roles() roles: StrictRole[],
 	) {
@@ -95,7 +95,7 @@ export class CaseController {
 
 	@Delete(":id")
 	async deleteDisabilityById(
-		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
