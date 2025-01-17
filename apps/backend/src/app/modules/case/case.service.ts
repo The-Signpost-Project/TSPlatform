@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService, S3Service } from "@db/client";
+import { PrismaService, S3Service, LuciaService } from "@db/client";
 import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type { CreateCaseInput, UpdateCaseInput } from "@shared/common/types";
@@ -12,6 +12,7 @@ export class CaseService extends CrudService<StrictCase> {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly s3: S3Service,
+    private readonly lucia: LuciaService,
 	) {
 		super();
 	}
@@ -77,9 +78,33 @@ export class CaseService extends CrudService<StrictCase> {
 		};
 	}
 
-	// @ts-expect-error
 	async create(data: CreateCaseInput) {
-		// TODO
+		try {
+			if (data.photos) {
+			}
+			const res = await this.prisma.case.create({
+				data: {
+					createdBy: {
+						connect: { id: data.createdById },
+					},
+					region: {
+						connect: { id: data.regionId },
+					},
+					peddler: {
+						connect: { id: data.peddlerId },
+					},
+					interactionDate: data.interactionDate,
+					location: data.location,
+					notes: data.notes,
+					importance: data.importance,
+					firstInteraction: data.firstInteraction,
+				},
+				select: this.rawCaseFindFields,
+			});
+			return this.parseCase(res);
+		} catch (error) {
+			handleDatabaseError(error);
+		}
 	}
 
 	async getAll() {
@@ -107,6 +132,22 @@ export class CaseService extends CrudService<StrictCase> {
 			handleDatabaseError(error);
 		}
 	}
+
+  async getOwn(tokenId: string | undefined) {
+    if (!tokenId) {
+			throw new AppError(AppErrorTypes.InvalidToken);
+		}
+
+		const { session, user } = await this.lucia.validateSessionToken(tokenId);
+
+		if (!session || !user) {
+			throw new AppError(AppErrorTypes.InvalidToken);
+		}
+
+    return this.getById(user.id);
+  }
+
+
 
 	// @ts-expect-error
 	async updateById(id: string, data: UpdateCaseInput) {

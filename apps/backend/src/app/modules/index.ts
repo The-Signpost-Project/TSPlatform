@@ -4,3 +4,4 @@ export { UserModule } from "./user";
 export { EmailModule } from "./email";
 export { PeddlerModule } from "./peddler";
 export { RoleModule } from "./role";
+export { CaseModule } from "./case";

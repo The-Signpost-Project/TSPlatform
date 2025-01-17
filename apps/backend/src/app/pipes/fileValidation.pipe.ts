@@ -3,25 +3,21 @@ import { AppError, AppErrorTypes } from "@utils/appErrors";
 
 interface FileValidationPipeOptions {
 	optional?: boolean;
+	multiple?: boolean;
 }
 
 export class FileValidationPipe implements PipeTransform {
 	private optional: boolean;
+	private multiple: boolean;
 	private maxFileSize = 1024 * 1024 * 10; // 10MB
 	private acceptedMimeTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
 
-	constructor({ optional = false }: FileValidationPipeOptions = {}) {
+	constructor({ optional = false, multiple = false }: FileValidationPipeOptions = {}) {
 		this.optional = optional;
+		this.multiple = multiple;
 	}
-	transform(value: unknown, _metadata: ArgumentMetadata) {
-		if (this.optional && !value) {
-			return null;
-		}
-		// check if value is a file
-		if (!value) {
-			throw new AppError(AppErrorTypes.FormValidationError("No file uploaded."));
-		}
 
+	private validateFile(value: unknown) {
 		if (!(value instanceof Object)) {
 			throw new AppError(AppErrorTypes.FormValidationError("Invalid file."));
 		}
@@ -48,7 +44,24 @@ export class FileValidationPipe implements PipeTransform {
 				),
 			);
 		}
-
 		return value;
+	}
+
+	transform(value: unknown, _metadata: ArgumentMetadata) {
+		if (this.optional && !value) {
+			return null;
+		}
+		// check if value is a file
+		if (!value) {
+			throw new AppError(AppErrorTypes.FormValidationError("No file uploaded."));
+		}
+
+		if (this.multiple) {
+			if (!Array.isArray(value)) {
+				throw new AppError(AppErrorTypes.FormValidationError("Invalid files."));
+			}
+			return value.map(this.validateFile);
+		}
+		return this.validateFile(value);
 	}
 }

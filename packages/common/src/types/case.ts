@@ -1,3 +1,4 @@
+import type { Express } from "express";
 export interface StrictCase {
 	id: string;
 	// user attrs
@@ -29,6 +30,7 @@ export type CreateCaseInput = {
 	importance: 1 | 2 | 3 | 4 | 5;
 	firstInteraction: boolean;
 	peddlerId: string;
+	photos: Express.Multer.File[] | null;
 };
 
 export type UpdateCaseInput = Partial<CreateCaseInput>;
