@@ -65,7 +65,6 @@ export const CreateRoleInputSchema = z.object({
 export const UpdateRoleInputSchema =
 	CreateRoleInputSchema.partial() satisfies z.ZodType<UpdateRoleInput>;
 
-
 export const StrictConditionSchema = z.object({
 	id: z.string(),
 	field: z.string().min(1),
