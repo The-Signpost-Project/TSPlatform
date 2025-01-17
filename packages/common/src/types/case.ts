@@ -34,3 +34,16 @@ export type CreateCaseInput = {
 };
 
 export type UpdateCaseInput = Partial<CreateCaseInput>;
+
+export type CaseFilters = {
+	region?: string; // region id
+	team?: string; // team id
+	peddler?: string; // peddler id
+	importance?: 1 | 2 | 3 | 4 | 5;
+
+	// pagination
+	limit?: number;
+	offset?: number;
+	sortBy?: "updatedAt" | "interactionDate" | "importance";
+	order?: "ASC" | "DESC";
+};

@@ -4,7 +4,7 @@ import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type { CreateCaseInput, UpdateCaseInput } from "@shared/common/types";
 import { CrudService } from "@base";
-import type { StrictCase } from "@shared/common/types";
+import type { StrictCase, CaseFilters } from "@shared/common/types";
 import type { Prisma } from "@prisma/client";
 
 @Injectable()
@@ -128,6 +128,27 @@ export class CaseService extends CrudService<StrictCase> {
 				throw new AppError(AppErrorTypes.NotFound);
 			}
 			return this.parseCase(res);
+		} catch (error) {
+			handleDatabaseError(error);
+		}
+	}
+
+	async getFiltered(filters: CaseFilters) {
+		try {
+			const res = await this.prisma.case.findMany({
+				where: {
+					regionId: filters.region,
+					peddlerId: filters.peddler,
+					importance: filters.importance,
+				},
+				select: this.rawCaseFindFields,
+				orderBy: {
+					[filters.sortBy || "updatedAt"]: filters.order || "DESC",
+				},
+				skip: filters.offset,
+				take: filters.limit,
+			});
+			return Promise.all(res.map(this.parseCase));
 		} catch (error) {
 			handleDatabaseError(error);
 		}

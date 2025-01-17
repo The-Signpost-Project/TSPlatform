@@ -7,11 +7,16 @@ import {
 	UseInterceptors,
 	Req,
 	UploadedFiles,
+	Query,
 } from "@nestjs/common";
 import { CaseService } from "./case.service";
 import { ValidationPipe, FileValidationPipe } from "@pipes";
-import { NonEmptyStringSchema, CreateCaseInputSchema } from "@shared/common/schemas";
-import type { StrictRole, CreateCaseInput } from "@shared/common/types";
+import {
+	NonEmptyStringSchema,
+	CreateCaseInputSchema,
+	CaseFiltersSchema,
+} from "@shared/common/schemas";
+import type { StrictRole, CreateCaseInput, CaseFilters } from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
@@ -28,6 +33,18 @@ export class CaseController {
 	async getAllCases(@Roles() roles: StrictRole[]) {
 		if (rolesHavePermission(roles, "case", "read")) {
 			return await this.caseService.getAll();
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
+	}
+
+	@Get("filter")
+	async getFilteredCases(
+		@Query(new ValidationPipe(CaseFiltersSchema)) filters: CaseFilters,
+		@Roles() roles: StrictRole[],
+	) {
+		console.log("filters", filters);
+		if (rolesHavePermission(roles, "case", "read")) {
+			return await this.caseService.getFiltered(filters);
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
