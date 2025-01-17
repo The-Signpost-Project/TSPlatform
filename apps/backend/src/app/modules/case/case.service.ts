@@ -12,7 +12,7 @@ export class CaseService extends CrudService<StrictCase> {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly s3: S3Service,
-    private readonly lucia: LuciaService,
+		private readonly lucia: LuciaService,
 	) {
 		super();
 	}
@@ -133,8 +133,8 @@ export class CaseService extends CrudService<StrictCase> {
 		}
 	}
 
-  async getOwn(tokenId: string | undefined) {
-    if (!tokenId) {
+	async getOwn(tokenId: string | undefined) {
+		if (!tokenId) {
 			throw new AppError(AppErrorTypes.InvalidToken);
 		}
 
@@ -144,10 +144,8 @@ export class CaseService extends CrudService<StrictCase> {
 			throw new AppError(AppErrorTypes.InvalidToken);
 		}
 
-    return this.getById(user.id);
-  }
-
-
+		return this.getById(user.id);
+	}
 
 	// @ts-expect-error
 	async updateById(id: string, data: UpdateCaseInput) {

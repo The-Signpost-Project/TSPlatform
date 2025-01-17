@@ -5,19 +5,13 @@ import {
 	Param,
 	Post,
 	UseInterceptors,
-  Req,
-  UploadedFiles
+	Req,
+	UploadedFiles,
 } from "@nestjs/common";
 import { CaseService } from "./case.service";
 import { ValidationPipe, FileValidationPipe } from "@pipes";
-import {
-  NonEmptyStringSchema,
-  CreateCaseInputSchema,
-} from "@shared/common/schemas";
-import type {
-	StrictRole,
-  CreateCaseInput,
-} from "@shared/common/types";
+import { NonEmptyStringSchema, CreateCaseInputSchema } from "@shared/common/schemas";
+import type { StrictRole, CreateCaseInput } from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
@@ -56,19 +50,20 @@ export class CaseController {
 	}
 
 	@Post()
-  @UseInterceptors(FilesInterceptor("photos", 10))
+	@UseInterceptors(FilesInterceptor("photos", 10))
 	async createCase(
 		@Body(new ValidationPipe(CreateCaseInputSchema)) data: CreateCaseInput,
 		@Roles() roles: StrictRole[],
-    @UploadedFiles(new FileValidationPipe({ optional: true, multiple: true })) photos: Express.Multer.File[],
+		@UploadedFiles(new FileValidationPipe({ optional: true, multiple: true }))
+		photos: Express.Multer.File[],
 	) {
 		if (rolesHavePermission(roles, "case", "readWrite")) {
-			return await this.caseService.create({...data, photos});
+			return await this.caseService.create({ ...data, photos });
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-  /*
+	/*
 	@Patch(":id")
 	async updateDisabilityById(
 		@Param("id", new ValidationPipe(GetDisabilityInputSchema)) id: string,

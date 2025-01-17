@@ -4,8 +4,8 @@ import { CaseController } from "./case.controller";
 import { CaseService } from "./case.service";
 
 @Module({
-  imports: [DbClientModule],
-  providers: [CaseService],
-  controllers: [CaseController],
+	imports: [DbClientModule],
+	providers: [CaseService],
+	controllers: [CaseController],
 })
 export class CaseModule {}

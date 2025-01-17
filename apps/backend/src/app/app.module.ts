@@ -8,7 +8,7 @@ import {
 	EmailModule,
 	PeddlerModule,
 	RoleModule,
-  CaseModule
+	CaseModule,
 } from "./modules";
 import { RateLimitGuard } from "@guards";
 import { ConfigModule } from "@nestjs/config";
@@ -60,7 +60,7 @@ const envSchema = z.object({
 		EmailModule,
 		PeddlerModule,
 		RoleModule,
-    CaseModule,
+		CaseModule,
 		ConfigModule.forRoot({
 			envFilePath: [envFilePath],
 			isGlobal: true,
