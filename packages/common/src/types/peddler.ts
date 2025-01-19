@@ -31,6 +31,11 @@ export interface CreatePeddlerInput {
 
 export type UpdatePeddlerInput = Partial<CreatePeddlerInput>;
 
+export interface Disability {
+	id: string;
+	name: string;
+}
+
 export type CreateDisabilityInput = {
 	name: string;
 };

@@ -73,13 +73,10 @@ export class PeddlerController {
 	async getById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
 		return await this.peddlerService.getById(id);
 	}
-
+	// this is public, no need for roles
 	@Get("disability/all")
-	async getAllDisabilities(@Roles() roles: StrictRole[]) {
-		if (rolesHavePermission(roles, "disability", "read")) {
-			return await this.disabilityService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	async getAllDisabilities() {
+		return await this.disabilityService.getAll();
 	}
 
 	@Get("disability/:id")
@@ -127,12 +124,10 @@ export class PeddlerController {
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
+	// this is public, no need for roles
 	@Get("region/all")
-	async getAllRegions(@Roles() roles: StrictRole[]) {
-		if (rolesHavePermission(roles, "region", "read")) {
-			return await this.regionService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	async getAllRegions() {
+		return await this.regionService.getAll();
 	}
 
 	@Get("region/:id")

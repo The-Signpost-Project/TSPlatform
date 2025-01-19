@@ -7,6 +7,7 @@ import type {
 	CreateRegionInput,
 	UpdateRegionInput,
 	Region,
+	Disability,
 } from "@shared/common/types";
 
 export const CreatePeddlerInputSchema = z.object({
@@ -21,6 +22,11 @@ export const CreatePeddlerInputSchema = z.object({
 
 export const UpdatePeddlerInputSchema =
 	CreatePeddlerInputSchema.partial() satisfies z.ZodType<UpdatePeddlerInput>;
+
+export const DisabilitySchema = z.object({
+	id: z.string(),
+	name: z.string(),
+}) satisfies z.ZodType<Disability>;
 
 export const CreateDisabilityInputSchema = z.object({
 	name: z.string().min(1),
