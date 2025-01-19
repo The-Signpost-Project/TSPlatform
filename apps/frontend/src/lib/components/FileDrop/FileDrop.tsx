@@ -2,8 +2,9 @@
 import { Button, Text } from "@lib/components";
 import type { FileDropProps } from "./types";
 import { useRef, useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
-export function FileDrop({ optional, ...props }: FileDropProps) {
+export function FileDrop({ optional, className, ...props }: FileDropProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
@@ -50,7 +51,10 @@ export function FileDrop({ optional, ...props }: FileDropProps) {
 	return (
 		<div
 			ref={containerRef}
-			className="w-full h-full py-4 border-2 border-dashed border-orange-500 dark:border-orange-400 rounded-lg flex flex-col items-center justify-center gap-2"
+			className={twMerge(
+				"w-full h-full py-4 border-2 border-dashed border-orange-500 dark:border-orange-400 rounded-lg flex flex-col items-center justify-center gap-2",
+				className,
+			)}
 		>
 			<svg
 				className="w-1/5 h-1/5 text-gray-600 dark:text-gray-400"

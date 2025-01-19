@@ -17,6 +17,7 @@ import type { CreateRegionInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
 import { createRegion } from "./actions";
 import { toast } from "react-hot-toast";
+import { supportedFileTypes } from "@shared/common/constants";
 
 export function AddRegion() {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -79,9 +80,7 @@ export function AddRegion() {
 						<FileDrop
 							optional
 							onChange={(e) => setUploadedFiles(e.target.files)}
-							accept={["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"].join(
-								", ",
-							)}
+							accept={supportedFileTypes}
 						/>
 					</div>
 
