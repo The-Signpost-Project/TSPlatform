@@ -9,3 +9,8 @@ export interface ModalProps {
 	reducedMotion?: boolean;
 	onClick?: (e: MouseEvent<HTMLDialogElement>) => void;
 }
+
+export interface ModalCloseButtonProps {
+	onClick: () => void;
+	accessibilityLabel?: string;
+}

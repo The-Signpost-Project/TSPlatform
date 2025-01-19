@@ -1,14 +1,15 @@
-import type { TextInputProps } from "./types";
+import type { TextAreaProps } from "./types";
 import { twMerge } from "tailwind-merge";
 
-export function TextInput({
+export function TextArea({
 	label,
 	variant,
 	helperText,
+	disabled,
 	className,
 	icon,
 	...rest
-}: TextInputProps) {
+}: TextAreaProps) {
 	const inputClasses = twMerge(
 		"block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500",
 		variant === undefined ? "focus:ring-indigo-500 focus:border-indigo-500" : "",
@@ -31,7 +32,7 @@ export function TextInput({
 			{/* biome-ignore lint/a11y/noLabelWithoutControl: htmlFor is not available as id is a prop */}
 			{label && <label className={helperTextClasses}>{label}</label>}
 			<div className="relative w-full">
-				<input className={inputClasses} {...rest} />
+				<textarea className={inputClasses} {...rest} />
 				{icon && <div className="absolute inset-y-0 right-0 pr-3 flex items-center ">{icon}</div>}
 			</div>
 			{helperText && <p className={helperTextClasses}>{helperText}</p>}

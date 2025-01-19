@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 
-export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface TextAreaProps extends InputHTMLAttributes<HTMLTextAreaElement> {
 	label?: string;
 	variant?: "success" | "error";
 	helperText?: string;
