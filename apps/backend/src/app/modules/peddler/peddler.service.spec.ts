@@ -32,7 +32,7 @@ describe("PeddlerService", () => {
 	describe("create", async () => {
 		it("should create a new peddler", async () => {
 			const res = await service.create({
-				mainRegion: testRegion,
+				mainRegionId: testRegion.id,
 				lastName: faker.person.lastName(),
 				firstName: faker.person.firstName(),
 				// @ts-ignore
@@ -40,7 +40,7 @@ describe("PeddlerService", () => {
 				// @ts-ignore
 				sex: ["M", "F"][Math.floor(Math.random() * 2)],
 				birthYear: faker.date.past().getFullYear(),
-				disabilities: [],
+				disabilityIds: [],
 			});
 			expect(res).toMatchObject({ id: expect.any(String) });
 		});
@@ -54,7 +54,7 @@ describe("PeddlerService", () => {
 			expect(
 				service.create({
 					// @ts-ignore
-					mainRegion: null,
+					mainRegionId: null,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -62,7 +62,7 @@ describe("PeddlerService", () => {
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
 					birthYear: faker.date.past().getFullYear(),
-					disabilities: [],
+					disabilityIds: [],
 				}),
 			).rejects.toThrow(AppError);
 		});
@@ -72,7 +72,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			for (let i = 0; i < 3; i++) {
 				await service.create({
-					mainRegion: testRegion,
+					mainRegionId: testRegion.id,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -80,7 +80,7 @@ describe("PeddlerService", () => {
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
 					birthYear: faker.date.past().getFullYear(),
-					disabilities: [],
+					disabilityIds: [],
 				});
 			}
 		});
@@ -103,7 +103,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			id = (
 				await service.create({
-					mainRegion: testRegion,
+					mainRegionId: testRegion.id,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -111,7 +111,7 @@ describe("PeddlerService", () => {
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
 					birthYear: faker.date.past().getFullYear(),
-					disabilities: [],
+					disabilityIds: [],
 				})
 			).id;
 		});
@@ -132,7 +132,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			id = (
 				await service.create({
-					mainRegion: testRegion,
+					mainRegionId: testRegion.id,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -140,7 +140,7 @@ describe("PeddlerService", () => {
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
 					birthYear: faker.date.past().getFullYear(),
-					disabilities: [],
+					disabilityIds: [],
 				})
 			).id;
 		});
@@ -153,6 +153,7 @@ describe("PeddlerService", () => {
 			} as const;
 			const res = await service.updateById(id, newAttrs);
 			expect(res).toMatchObject({ id, ...newAttrs });
+			expect(res.codename).toMatch(new RegExp(`${testRegion.name}_.*_M`));
 		});
 	});
 
@@ -162,7 +163,7 @@ describe("PeddlerService", () => {
 		beforeEach(async () => {
 			id = (
 				await service.create({
-					mainRegion: testRegion,
+					mainRegionId: testRegion.id,
 					lastName: faker.person.lastName(),
 					firstName: faker.person.firstName(),
 					// @ts-ignore
@@ -170,7 +171,7 @@ describe("PeddlerService", () => {
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
 					birthYear: faker.date.past().getFullYear(),
-					disabilities: [],
+					disabilityIds: [],
 				})
 			).id;
 		});

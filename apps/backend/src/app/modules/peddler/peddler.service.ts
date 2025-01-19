@@ -25,17 +25,29 @@ export class PeddlerService extends CrudService<StrictPeddler> {
 	}
 
 	async create(data: CreatePeddlerInput): Promise<StrictPeddler> {
-		// region_lastname_sex
-		const codename = `${data.mainRegion}_${data.lastName}_${data.sex}`;
+		let mainRegion: { id: string; name: string; photoPath: string | null } | undefined = undefined;
+		try {
+			// get mainRegion
+			mainRegion =
+				(await this.prisma.region.findUnique({ where: { id: data.mainRegionId } })) ?? undefined;
+			if (!mainRegion) {
+				throw new AppError(AppErrorTypes.FormValidationError("Main region not found"));
+			}
+		} catch (error) {
+			handleDatabaseError(error);
+		}
 
-		const { disabilities, mainRegion, ...peddlerData } = data;
+		// region_lastname_sex
+		const codename = `${mainRegion.name}_${data.lastName}_${data.sex}`;
+
+		const { disabilityIds, ...peddlerData } = data;
 		try {
 			const newPeddler = await this.prisma.peddler.create({
-				data: { codename, mainRegionId: mainRegion.id, ...peddlerData },
+				data: { codename, ...peddlerData },
 			});
 			// create peddlerdisability records
-			const peddlerDisability = data.disabilities.map((d) => ({
-				disabilityId: d.id,
+			const peddlerDisability = disabilityIds.map((d) => ({
+				disabilityId: d,
 				peddlerId: newPeddler.id,
 			}));
 			await this.prisma.peddlerDisability.createMany({ data: peddlerDisability });
@@ -74,18 +86,53 @@ export class PeddlerService extends CrudService<StrictPeddler> {
 
 	async updateById(id: string, data: UpdatePeddlerInput) {
 		try {
-			const peddler = await this.prisma.peddler.findUnique({ where: { id } });
+			const peddler = await this.prisma.peddler.findUnique({
+				where: { id },
+				include: { mainRegion: true },
+			});
 			if (!peddler) {
 				throw new AppError(AppErrorTypes.NotFound);
 			}
-			const { disabilities, mainRegion, ...peddlerData } = data;
+			let mainRegion:
+				| {
+						id: string;
+						name: string;
+						photoPath: string | null;
+				  }
+				| undefined = undefined;
+			try {
+				// get mainRegion
+				if (data.mainRegionId) {
+					mainRegion =
+						(await this.prisma.region.findUnique({ where: { id: data.mainRegionId } })) ??
+						undefined;
+				}
+			} catch (error) {
+				handleDatabaseError(error);
+			}
+			if (data.mainRegionId && mainRegion === undefined) {
+				throw new AppError(AppErrorTypes.FormValidationError("Main region not found"));
+			}
+
+			let codename = peddler.codename;
+			// if changes to peddler lastName or sex or mainRegionId
+			if (
+				data.lastName !== undefined ||
+				data.sex !== undefined ||
+				data.mainRegionId !== undefined
+			) {
+				// calculate new codename
+				codename = `${mainRegion?.name ?? peddler.mainRegion.name}_${data.lastName ?? peddler.lastName}_${data.sex ?? peddler.sex}`;
+			}
+
+			const { disabilityIds, ...peddlerData } = data;
 			const updatedPeddler = await this.prisma.peddler.update({
 				where: { id },
-				data: { mainRegionId: mainRegion?.id, ...peddlerData },
+				data: { codename, ...peddlerData },
 			});
 			// update peddlerdisability records
-			const peddlerDisability = data.disabilities?.map((d) => ({
-				disabilityId: d.id,
+			const peddlerDisability = disabilityIds?.map((d) => ({
+				disabilityId: d,
 				peddlerId: updatedPeddler.id,
 			}));
 			await this.prisma.peddlerDisability.deleteMany({ where: { peddlerId: id } });

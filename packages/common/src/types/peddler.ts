@@ -20,17 +20,13 @@ export interface StrictPeddler {
 }
 
 export interface CreatePeddlerInput {
-	mainRegion: {
-		id: string;
-	};
+	mainRegionId: string;
 	firstName: string | null;
 	lastName: string;
 	race: "Chinese" | "Malay" | "Indian" | "Others";
 	sex: "M" | "F";
 	birthYear: number;
-	disabilities: {
-		id: string;
-	}[];
+	disabilityIds: string[];
 }
 
 export type UpdatePeddlerInput = Partial<CreatePeddlerInput>;
