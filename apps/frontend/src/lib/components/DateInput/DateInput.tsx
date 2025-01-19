@@ -12,6 +12,7 @@ export function DateInput({
 	helperText,
 	label,
 	parentElement,
+	onChange,
 	...rest
 }: DateInputProps) {
 	const inputId = useId();
@@ -55,6 +56,7 @@ export function DateInput({
 									{...rest}
 									selected={selectedDate}
 									onSelect={(date) => {
+										onChange?.(date);
 										setSelectedDate(date);
 										setInputFocused(false);
 									}}

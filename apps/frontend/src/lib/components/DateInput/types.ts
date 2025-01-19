@@ -7,4 +7,5 @@ export interface DateInputProps
 	helperText?: string;
 	label?: string;
 	parentElement?: HTMLElement;
+	onChange?: (date: Date) => void;
 }
