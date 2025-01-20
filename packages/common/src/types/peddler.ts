@@ -11,7 +11,7 @@ export interface StrictPeddler {
 	lastName: string;
 	race: "Chinese" | "Malay" | "Indian" | "Others";
 	sex: "M" | "F";
-	birthYear: number;
+	birthYear: string;
 	createdAt: Date;
 	disabilities: {
 		id: string;
@@ -25,7 +25,7 @@ export interface CreatePeddlerInput {
 	lastName: string;
 	race: "Chinese" | "Malay" | "Indian" | "Others";
 	sex: "M" | "F";
-	birthYear: number;
+	birthYear: string; // can be estimated
 	disabilityIds: string[];
 }
 

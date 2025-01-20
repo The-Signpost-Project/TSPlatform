@@ -39,7 +39,7 @@ describe("PeddlerService", () => {
 				race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
 				// @ts-ignore
 				sex: ["M", "F"][Math.floor(Math.random() * 2)],
-				birthYear: faker.date.past().getFullYear(),
+				birthYear: faker.date.past().getFullYear().toString(),
 				disabilityIds: [],
 			});
 			expect(res).toMatchObject({ id: expect.any(String) });
@@ -61,7 +61,7 @@ describe("PeddlerService", () => {
 					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear(),
+					birthYear: faker.date.past().getFullYear().toString(),
 					disabilityIds: [],
 				}),
 			).rejects.toThrow(AppError);
@@ -79,7 +79,7 @@ describe("PeddlerService", () => {
 					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear(),
+					birthYear: faker.date.past().getFullYear().toString(),
 					disabilityIds: [],
 				});
 			}
@@ -110,7 +110,7 @@ describe("PeddlerService", () => {
 					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear(),
+					birthYear: faker.date.past().getFullYear().toString(),
 					disabilityIds: [],
 				})
 			).id;
@@ -139,7 +139,7 @@ describe("PeddlerService", () => {
 					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear(),
+					birthYear: faker.date.past().getFullYear().toString(),
 					disabilityIds: [],
 				})
 			).id;
@@ -170,7 +170,7 @@ describe("PeddlerService", () => {
 					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
 					// @ts-ignore
 					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear(),
+					birthYear: faker.date.past().getFullYear().toString(),
 					disabilityIds: [],
 				})
 			).id;

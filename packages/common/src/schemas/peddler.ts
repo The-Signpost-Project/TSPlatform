@@ -13,10 +13,10 @@ import type {
 export const CreatePeddlerInputSchema = z.object({
 	mainRegionId: z.string(),
 	firstName: z.string().nullable(),
-	lastName: z.string(),
+	lastName: z.string().min(1),
 	race: z.enum(["Chinese", "Malay", "Indian", "Others"]),
 	sex: z.enum(["M", "F"]),
-	birthYear: z.number(),
+	birthYear: z.string(),
 	disabilityIds: z.array(z.string()),
 }) satisfies z.ZodType<CreatePeddlerInput>;
 

@@ -122,13 +122,13 @@ model UserRole {
 
 model Peddler {
   id           String  @id @default(uuid(7))
-  codename     String
+  codename     String  @unique
   mainRegionId String
   firstName    String?
   lastName     String
   race         String
   sex          String
-  birthYear    Int
+  birthYear    String
 
   createdAt DateTime @default(now())
 
