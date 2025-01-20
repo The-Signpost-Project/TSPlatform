@@ -12,6 +12,8 @@ import {
 	FileDrop,
 	Button,
 	Text,
+	RadioRoot,
+	RadioItem,
 } from "@lib/components";
 import { useTransition, useState } from "react";
 import { supportedFileTypes } from "@shared/common/constants";
@@ -70,6 +72,11 @@ export function CaseForm({ allRegions, allDisabilities }: CaseFormProps) {
 					accept={supportedFileTypes}
 				/>
 			</div>
+			<RadioRoot>
+				<RadioItem value="1">Option 1</RadioItem>
+				<RadioItem value="2">Option 2</RadioItem>
+				<RadioItem value="3">Option 3</RadioItem>
+			</RadioRoot>
 		</form>
 	);
 }

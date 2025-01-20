@@ -13,26 +13,29 @@ export async function Hero() {
 					<Title className="bg-gradient-to-r from-orange-400 to-red-700 inline-block text-transparent bg-clip-text">
 						TSPlatform
 					</Title>
-          <div>
-					<Text order="lg">The Signpost Project's internal platform to handle peddlers and their data.</Text>
-					{user === null ? (
-						<Text order='lg'>
-							<span>
-								<Link href="/auth/signin">Sign In</Link>
-							</span>{" "}
-							to get started.
+					<div>
+						<Text order="lg">
+							The Signpost Project's internal platform to handle peddlers and their data.
 						</Text>
-					) : (
-						<div className="flex flex-col">
-							<Text order='lg'>
-								You are signed in as <span className="font-semibold">{user?.username}</span>.
-							</Text>
+						{user === null ? (
 							<Text order="lg">
-								Submit a <Link href="/case-form">new case</Link> or{" "} <Link href="/cases">view cases</Link>.
+								<span>
+									<Link href="/auth/signin">Sign In</Link>
+								</span>{" "}
+								to get started.
 							</Text>
-						</div>
-					)}
-          </div>
+						) : (
+							<div className="flex flex-col">
+								<Text order="lg">
+									You are signed in as <span className="font-semibold">{user?.username}</span>.
+								</Text>
+								<Text order="lg">
+									Submit a <Link href="/case-form">new case</Link> or{" "}
+									<Link href="/cases">view cases</Link>.
+								</Text>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

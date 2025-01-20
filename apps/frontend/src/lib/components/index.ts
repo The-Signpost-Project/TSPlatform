@@ -27,3 +27,4 @@ export * from "./FileDrop";
 export * from "./AddButton";
 export * from "./DateInput";
 export * from "./TextArea";
+export * from "./Radio";

@@ -4,4 +4,4 @@ export const supportedFileTypes = [
 	"image/jpg",
 	"image/gif",
 	"image/webp",
-].join(", ")
+].join(", ");
