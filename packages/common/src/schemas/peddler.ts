@@ -8,7 +8,31 @@ import type {
 	UpdateRegionInput,
 	Region,
 	Disability,
+	StrictPeddler,
 } from "@shared/common/types";
+
+export const PeddlerSchema = z.object({
+	id: z.string(),
+	codename: z
+		.string()
+		.regex(/^[a-zA-Z]+_[a-zA-Z]+_[MF]$/) as z.ZodType<`${string}_${string}_${"M" | "F"}`>,
+	mainRegion: z.object({
+		id: z.string(),
+		name: z.string(),
+	}),
+	firstName: z.string().nullable(),
+	lastName: z.string().min(1),
+	race: z.enum(["Chinese", "Malay", "Indian", "Others"]),
+	sex: z.enum(["M", "F"]),
+	birthYear: z.string().min(1),
+	createdAt: z.date(),
+	disabilities: z.array(
+		z.object({
+			id: z.string(),
+			name: z.string(),
+		}),
+	),
+}) satisfies z.ZodType<StrictPeddler>;
 
 export const CreatePeddlerInputSchema = z.object({
 	mainRegionId: z.string(),
@@ -16,7 +40,7 @@ export const CreatePeddlerInputSchema = z.object({
 	lastName: z.string().min(1),
 	race: z.enum(["Chinese", "Malay", "Indian", "Others"]),
 	sex: z.enum(["M", "F"]),
-	birthYear: z.string(),
+	birthYear: z.string().min(1),
 	disabilityIds: z.array(z.string()),
 }) satisfies z.ZodType<CreatePeddlerInput>;
 

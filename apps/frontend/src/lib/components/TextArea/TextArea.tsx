@@ -32,7 +32,7 @@ export function TextArea({
 			{/* biome-ignore lint/a11y/noLabelWithoutControl: htmlFor is not available as id is a prop */}
 			{label && <label className={helperTextClasses}>{label}</label>}
 			<div className="relative w-full">
-				<textarea className={inputClasses} {...rest} />
+				<textarea className={inputClasses} rows={3} {...rest} />
 				{icon && <div className="absolute inset-y-0 right-0 pr-3 flex items-center ">{icon}</div>}
 			</div>
 			{helperText && <p className={helperTextClasses}>{helperText}</p>}

@@ -2,11 +2,12 @@ import { Title, Text } from "@lib/components";
 import { CaseForm } from "./components";
 import { query } from "@utils";
 import { z } from "zod";
-import { DisabilitySchema, RegionSchema } from "@shared/common/schemas";
+import { DisabilitySchema, RegionSchema, PeddlerSchema } from "@shared/common/schemas";
 import { getSessionCookieHeader } from "@utils";
 
 const DisabilitiesSchema = z.array(DisabilitySchema);
 const RegionsSchema = z.array(RegionSchema);
+const PeddlersSchema = z.array(PeddlerSchema);
 
 export default async function CaseFormPage() {
 	const { data: allDisabilities, error: fetchDisabilitiesError } = await query({
@@ -26,7 +27,23 @@ export default async function CaseFormPage() {
 		},
 	});
 
-	if (!allDisabilities || fetchDisabilitiesError || !allRegions || fetchRegionsError) {
+	const { data: allPeddlers, error: fetchPeddlersError } = await query({
+		path: "/peddler/all",
+		validator: PeddlersSchema,
+		init: {
+			method: "GET",
+			headers: await getSessionCookieHeader(),
+		},
+	});
+
+	if (
+		!allDisabilities ||
+		fetchDisabilitiesError ||
+		!allRegions ||
+		fetchRegionsError ||
+		!allPeddlers ||
+		fetchPeddlersError
+	) {
 		return (
 			<div className="p-4 flex flex-col gap-1">
 				<Title order={2}>The Signpost Project Combined Case Form</Title>
@@ -34,14 +51,18 @@ export default async function CaseFormPage() {
 				<div className="mt-4">
 					<Text description>There was an error fetching the disabilities or regions.</Text>
 					<Text description>
-						Error: {JSON.stringify(fetchDisabilitiesError || fetchRegionsError)}
+						Error:{" "}
+						{[fetchDisabilitiesError, fetchRegionsError, fetchPeddlersError]
+							.filter(Boolean)
+							.map((e) => JSON.stringify(e))
+							.join(", ")}
 					</Text>
 				</div>
 			</div>
 		);
 	}
 
-	console.log(allDisabilities, allRegions);
+	console.log(allPeddlers);
 	return (
 		<section className="p-4 sm:p-8 flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
@@ -50,7 +71,11 @@ export default async function CaseFormPage() {
 					Please fill this in to the best of your ability!
 				</Text>
 			</div>
-			<CaseForm allDisabilities={allDisabilities} allRegions={allRegions} />
+			<CaseForm
+				allDisabilities={allDisabilities}
+				allRegions={allRegions}
+				allPeddlers={allPeddlers}
+			/>
 		</section>
 	);
 }

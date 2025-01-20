@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { CreateCaseInputSchema, CreatePeddlerInputSchema } from "@shared/common/schemas";
-import type { CreateCaseInput, CreatePeddlerInput } from "@shared/common/types";
+import { CreatePeddlerInputSchema } from "@shared/common/schemas";
+import type { CreateCaseInput } from "@shared/common/types";
 
 // for general case details
 const CombinedCaseFormSection1Schema = z.object({
@@ -13,7 +13,14 @@ const CombinedCaseFormSection1Schema = z.object({
 }) satisfies z.ZodType<Omit<CreateCaseInput, "photos" | "createdById" | "peddlerId">>;
 
 // for new peddler details
-const CombinedCaseFormSection2ASchema = CreatePeddlerInputSchema;
+const CombinedCaseFormSection2ASchema = CreatePeddlerInputSchema.pick({
+	lastName: true,
+	firstName: true,
+	race: true,
+	sex: true,
+	birthYear: true,
+	disabilityIds: true,
+});
 
 // for existing peddler details
 const CombinedCaseFormSection2BSchema = z.object({

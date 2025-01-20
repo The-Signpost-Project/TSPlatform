@@ -81,11 +81,11 @@ export function DateInput({
 										day_button: "size-9",
 										day: "inline-flex items-center justify-center rounded text-gray-700 dark:text-gray-200 hover:bg-gray-200 hover:text-gray-900 hover:dark:bg-gray-800 hover:dark:text-gray-300 font-normal aria-selected:opacity-100 cursor-pointer",
 										today: "font-semibold",
-										selected: "bg-blue-500 text-white focus:bg-blue-500 focus:text-white",
+										selected: "bg-orange-500 text-white focus:bg-orange-500 focus:text-white",
 										outside: "text-gray-500 opacity-50",
 										disabled: "text-gray-500 opacity-50 cursor-auto",
 										range_middle:
-											"aria-selected:bg-blue-50 aria-selected:text-gray-900 aria-selected:hover:bg-blue-200 rounded-none ",
+											"aria-selected:bg-orange-50 aria-selected:text-gray-900 aria-selected:hover:bg-orange-200 rounded-none ",
 										hidden: "invisible",
 									}}
 								/>
