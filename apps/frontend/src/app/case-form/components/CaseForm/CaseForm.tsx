@@ -1,7 +1,8 @@
 "use client";
 import { useForm } from "react-hook-form";
 import type { CaseFormProps, CaseFormValues } from "./types";
-import { CombinedCaseFormSchema } from "./actions";
+import { createCaseFromForm } from "./actions";
+import { CombinedCaseFormSchema } from "./utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	DateInput,
@@ -18,7 +19,10 @@ import {
 } from "@lib/components";
 import { useTransition, useState, useEffect } from "react";
 import { supportedFileTypes } from "@shared/common/constants";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
+import { getUser } from "@lib/actions";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormProps) {
 	const { register, handleSubmit, formState, watch, setValue } = useForm<CaseFormValues>({
@@ -38,12 +42,24 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 			subscriber.unsubscribe();
 		};
 	}, [watch]);
+	const router = useRouter();
 
 	const [isPending, startTransition] = useTransition();
 	const [photos, setPhotos] = useState<FileList | null>(null);
 
-	const onSubmit = (data: CaseFormValues) => {
-		console.log(data, photos);
+	const onSubmit = async (data: CaseFormValues) => {
+		const { data: user } = await getUser();
+		if (!user) {
+			toast.error("You are not logged in.");
+			return;
+		}
+		const result = await createCaseFromForm(data, photos, user.id);
+		if (result.success) {
+			toast.success("Case created successfully");
+			router.push("/");
+			return;
+		}
+		toast.error(result.error);
 	};
 
 	return (
@@ -94,6 +110,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 					onChange={(e) => setPhotos(e.target.files)}
 					disabled={isPending}
 					accept={supportedFileTypes}
+					multiple
 				/>
 			</div>
 
@@ -178,7 +195,8 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 							</Text>
 							<Text description order="xs">
 								Please do not indicate location or gender here (these will be processed later; i.e.
-								DO NOT write AMK_Lim_F). This value should be unique to avoid confusion.
+								DO NOT write AMK_Lim_F). If there are multiple peddlers with the same last name and
+								sex in the same region, please differentiate them to avoid confusion.
 							</Text>
 						</div>
 						<TextInput

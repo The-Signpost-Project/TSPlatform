@@ -62,7 +62,6 @@ export default async function CaseFormPage() {
 		);
 	}
 
-	console.log(allPeddlers);
 	return (
 		<section className="p-4 sm:p-8 flex flex-col gap-4">
 			<div className="flex flex-col gap-1">

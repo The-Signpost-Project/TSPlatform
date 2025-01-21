@@ -15,9 +15,9 @@ export function RadioItem({ className, children, ...props }: RadioItemProps) {
 			<RadioGroup.Item
 				{...props}
 				id={id}
-				className="flex items-center justify-center w-6 h-6 border-2 border-gray-600 dark:border-gray-500 rounded-full"
+				className="flex items-center justify-center w-6 h-6 ring-2 ring-gray-600 dark:ring-gray-400 rounded-full"
 			>
-				<RadioGroup.Indicator className="bg-orange-400 dark:bg-orange-500 w-2/3 h-2/3 rounded-full" />
+				<RadioGroup.Indicator className="bg-orange-500 w-full h-full rounded-full" />
 			</RadioGroup.Item>
 			<label htmlFor={id} className="text-gray-600 dark:text-gray-400">
 				{children}

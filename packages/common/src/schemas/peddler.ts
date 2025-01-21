@@ -25,7 +25,7 @@ export const PeddlerSchema = z.object({
 	race: z.enum(["Chinese", "Malay", "Indian", "Others"]),
 	sex: z.enum(["M", "F"]),
 	birthYear: z.string().min(1),
-	createdAt: z.date(),
+	createdAt: z.coerce.date(),
 	disabilities: z.array(
 		z.object({
 			id: z.string(),

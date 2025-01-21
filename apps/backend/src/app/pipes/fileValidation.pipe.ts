@@ -15,6 +15,7 @@ export class FileValidationPipe implements PipeTransform {
 	constructor({ optional = false, multiple = false }: FileValidationPipeOptions = {}) {
 		this.optional = optional;
 		this.multiple = multiple;
+		this.validateFile = this.validateFile.bind(this);
 	}
 
 	private validateFile(value: unknown) {
