@@ -13,7 +13,7 @@ import {
 import type { Request } from "express";
 import { sessionCookieName } from "@shared/common/constants";
 import { UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@guards";
+import { SelfServeGuard } from "@guards";
 import { UserService } from "./user.service";
 import { ValidationPipe } from "@pipes";
 import {
@@ -43,7 +43,7 @@ export class UserController {
 	}
 
 	@Patch(":id")
-	@UseGuards(AuthGuard("params", "id"))
+	@UseGuards(SelfServeGuard("params", "id"))
 	async updateById(
 		@Param("id", new ValidationPipe(GetUserInputSchema)) id: string,
 		@Body(new ValidationPipe(UpdateUserInputSchema)) data: UpdateUserInput,
@@ -66,7 +66,7 @@ export class UserController {
 	}
 
 	@Delete(":id")
-	@UseGuards(AuthGuard("params", "id"))
+	@UseGuards(SelfServeGuard("params", "id"))
 	async deleteById(@Param("id", new ValidationPipe(GetUserInputSchema)) id: string) {
 		return await this.userService.deleteById(id);
 	}

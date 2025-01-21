@@ -1,2 +1,2 @@
-export * from "./auth.guard";
+export * from "./selfServe.guard";
 export * from "./rateLimit.guard";

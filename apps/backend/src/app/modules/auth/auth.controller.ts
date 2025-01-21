@@ -29,7 +29,7 @@ import {
 } from "@shared/common/schemas";
 import { ValidationPipe } from "@pipes";
 import { ConfigService } from "@nestjs/config";
-import { AuthGuard } from "@guards";
+import { SelfServeGuard } from "@guards";
 
 @Controller("auth")
 export class AuthController {
@@ -66,7 +66,7 @@ export class AuthController {
 	}
 
 	@Post("change-password/:id")
-	@UseGuards(AuthGuard("params", "id"))
+	@UseGuards(SelfServeGuard("params", "id"))
 	@HttpCode(201)
 	async changePassword(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,

@@ -6,11 +6,12 @@ import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { type RequestSource, CheckRequestGuard } from "@base";
 
 /**
- * This function creates a guard that checks if the user is authenticated and has the correct permissions.
+ * This function creates a guard that checks if the user is authenticated.
+ * Used to protect self-serve routes, ie. routes that users access to modify their own data.
  */
-export const AuthGuard = (source: RequestSource, key: string) => {
+export const SelfServeGuard = (source: RequestSource, key: string) => {
 	@Injectable()
-	class AuthGuardMixin extends CheckRequestGuard implements CanActivate {
+	class SelfServeGuardMixin extends CheckRequestGuard implements CanActivate {
 		constructor(private readonly luciaService: LuciaService) {
 			super();
 		}
@@ -37,5 +38,5 @@ export const AuthGuard = (source: RequestSource, key: string) => {
 			return true;
 		}
 	}
-	return mixin(AuthGuardMixin);
+	return mixin(SelfServeGuardMixin);
 };

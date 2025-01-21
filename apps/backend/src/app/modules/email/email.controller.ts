@@ -3,7 +3,7 @@ import { EmailService } from "./email.service";
 import { ValidationPipe } from "@pipes";
 import { ForgotPasswordEmailSchema, VerifyEmailSchema } from "@shared/common/schemas";
 import type { ForgotPasswordEmail, VerifyEmail } from "@shared/common/types";
-import { AuthGuard } from "@guards";
+import { SelfServeGuard } from "@guards";
 
 @Controller("email")
 export class EmailController {
@@ -18,7 +18,7 @@ export class EmailController {
 	}
 
 	@Post("verify")
-	@UseGuards(AuthGuard("body", "id"))
+	@UseGuards(SelfServeGuard("body", "id"))
 	@HttpCode(201)
 	async sendVerificationEmail(@Body(new ValidationPipe(VerifyEmailSchema)) { id }: VerifyEmail) {
 		await this.emailService.sendVerificationEmail(id);
