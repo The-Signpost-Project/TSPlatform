@@ -143,7 +143,7 @@ export class CaseService extends CrudService<StrictCase> {
 				},
 				select: this.rawCaseFindFields,
 				orderBy: {
-					[filters.sortBy || "updatedAt"]: filters.order || "DESC",
+					[filters.sortBy || "updatedAt"]: filters.order || "desc",
 				},
 				skip: filters.offset,
 				take: filters.limit,

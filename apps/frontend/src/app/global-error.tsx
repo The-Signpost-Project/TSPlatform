@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Text, Title, Link } from "@lib/components";
 
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {

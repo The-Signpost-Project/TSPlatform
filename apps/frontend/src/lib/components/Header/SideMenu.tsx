@@ -105,7 +105,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 				<SideMenuButton
 					key="allUsers"
 					icon="/common/user.svg"
-					text="Admin"
+					text="Permissions"
 					onClick={() => router.push("/admin")}
 				/>,
 			);

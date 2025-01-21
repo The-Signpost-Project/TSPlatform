@@ -6,7 +6,7 @@ import { ClientContext } from "@lib/providers";
 import { SideMenu } from "./SideMenu";
 
 const mainNavLinks = [
-	{ title: "Cases", href: "/" },
+	{ title: "Cases", href: "/cases" },
 	{ title: "Peddlers", href: "/" },
 	{ title: "Teams", href: "/" },
 	{ title: "Regions", href: "/regions" },

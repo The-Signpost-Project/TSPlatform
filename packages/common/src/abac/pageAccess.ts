@@ -18,4 +18,5 @@ export const protectedPages = {
 	"/regions": RESOURCES.REGION,
 	"/teams": RESOURCES.TEAM,
 	"/case-form": MUST_LOGIN,
+	"/cases": RESOURCES.CASE,
 } as const;

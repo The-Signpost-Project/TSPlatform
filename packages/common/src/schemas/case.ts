@@ -35,22 +35,32 @@ export const CaseFiltersSchema = z
 		region: z.string().optional(),
 		team: z.string().optional(),
 		peddler: z.string().optional(),
-		importance: z.number().int().min(1).max(5).optional() as z.ZodType<
+		importance: z.coerce.number().int().min(1).max(5).optional() as z.ZodType<
 			1 | 2 | 3 | 4 | 5 | undefined
 		>,
 
-		limit: z.number().int().positive().optional(),
-		offset: z.number().int().nonnegative().optional(),
+		limit: z.coerce.number().int().positive().optional(),
+		offset: z.coerce.number().int().nonnegative().optional(),
 		sortBy: z
 			.union([z.literal("updatedAt"), z.literal("interactionDate"), z.literal("importance")])
 			.optional(),
-		order: z.union([z.literal("ASC"), z.literal("DESC")]).optional(),
+		order: z.union([z.literal("asc"), z.literal("desc")]).optional(),
 	})
-	.refine((v) => v.limit !== undefined && v.offset !== undefined, {
-		message: "Both limit and offset must be provided",
-		path: ["limit", "offset"],
-	})
-	.refine((v) => v.sortBy !== undefined && v.order !== undefined, {
-		message: "Both sortBy and order must be provided",
-		path: ["sortBy", "order"],
-	}) satisfies z.ZodType<CaseFilters>;
+	.refine(
+		(v) =>
+			(v.limit === undefined && v.offset === undefined) ||
+			(v.limit !== undefined && v.offset !== undefined),
+		{
+			message: "Both limit and offset must be provided",
+			path: ["limit", "offset"],
+		},
+	)
+	.refine(
+		(v) =>
+			(v.sortBy === undefined && v.order === undefined) ||
+			(v.sortBy !== undefined && v.order !== undefined),
+		{
+			message: "Both sortBy and order must be provided",
+			path: ["sortBy", "order"],
+		},
+	) satisfies z.ZodType<CaseFilters>;

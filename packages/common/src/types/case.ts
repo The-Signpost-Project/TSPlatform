@@ -44,5 +44,5 @@ export type CaseFilters = {
 	limit?: number;
 	offset?: number;
 	sortBy?: "updatedAt" | "interactionDate" | "importance";
-	order?: "ASC" | "DESC";
+	order?: "asc" | "desc";
 };
