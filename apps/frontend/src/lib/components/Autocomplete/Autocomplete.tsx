@@ -19,6 +19,7 @@ export function Autocomplete({
 	disabled,
 	helperText,
 	variant,
+	onClickOutside,
 }: AutocompleteProps) {
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState(value ?? "");
@@ -35,6 +36,7 @@ export function Autocomplete({
 			onClickOutside={() => {
 				setSearch(value ?? "");
 				setOpen(false);
+				onClickOutside?.();
 			}}
 			align="start"
 			padding={5}

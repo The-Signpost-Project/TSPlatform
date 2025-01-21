@@ -137,9 +137,18 @@ export class CaseService extends CrudService<StrictCase> {
 		try {
 			const res = await this.prisma.case.findMany({
 				where: {
-					regionId: filters.region,
-					peddlerId: filters.peddler,
+					regionId: filters.regionId,
+					peddlerId: filters.peddlerId,
 					importance: filters.importance,
+					createdBy: filters.teamId
+						? {
+								teams: {
+									some: {
+										id: filters.teamId,
+									},
+								},
+							}
+						: undefined,
 				},
 				select: this.rawCaseFindFields,
 				orderBy: {

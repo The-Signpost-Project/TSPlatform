@@ -32,9 +32,9 @@ export const CreateCaseInputSchema = z.object({
 
 export const CaseFiltersSchema = z
 	.object({
-		region: z.string().optional(),
-		team: z.string().optional(),
-		peddler: z.string().optional(),
+		regionId: z.string().optional(),
+		teamId: z.string().optional(),
+		peddlerId: z.string().optional(),
 		importance: z.coerce.number().int().min(1).max(5).optional() as z.ZodType<
 			1 | 2 | 3 | 4 | 5 | undefined
 		>,

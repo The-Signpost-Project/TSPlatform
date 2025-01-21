@@ -87,7 +87,7 @@ export async function query<T = void>({
 			}
 		})
 		.catch((error) => {
-			console.warn("Failed fetch call:", JSON.stringify(error));
+			console.warn("Failed fetch call:", JSON.stringify(error), error.message);
 			return {
 				status: 500,
 				data: null,

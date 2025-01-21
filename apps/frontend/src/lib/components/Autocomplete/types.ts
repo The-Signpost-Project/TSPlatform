@@ -10,6 +10,7 @@ export type AutocompleteProps = {
 	disabled?: boolean;
 	helperText?: string;
 	variant?: "error" | "success";
+	onClickOutside?: () => void;
 };
 
 export type AutocompleteChoiceProps = {
