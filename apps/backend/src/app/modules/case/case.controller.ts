@@ -8,6 +8,7 @@ import {
 	Req,
 	UploadedFiles,
 	Query,
+	UseGuards,
 } from "@nestjs/common";
 import { CaseService } from "./case.service";
 import { ValidationPipe, FileValidationPipe } from "@pipes";
@@ -23,6 +24,7 @@ import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type { Request } from "express";
 import { sessionCookieName } from "@shared/common/constants";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { LoggedInGuard } from "@guards";
 
 @Controller("case")
 @UseInterceptors(RoleInterceptor)
@@ -68,16 +70,13 @@ export class CaseController {
 
 	@Post()
 	@UseInterceptors(FilesInterceptor("photos", 10))
+	@UseGuards(LoggedInGuard)
 	async createCase(
 		@Body(new ValidationPipe(CreateCaseInputSchema)) data: CreateCaseInput,
-		@Roles() roles: StrictRole[],
 		@UploadedFiles(new FileValidationPipe({ optional: true, multiple: true }))
 		photos: Express.Multer.File[],
 	) {
-		if (rolesHavePermission(roles, "case", "readWrite")) {
-			return await this.caseService.create({ ...data, photos });
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.caseService.create({ ...data, photos });
 	}
 
 	/*

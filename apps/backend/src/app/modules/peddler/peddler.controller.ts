@@ -8,6 +8,7 @@ import {
 	Post,
 	UseInterceptors,
 	UploadedFile,
+	UseGuards,
 } from "@nestjs/common";
 import { PeddlerService } from "./peddler.service";
 import { DisabilityService } from "./disability.service";
@@ -35,6 +36,7 @@ import { RoleInterceptor, Roles } from "@interceptors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { LoggedInGuard } from "@guards";
 import type { Express } from "express";
 
 @Controller("peddler")
@@ -47,6 +49,7 @@ export class PeddlerController {
 	) {}
 
 	@Post()
+	@UseGuards(LoggedInGuard)
 	async create(@Body(new ValidationPipe(CreatePeddlerInputSchema)) data: CreatePeddlerInput) {
 		return await this.peddlerService.create(data);
 	}
@@ -73,8 +76,9 @@ export class PeddlerController {
 	async getById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
 		return await this.peddlerService.getById(id);
 	}
-	// this is public, no need for roles
+
 	@Get("disability/all")
+	@UseGuards(LoggedInGuard)
 	async getAllDisabilities() {
 		return await this.disabilityService.getAll();
 	}
@@ -124,8 +128,8 @@ export class PeddlerController {
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-	// this is public, no need for roles
 	@Get("region/all")
+	@UseGuards(LoggedInGuard)
 	async getAllRegions() {
 		return await this.regionService.getAll();
 	}
