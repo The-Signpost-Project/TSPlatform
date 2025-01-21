@@ -1,7 +1,6 @@
 import { S3Client, randomUUIDv7 } from "bun";
 import { ConfigService } from "@nestjs/config";
 import { Injectable } from "@nestjs/common";
-import type { Express } from "express";
 import { join } from "node:path";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 

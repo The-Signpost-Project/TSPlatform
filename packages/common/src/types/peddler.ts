@@ -1,5 +1,3 @@
-import type { Express } from "express";
-
 export interface StrictPeddler {
 	id: string;
 	codename: `${string}_${string}_${"M" | "F"}`;

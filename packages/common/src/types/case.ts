@@ -1,4 +1,3 @@
-import type { Express } from "express";
 export interface StrictCase {
 	id: string;
 	// user attrs

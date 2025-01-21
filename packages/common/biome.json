@@ -1,4 +1,7 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
-	"extends": ["@shared/biome-config/base"]
+	"extends": ["@shared/biome-config/base"],
+	"javascript": {
+		"globals": ["Express"]
+	}
 }

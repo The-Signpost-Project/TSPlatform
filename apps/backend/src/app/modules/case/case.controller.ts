@@ -44,7 +44,7 @@ export class CaseController {
 		@Query(new ValidationPipe(CaseFiltersSchema)) filters: CaseFilters,
 		@Roles() roles: StrictRole[],
 	) {
-		console.log("filters", filters);
+		// console.log("filters", filters);
 		if (rolesHavePermission(roles, "case", "read")) {
 			return await this.caseService.getFiltered(filters);
 		}
