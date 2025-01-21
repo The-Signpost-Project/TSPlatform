@@ -70,8 +70,6 @@ export async function createCaseFromForm(
 		formData.append(field, String(value));
 	}
 
-	console.log("formData", formData);
-
 	const { status, error, data } = await query({
 		path: "/case",
 		init: {
@@ -83,7 +81,6 @@ export async function createCaseFromForm(
 		withFiles: true,
 	});
 
-	console.log(status, error, data);
 	if (status === 201 && data) {
 		return { success: true, data };
 	}

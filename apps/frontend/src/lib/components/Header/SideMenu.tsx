@@ -87,6 +87,11 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 					text="Sign Out"
 					onClick={signOutResponse}
 				/>
+				<SideMenuButton
+					icon="/common/link.svg"
+					text="Case Form"
+					onClick={() => router.push("/case-form")}
+				/>
 			</>
 		);
 	}, [user, loading, signOutResponse, router]);

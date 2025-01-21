@@ -1,15 +1,16 @@
-"use client";
-import NextError from "next/error";
+'use client'
+import { Text, Title, Link } from "@lib/components";
 
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
 	return (
 		<html lang="en">
 			<body>
-				{/* `NextError` is the default Next.js error page component. Its type
-        definition requires a `statusCode` prop. However, since the App Router
-        does not expose status codes for errors, we simply pass 0 to render a
-        generic error message. */}
-				<NextError statusCode={0} />
+				<div className="flex flex-col items-center sm:p-24 p-12 gap-6">
+					<Title>500 - Internal Server Error</Title>
+					<Text>{error.message}</Text>
+					<Text description>{error.digest}</Text>
+					<Link href="/">Go to Home</Link>
+				</div>
 			</body>
 		</html>
 	);
