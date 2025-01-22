@@ -15,6 +15,8 @@ export class CaseService extends CrudService<StrictCase> {
 		private readonly lucia: LuciaService,
 	) {
 		super();
+		this.create = this.create.bind(this);
+		this.parseCase = this.parseCase.bind(this);
 	}
 
 	private rawCaseFindFields = {
@@ -80,7 +82,14 @@ export class CaseService extends CrudService<StrictCase> {
 
 	async create(data: CreateCaseInput) {
 		try {
+			let photoPaths: string[] = [];
 			if (data.photos) {
+				photoPaths = await Promise.all(
+					data.photos.map(
+						async (photo) =>
+							await this.s3.upload(photo, { dir: "case-photos", contentType: photo.mimetype }),
+					),
+				);
 			}
 			const res = await this.prisma.case.create({
 				data: {
@@ -98,6 +107,9 @@ export class CaseService extends CrudService<StrictCase> {
 					notes: data.notes,
 					importance: data.importance,
 					firstInteraction: data.firstInteraction,
+					photos: {
+						create: photoPaths.map((photoPath) => ({ photoPath })),
+					},
 				},
 				select: this.rawCaseFindFields,
 			});
