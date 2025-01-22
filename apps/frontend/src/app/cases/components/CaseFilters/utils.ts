@@ -20,7 +20,6 @@ export async function fetchCases(filters: CaseFilters, signal?: AbortSignal) {
 			return [key, value];
 		}),
 	);
-	console.log(`/case/filter?${new URLSearchParams(filtersString).toString()}`);
 	const { data, error, status } = await query({
 		path: `/case/filter?${new URLSearchParams(filtersString).toString()}`,
 		init: {
@@ -30,7 +29,6 @@ export async function fetchCases(filters: CaseFilters, signal?: AbortSignal) {
 		},
 		validator: StrictCasesSchema,
 	});
-	console.log(data);
 	return { data: data ?? [], error, status };
 }
 

@@ -23,7 +23,6 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 	useEffect(() => {
 		const controller = new AbortController();
 		startTransition(async () => {
-			console.log(deferredFilters);
 			const { data } = await fetchCases(deferredFilters, controller.signal);
 			setFilteredCases(data);
 		});
@@ -63,7 +62,6 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 						}, [] as string[])}
 						label="Filter by Region"
 						handleChange={(val) => {
-							console.log(val);
 							const region = allRegions.find((r) => r.name === val);
 							if (region) {
 								setFilters((prev) => ({ ...prev, regionId: region.id }));
@@ -84,6 +82,14 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 				<MultiSelect
 					items={["1", "2", "3", "4", "5"]}
 					onChange={(value) => {
+						if (value.length === 0) {
+							// remove importance from filters
+							setFilters((prev) => {
+								const { importance, ...rest } = prev;
+								return rest;
+							});
+							return;
+						}
 						setFilters((prev) => ({
 							...prev,
 							importance: value.map((v) => parseInt(v) as 1 | 2 | 3 | 4 | 5),

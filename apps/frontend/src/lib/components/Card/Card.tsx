@@ -12,6 +12,7 @@ export function Card({
 	description,
 	date,
 	className,
+	innerClassName,
 	titleClassName,
 	descriptionClassName,
 	dateClassName,
@@ -31,7 +32,12 @@ export function Card({
 					/>
 				</div>
 			)}
-			<div className="px-6 py-2 flex flex-col gap-4 items-center text-center">
+			<div
+				className={twMerge(
+					"px-6 py-2 flex flex-col gap-4 items-center text-center",
+					innerClassName,
+				)}
+			>
 				{date && (
 					<Text
 						order="sm"

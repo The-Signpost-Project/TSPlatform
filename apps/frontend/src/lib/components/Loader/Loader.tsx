@@ -1,6 +1,6 @@
 import type { LoaderProps } from "./types";
 
-export function Loader({ color, className }: LoaderProps) {
+export function Loader({ color = "orange", className }: LoaderProps) {
 	// By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL
 	return (
 		<svg

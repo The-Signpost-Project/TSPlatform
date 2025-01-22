@@ -7,6 +7,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 	title?: string;
 	description?: string;
 	className?: string;
+	innerClassName?: string;
 	titleClassName?: string;
 	descriptionClassName?: string;
 	dateClassName?: string;
