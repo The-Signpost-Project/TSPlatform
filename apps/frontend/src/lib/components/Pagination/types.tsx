@@ -1,6 +1,7 @@
 export interface PaginationProps {
-	labels: [string, string];
-	hrefs: [string, string];
-	showNext: boolean;
-	showPrevious: boolean;
+	labels?: [string, string];
+	onClickNext: () => void;
+	onClickPrevious: () => void;
+	disableNext: boolean;
+	disablePrevious: boolean;
 }

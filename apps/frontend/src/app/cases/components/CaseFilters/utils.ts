@@ -24,3 +24,11 @@ export async function fetchCases(filters: CaseFilters, signal?: AbortSignal) {
 	console.log(data);
 	return { data: data ?? [], error, status };
 }
+
+export const casesPerPage = 10;
+export function calculateLimitOffset(page: number) {
+	return {
+		limit: casesPerPage,
+		offset: (page - 1) * casesPerPage,
+	};
+}
