@@ -1,29 +1,30 @@
+"use client";
 import type { CaseCardProps } from "./types";
-import { Card } from "@lib/components";
-import { Text } from "@lib/components";
+import { Card, Text } from "@lib/components";
 import { twMerge } from "tailwind-merge";
+import { useRouter } from "next/navigation";
 
 export function CaseCard({ data, isStale }: CaseCardProps) {
+	const router = useRouter();
 	return (
 		<Card
 			title={data.peddlerCodename}
 			date={data.interactionDate.toLocaleDateString()}
 			description={data.id}
-			className={twMerge(isStale ? "animate-pulse" : "", "px-4")}
+			className={twMerge(isStale ? "animate-pulse" : "", "px-4 cursor-pointer")}
 			descriptionClassName="break-all text-xs sm:text-xs"
 			innerClassName="gap-2"
+			onClick={() => router.push(`/cases/${data.id}`)}
 		>
-			<div className="flex flex-col items-start break-all">
-				<Text>
-					<span className="font-semibold">Created At: </span>
-					{data.createdAt.toLocaleDateString()}
-				</Text>
-				<Text>
-					<span className="font-semibold">Region: </span>
-					{data.regionName}
-				</Text>
-				<Text>
-					<span className="font-semibold">Importance: </span>
+			<Text className="grid grid-cols-2 gap-1">
+				<span className="font-semibold justify-start">Created At: </span>
+				<span className="justify-self-start">{data.createdAt.toLocaleDateString()}</span>
+
+				<span className="font-semibold justify-self-start">Region: </span>
+				<span className="justify-self-start">{data.regionName}</span>
+
+				<span className="font-semibold justify-self-start">Importance: </span>
+				<span className="justify-self-start">
 					{(() => {
 						switch (data.importance) {
 							case 1:
@@ -40,8 +41,8 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 								return "Unknown";
 						}
 					})()}
-				</Text>
-			</div>
+				</span>
+			</Text>
 		</Card>
 	);
 }

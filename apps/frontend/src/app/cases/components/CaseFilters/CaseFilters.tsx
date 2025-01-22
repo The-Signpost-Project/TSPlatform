@@ -92,7 +92,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 						}
 						setFilters((prev) => ({
 							...prev,
-							importance: value.map((v) => parseInt(v) as 1 | 2 | 3 | 4 | 5),
+							importance: value.map((v) => Number.parseInt(v) as 1 | 2 | 3 | 4 | 5),
 						}));
 					}}
 					placeholder="Filter by Importance"
