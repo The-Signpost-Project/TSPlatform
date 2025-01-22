@@ -79,7 +79,6 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 					/>
 				</div>
 
-        
 				<MultiSelect
 					items={[
 						"No concern (1)",

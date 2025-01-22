@@ -9,8 +9,8 @@ export default function Layout({
 }) {
 	return (
 		<>
-			<div>{id}</div>
-			<div>{children}</div>
+			{id}
+			{children}
 		</>
 	);
 }
