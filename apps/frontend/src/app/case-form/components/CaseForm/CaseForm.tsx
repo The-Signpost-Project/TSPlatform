@@ -61,7 +61,6 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 		}
 		toast.error(result.error);
 	};
-
 	return (
 		<form
 			onSubmit={handleSubmit((args) => startTransition(() => onSubmit(args)))}
@@ -87,6 +86,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 						setValue("regionId", region.id);
 					}
 				}}
+				onClickOutside={() => setValue("regionId", "")}
 				placeholder="eg. Bishan"
 				disabled={isPending}
 				variant={formState.errors.regionId ? "error" : undefined}
@@ -346,6 +346,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 								setValue("peddlerId", peddler.id);
 							}
 						}}
+						onClickOutside={() => setValue("peddlerId", "")}
 						placeholder="eg. AMK_Lim_F"
 						disabled={isPending}
 						variant={

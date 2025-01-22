@@ -11,6 +11,7 @@ export type AutocompleteProps = {
 	helperText?: string;
 	variant?: "error" | "success";
 	onClickOutside?: () => void;
+	name?: string;
 };
 
 export type AutocompleteChoiceProps = {

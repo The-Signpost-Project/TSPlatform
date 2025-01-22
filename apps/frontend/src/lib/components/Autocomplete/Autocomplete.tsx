@@ -20,6 +20,7 @@ export function Autocomplete({
 	helperText,
 	variant,
 	onClickOutside,
+	name,
 }: AutocompleteProps) {
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState(value ?? "");
@@ -84,6 +85,7 @@ export function Autocomplete({
 				disabled={disabled}
 				helperText={helperText}
 				variant={variant}
+				name={name}
 				icon={
 					<button onClick={() => setOpen((o) => !o)} type="button" className="cursor-pointer">
 						<svg
