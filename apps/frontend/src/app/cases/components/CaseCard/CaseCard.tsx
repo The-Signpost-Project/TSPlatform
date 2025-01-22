@@ -11,12 +11,12 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 			title={data.peddlerCodename}
 			date={data.interactionDate.toLocaleDateString()}
 			description={data.id}
-			className={twMerge(isStale ? "animate-pulse" : "", "px-4 cursor-pointer")}
+			className={twMerge(isStale ? "animate-pulse" : "", "px-2 cursor-pointer")}
 			descriptionClassName="break-all text-xs sm:text-xs"
-			innerClassName="gap-2"
+			innerClassName="gap-2 px-2"
 			onClick={() => router.push(`/cases/${data.id}`)}
 		>
-			<Text className="grid grid-cols-2 gap-1">
+			<Text className="grid grid-cols-2 gap-2">
 				<span className="font-semibold justify-start">Created At: </span>
 				<span className="justify-self-start">{data.createdAt.toLocaleDateString()}</span>
 

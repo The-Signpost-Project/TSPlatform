@@ -32,7 +32,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 	return (
 		<div className="flex flex-col gap-4 w-full items-center">
 			<div className="flex flex-col gap-4 w-full">
-				<div className="flex gap-4 w-full">
+				<div className="flex gap-4 w-full sm:flex-row flex-col">
 					<Autocomplete
 						items={allPeddlers.reduce((acc, region) => {
 							acc.push(region.codename);
@@ -79,8 +79,15 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 					/>
 				</div>
 
+        
 				<MultiSelect
-					items={["1", "2", "3", "4", "5"]}
+					items={[
+						"No concern (1)",
+						"No concern (2)",
+						"Mild concern (3)",
+						"Concern (4)",
+						"Urgent (5)",
+					]}
 					onChange={(value) => {
 						if (value.length === 0) {
 							// remove importance from filters
@@ -92,13 +99,17 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 						}
 						setFilters((prev) => ({
 							...prev,
-							importance: value.map((v) => Number.parseInt(v) as 1 | 2 | 3 | 4 | 5),
+							// remove all non-numeric characters from the string
+							// and parse the string to an integer
+							importance: value
+								.map((v) => v.replace(/[^0-9]/g, ""))
+								.map((v) => Number.parseInt(v) as 1 | 2 | 3 | 4 | 5),
 						}));
 					}}
-					placeholder="Filter by Importance"
+					label="Filter by Importance"
 				/>
 
-				<div className="flex gap-4 w-full">
+				<div className="flex gap-4 w-full sm:flex-row flex-col">
 					<div className="flex flex-col gap-2">
 						<Text description order="sm">
 							Sort By
