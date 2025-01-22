@@ -3,7 +3,7 @@ import { useState, useDeferredValue, useTransition, useEffect } from "react";
 import type { CaseFilters as CaseFiltersOptions, StrictCase } from "@shared/common/types";
 import { CaseGrid } from "../CaseGrid";
 import { fetchCases, calculateLimitOffset, casesPerPage } from "./utils";
-import { RadioRoot, RadioItem, Autocomplete, Pagination, Text } from "@lib/components";
+import { RadioRoot, RadioItem, Autocomplete, Pagination, Text, MultiSelect } from "@lib/components";
 import type { CaseFiltersProps } from "./types";
 
 //TODO: add team filter
@@ -80,28 +80,18 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 						}
 					/>
 				</div>
-				<div className="flex gap-2">
-					<Text description order="sm">
-						Filter Importance
-					</Text>
-					<RadioRoot
-						onValueChange={(v) =>
-							setFilters((prev) => ({
-								...prev,
-								importance: parseInt(v) as 1 | 2 | 3 | 4 | 5,
-							}))
-						}
-						required
-						className="flex gap-4 "
-						value={filters.sortBy}
-					>
-						<RadioItem value="1">1</RadioItem>
-						<RadioItem value="2">2</RadioItem>
-						<RadioItem value="3">3</RadioItem>
-						<RadioItem value="4">4</RadioItem>
-						<RadioItem value="5">5</RadioItem>
-					</RadioRoot>
-				</div>
+
+				<MultiSelect
+					items={["1", "2", "3", "4", "5"]}
+					onChange={(value) => {
+						setFilters((prev) => ({
+							...prev,
+							importance: value.map((v) => parseInt(v) as 1 | 2 | 3 | 4 | 5),
+						}));
+					}}
+					placeholder="Filter by Importance"
+				/>
+
 				<div className="flex gap-4 w-full">
 					<div className="flex flex-col gap-2">
 						<Text description order="sm">

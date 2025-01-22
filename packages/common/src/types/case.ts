@@ -38,7 +38,7 @@ export type CaseFilters = {
 	regionId?: string; // region id
 	teamId?: string; // team id
 	peddlerId?: string; // peddler id
-	importance?: 1 | 2 | 3 | 4 | 5;
+	importance?: (1 | 2 | 3 | 4 | 5)[];
 
 	// pagination
 	limit?: number;

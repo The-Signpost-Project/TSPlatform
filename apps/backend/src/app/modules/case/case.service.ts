@@ -151,7 +151,11 @@ export class CaseService extends CrudService<StrictCase> {
 				where: {
 					regionId: filters.regionId,
 					peddlerId: filters.peddlerId,
-					importance: filters.importance,
+					importance: filters.importance
+						? {
+								in: filters.importance,
+							}
+						: undefined,
 					createdBy: filters.teamId
 						? {
 								teams: {

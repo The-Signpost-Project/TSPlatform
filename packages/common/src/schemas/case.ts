@@ -35,9 +35,11 @@ export const CaseFiltersSchema = z
 		regionId: z.string().optional(),
 		teamId: z.string().optional(),
 		peddlerId: z.string().optional(),
-		importance: z.coerce.number().int().min(1).max(5).optional() as z.ZodType<
-			1 | 2 | 3 | 4 | 5 | undefined
-		>,
+		// a string of comma separated numbers from 1 to 5
+		importance: z
+			.string()
+			.regex(/^[1-5](,[1-5])*$/)
+			.optional(),
 
 		limit: z.coerce.number().int().positive().optional(),
 		offset: z.coerce.number().int().nonnegative().optional(),
@@ -63,4 +65,4 @@ export const CaseFiltersSchema = z
 			message: "Both sortBy and order must be provided",
 			path: ["sortBy", "order"],
 		},
-	) satisfies z.ZodType<CaseFilters>;
+	) satisfies z.ZodType<Omit<CaseFilters, "importance">>;

@@ -41,11 +41,17 @@ export class CaseController {
 
 	@Get("filter")
 	async getFilteredCases(
-		@Query(new ValidationPipe(CaseFiltersSchema)) filters: CaseFilters,
+		// due to query string serialization, importance is a string of comma separated numbers and not an array of numbers
+		@Query(new ValidationPipe(CaseFiltersSchema)) filters: Omit<CaseFilters, "importance"> & {
+			importance?: string;
+		},
 		@Roles() roles: StrictRole[],
 	) {
 		if (rolesHavePermission(roles, "case", "read")) {
-			return await this.caseService.getFiltered(filters);
+			return await this.caseService.getFiltered({
+				...filters,
+				importance: filters.importance?.split(",").map(Number) as (1 | 2 | 3 | 4 | 5)[],
+			});
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}

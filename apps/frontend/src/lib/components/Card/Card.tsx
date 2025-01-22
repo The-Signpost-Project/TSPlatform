@@ -12,6 +12,9 @@ export function Card({
 	description,
 	date,
 	className,
+	titleClassName,
+	descriptionClassName,
+	dateClassName,
 	...rest
 }: CardProps) {
 	const mergedStyles = twMerge(defaultStyles, className);
@@ -30,17 +33,21 @@ export function Card({
 			)}
 			<div className="px-6 py-2 flex flex-col gap-4 items-center text-center">
 				{date && (
-					<Text order="sm" data-testid="card-date">
+					<Text
+						order="sm"
+						data-testid="card-date"
+						className={twMerge("sm:text-sm text-xs", dateClassName)}
+					>
 						{date}
 					</Text>
 				)}
 				{title && (
-					<Title order={2} className="sm:text-xl text-lg">
+					<Title order={2} className={twMerge("sm:text-xl text-lg", titleClassName)}>
 						{title}
 					</Title>
 				)}
 				{description && (
-					<Text className="sm:text-base text-sm" description>
+					<Text className={twMerge("sm:text-base text-sm", descriptionClassName)} description>
 						{description}
 					</Text>
 				)}
