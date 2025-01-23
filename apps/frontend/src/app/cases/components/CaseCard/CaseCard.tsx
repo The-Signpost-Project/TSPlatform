@@ -3,6 +3,7 @@ import type { CaseCardProps } from "./types";
 import { Card, Text } from "@lib/components";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
+import { ImportanceText } from "../ImportanceText";
 
 export function CaseCard({ data, isStale }: CaseCardProps) {
 	const router = useRouter();
@@ -25,22 +26,7 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 
 				<span className="font-semibold justify-self-start">Importance: </span>
 				<span className="justify-self-start">
-					{(() => {
-						switch (data.importance) {
-							case 1:
-								return <span className="text-green-300">No concern (1)</span>;
-							case 2:
-								return <span className="text-green-500">No concern (2)</span>;
-							case 3:
-								return <span className="text-yellow-500">Mild concern (3)</span>;
-							case 4:
-								return <span className="text-orange-500">Concern (4)</span>;
-							case 5:
-								return <span className="text-red-500 font-bold">Urgent (5)</span>;
-							default:
-								return "Unknown";
-						}
-					})()}
+					<ImportanceText importance={data.importance} />
 				</span>
 			</Text>
 		</Card>
