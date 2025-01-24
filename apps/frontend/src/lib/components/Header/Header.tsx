@@ -7,7 +7,7 @@ import { SideMenu } from "./SideMenu";
 
 const mainNavLinks = [
 	{ title: "Cases", href: "/cases" },
-	{ title: "Peddlers", href: "/" },
+	{ title: "Peddlers", href: "/peddlers" },
 	{ title: "Teams", href: "/" },
 	{ title: "Regions", href: "/regions" },
 ];
