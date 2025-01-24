@@ -95,7 +95,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 															className="relative min-w-32 h-32 cursor-pointer"
 															key={photo}
 															onClick={() => window.open(photo)}
-                              onKeyDown={() => window.open(photo)}
+															onKeyDown={() => window.open(photo)}
 														>
 															<Image src={photo} alt="Case photo" />
 														</div>

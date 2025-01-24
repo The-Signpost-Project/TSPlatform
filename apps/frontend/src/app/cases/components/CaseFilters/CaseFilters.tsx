@@ -5,14 +5,44 @@ import { CaseGrid } from "../CaseGrid";
 import { fetchCases, calculateLimitOffset, casesPerPage } from "./utils";
 import { RadioRoot, RadioItem, Autocomplete, Pagination, Text, MultiSelect } from "@lib/components";
 import type { CaseFiltersProps } from "./types";
+import { useSearchParams } from "next/navigation";
 
 //TODO: add team filter
 
 export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
-	const [filters, setFilters] = useState<CaseFiltersOptions>({
-		...calculateLimitOffset(1),
-		sortBy: "updatedAt",
-		order: "desc",
+	const params = useSearchParams();
+
+	const [filters, setFilters] = useState<CaseFiltersOptions>(() => {
+		const { limit, offset } = calculateLimitOffset(1);
+		const sortBy = (
+			["updatedAt", "interactionDate", "importance"].includes(params.get("sortBy") ?? "")
+				? params.get("sortBy")
+				: "updatedAt"
+		) as "updatedAt" | "interactionDate" | "importance";
+		const order = (
+			["asc", "desc"].includes(params.get("order") ?? "") ? params.get("order") : "desc"
+		) as "asc" | "desc";
+
+		const peddlerCodename = params.get("peddlerCodename") ?? "";
+		const regionName = params.get("regionName") ?? "";
+
+		// find ids from names
+		const peddlerId = allPeddlers.find((p) => p.codename === peddlerCodename)?.id;
+		const regionId = allRegions.find((r) => r.name === regionName)?.id;
+
+		const ret = {
+			limit,
+			offset,
+			sortBy,
+			order,
+			peddlerId,
+			regionId,
+		};
+    // biome-ignore lint/performance/noDelete: better to be explicit
+		if (!peddlerId) delete ret.peddlerId;
+    // biome-ignore lint/performance/noDelete: better to be explicit
+		if (!regionId) delete ret.regionId;
+		return ret;
 	});
 	const deferredFilters = useDeferredValue(filters);
 	const [isPending, startTransition] = useTransition();
@@ -34,6 +64,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 			<div className="flex flex-col gap-4 w-full">
 				<div className="flex gap-4 w-full sm:flex-row flex-col">
 					<Autocomplete
+						value={allPeddlers.find((p) => p.id === filters.peddlerId)?.codename ?? ""}
 						items={allPeddlers.reduce((acc, region) => {
 							acc.push(region.codename);
 							return acc;
@@ -56,6 +87,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 						}
 					/>
 					<Autocomplete
+						value={allRegions.find((r) => r.id === filters.regionId)?.name ?? ""}
 						items={allRegions.reduce((acc, region) => {
 							acc.push(region.name);
 							return acc;
@@ -125,8 +157,8 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 							value={filters.sortBy}
 						>
 							<RadioItem value="updatedAt">Updated At</RadioItem>
-							<RadioItem value="interactionDate">Date of interaction</RadioItem>
 							<RadioItem value="importance">Importance</RadioItem>
+							<RadioItem value="interactionDate">Date of interaction</RadioItem>
 						</RadioRoot>
 					</div>
 					<div className="flex flex-col gap-2">
@@ -144,8 +176,8 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 							className="flex gap-2 flex-col"
 							value={filters.order}
 						>
-							<RadioItem value="asc">Ascending</RadioItem>
 							<RadioItem value="desc">Descending</RadioItem>
+							<RadioItem value="asc">Ascending</RadioItem>
 						</RadioRoot>
 					</div>
 				</div>
