@@ -50,12 +50,12 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 			}}
 		>
 			<div
-				className="lg:w-1/2 md:w-2/3 sm:w-5/6 w-11/12 absolute right-0 top-0 h-full bg-white dark:bg-gray-800 shadow-lg "
+				className="lg:w-1/2 md:w-2/3 sm:w-5/6 w-11/12 absolute right-0 top-0 h-full bg-white dark:bg-gray-900 shadow-lg "
 				onClick={(e) => e.stopPropagation()}
 				onKeyDown={(e) => e.stopPropagation()}
 			>
-				<div className="flex flex-col p-4 gap-2 bg-white dark:bg-gray-800">
-					<ModalCloseButton onClick={navigate} accessibilityLabel="case overlay" />
+				<div className="flex flex-col p-4 gap-2 bg-white dark:bg-gray-900">
+					<ModalCloseButton onClick={navigate} accessibilityLabel="case overlay" className="hover:dark:bg-gray-950" />
 					<div className="px-4 flex flex-col gap-2">
 						<Title order={5}>Case {caseId}</Title>
 						{error && !isPending ? (

@@ -13,4 +13,5 @@ export interface ModalProps {
 export interface ModalCloseButtonProps {
 	onClick: () => void;
 	accessibilityLabel?: string;
+  className?: string;
 }
