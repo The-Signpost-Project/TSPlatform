@@ -2,11 +2,18 @@ import type { ModalCloseButtonProps } from "./types";
 import { Button } from "@lib/components";
 import { twMerge } from "tailwind-merge";
 
-export function ModalCloseButton({ onClick, accessibilityLabel, className }: ModalCloseButtonProps) {
+export function ModalCloseButton({
+	onClick,
+	accessibilityLabel,
+	className,
+}: ModalCloseButtonProps) {
 	return (
 		<Button
 			aria-label={`Close ${accessibilityLabel}`}
-			className={twMerge("w-8 h-8 flex items-center justify-center border-none rounded-full bg-transparent hover:bg-gray-100 hover:dark:bg-gray-900 hover:text-zinc-700 text-zinc-900 hover:dark:text-zinc-200 dark:text-zinc-100 transition-colors duration-200", className)}
+			className={twMerge(
+				"w-8 h-8 flex items-center justify-center border-none rounded-full bg-transparent hover:bg-gray-100 hover:dark:bg-gray-900 hover:text-zinc-700 text-zinc-900 hover:dark:text-zinc-200 dark:text-zinc-100 transition-colors duration-200",
+				className,
+			)}
 			onClick={onClick}
 			tabIndex={-1}
 		>

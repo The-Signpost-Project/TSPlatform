@@ -38,9 +38,9 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 			peddlerId,
 			regionId,
 		};
-    // biome-ignore lint/performance/noDelete: better to be explicit
+		// biome-ignore lint/performance/noDelete: better to be explicit
 		if (!peddlerId) delete ret.peddlerId;
-    // biome-ignore lint/performance/noDelete: better to be explicit
+		// biome-ignore lint/performance/noDelete: better to be explicit
 		if (!regionId) delete ret.regionId;
 		return ret;
 	});

@@ -55,7 +55,11 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 				onKeyDown={(e) => e.stopPropagation()}
 			>
 				<div className="flex flex-col p-4 gap-2 bg-white dark:bg-gray-900">
-					<ModalCloseButton onClick={navigate} accessibilityLabel="case overlay" className="hover:dark:bg-gray-950" />
+					<ModalCloseButton
+						onClick={navigate}
+						accessibilityLabel="case overlay"
+						className="hover:dark:bg-gray-950"
+					/>
 					<div className="px-4 flex flex-col gap-2">
 						<Title order={5}>Case {caseId}</Title>
 						{error && !isPending ? (
