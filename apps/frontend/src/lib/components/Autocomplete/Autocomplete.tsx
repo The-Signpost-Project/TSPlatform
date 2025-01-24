@@ -21,9 +21,10 @@ export function Autocomplete({
 	variant,
 	onClickOutside,
 	name,
+  defaultValue
 }: AutocompleteProps) {
 	const [open, setOpen] = useState(false);
-	const [search, setSearch] = useState(value ?? "");
+	const [search, setSearch] = useState(defaultValue ?? value ?? "");
 	const deferredSearch = useDeferredValue(search);
 	const isPending = deferredSearch !== search;
 	const ref = useRef<HTMLInputElement>(null);
@@ -35,9 +36,9 @@ export function Autocomplete({
 			isOpen={open}
 			positions={["bottom", "left"]}
 			onClickOutside={() => {
+				onClickOutside?.();
 				setSearch(value ?? "");
 				setOpen(false);
-				onClickOutside?.();
 			}}
 			align="start"
 			padding={5}

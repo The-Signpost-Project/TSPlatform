@@ -64,7 +64,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 			<div className="flex flex-col gap-4 w-full">
 				<div className="flex gap-4 w-full sm:flex-row flex-col">
 					<Autocomplete
-						value={allPeddlers.find((p) => p.id === filters.peddlerId)?.codename ?? ""}
+						defaultValue={params.get("peddlerCodename") ?? undefined}
 						items={allPeddlers.reduce((acc, region) => {
 							acc.push(region.codename);
 							return acc;
@@ -87,7 +87,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 						}
 					/>
 					<Autocomplete
-						value={allRegions.find((r) => r.id === filters.regionId)?.name ?? ""}
+						defaultValue={params.get("regionName") ?? undefined}
 						items={allRegions.reduce((acc, region) => {
 							acc.push(region.name);
 							return acc;
