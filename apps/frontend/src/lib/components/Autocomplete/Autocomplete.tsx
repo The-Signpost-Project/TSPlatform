@@ -21,7 +21,7 @@ export function Autocomplete({
 	variant,
 	onClickOutside,
 	name,
-  defaultValue
+	defaultValue,
 }: AutocompleteProps) {
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState(defaultValue ?? value ?? "");

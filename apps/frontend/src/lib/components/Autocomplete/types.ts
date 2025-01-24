@@ -12,7 +12,7 @@ export type AutocompleteProps = {
 	variant?: "error" | "success";
 	onClickOutside?: () => void;
 	name?: string;
-  defaultValue?: string;
+	defaultValue?: string;
 };
 
 export type AutocompleteChoiceProps = {

@@ -60,7 +60,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 						accessibilityLabel="case overlay"
 						className="hover:dark:bg-gray-950"
 					/>
-					<div className="px-4 flex flex-col gap-2">
+					<div className="px-4 flex flex-col gap-4">
 						<Title order={5}>Case {caseId}</Title>
 						{error && !isPending ? (
 							<>
@@ -71,7 +71,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 							<>
 								{isPending && <Loader />}
 								{caseData && (
-									<div className="flex flex-col gap-2">
+									<div className="flex flex-col gap-6">
 										<div className="grid grid-cols-[1fr_2fr] gap-2">
 											<Text className="font-semibold">Region: </Text>
 											<Text>{caseData.regionName}</Text>
@@ -91,12 +91,12 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 											</Text>
 										</div>
 										{caseData.photoPaths.length > 0 && (
-											<>
+											<div>
 												<Text className="font-semibold">Photos:</Text>
 												<div className="flex overflow-x-scroll gap-1">
 													{caseData.photoPaths.map((photo) => (
 														<div
-															className="relative min-w-32 h-32 cursor-pointer"
+															className="relative min-w-64 h-64 cursor-pointer"
 															key={photo}
 															onClick={() => window.open(photo)}
 															onKeyDown={() => window.open(photo)}
@@ -105,7 +105,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 														</div>
 													))}
 												</div>
-											</>
+											</div>
 										)}
 										<div className="grid grid-cols-[1fr_2fr] gap-2">
 											<Text className="font-semibold">Created By: </Text>
