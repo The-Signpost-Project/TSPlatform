@@ -1,4 +1,4 @@
-import { AddPeddler, PeddlerCard } from "./components";
+import { AddPeddler, ManageDisabilitiesWrapper, PeddlerCard } from "./components";
 import { Title, Text } from "@lib/components";
 import { PeddlerSchema } from "@shared/common/schemas";
 import { query, getSessionCookieHeader } from "@utils";
@@ -31,13 +31,16 @@ export default async function RegionPage() {
 	}
 
 	return (
-		<section className="flex flex-col gap-2 sm:p-8 p-4">
+		<section className="flex flex-col gap-6 sm:p-8 p-4">
 			<div className="flex justify-between gap-6 sm:items-center sm:flex-row flex-col">
 				<div className="flex flex-col gap-1">
 					<Title order={2}>Peddlers</Title>
 					<Text description>Manage the profiles and cases linked to tissue sellers.</Text>
 				</div>
-				<AddPeddler />
+				<div className="flex gap-2">
+					<AddPeddler />
+					<ManageDisabilitiesWrapper />
+				</div>
 			</div>
 
 			<div className="flex flex-col gap-4">
@@ -46,7 +49,7 @@ export default async function RegionPage() {
 						if (peddlers && peddlers.length > 0)
 							return (
 								<div key={region} className="flex flex-col gap-2">
-									<Title order={3}>{region}</Title>
+									<Title order={4}>{region}</Title>
 									<div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
 										{peddlers.map((peddler) => (
 											<PeddlerCard key={peddler.id} data={peddler} />

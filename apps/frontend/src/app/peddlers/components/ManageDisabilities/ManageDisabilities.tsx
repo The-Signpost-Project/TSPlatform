@@ -9,19 +9,18 @@ import {
 	AddButton,
 	FileDrop,
 } from "@lib/components";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { CreateRegionInputSchema } from "@shared/common/schemas";
+import { useState, useTransition, use } from "react";
+import { CreateDisabilityInputSchema, UpdateDisabilityInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateRegionInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
 import { supportedFileTypes } from "@shared/common/constants";
+import { getDisabilities } from "./actions";
+import type { ManageDisabilitiesProps } from "./types";
 
-export function AddPeddler() {
+export function ManageDisabilities({ disabilities }: ManageDisabilitiesProps) {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState } = useForm<Omit<CreateRegionInput, "photo">>({
-		resolver: zodResolver(CreateRegionInputSchema),
-	});
+	const { data, error } = use(disabilities);
 
 	const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
 
@@ -49,7 +48,7 @@ export function AddPeddler() {
 
 	return (
 		<>
-			<AddButton onClick={() => setModalOpen(true)} subject="Peddler" />
+			<AddButton onClick={() => setModalOpen(true)} subject="Disabilities" />
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
@@ -62,33 +61,6 @@ export function AddPeddler() {
 				<Text order="sm" description>
 					Create a new peddler profile.
 				</Text>
-				<form
-					onSubmit={handleSubmit((args) => startTransition(() => onSubmit(args)))}
-					className="flex flex-col justify-center gap-4 mt-4"
-				>
-					<TextInput
-						label="Name"
-						placeholder="Enter a region name (eg. 'Johor Bahru')"
-						disabled={isPending}
-						{...register("name")}
-						variant={formState.errors.name ? "error" : undefined}
-						helperText={formState.errors.name?.message as string}
-					/>
-					<div className="flex flex-col gap-1">
-						<Text description order="sm">
-							Upload a photo
-						</Text>
-						<FileDrop
-							optional
-							onChange={(e) => setUploadedFiles(e.target.files)}
-							accept={supportedFileTypes}
-						/>
-					</div>
-
-					<Button type="submit" color="success" disabled={isPending}>
-						Create Region
-					</Button>
-				</form>
 			</Modal>
 		</>
 	);
