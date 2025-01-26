@@ -27,11 +27,13 @@ export function UserTable({ users, allRoles }: UserTableProps) {
 							<Text>{user.email}</Text>
 						</Table.TableCell>
 						<Table.TableCell>
-							{user.roles.map((r) => (
-								<Pill key={r.id} color="info" className="mr-1">
-									{r.name}
-								</Pill>
-							))}
+							<div className="flex flex-wrap gap-1">
+								{user.roles.map((r) => (
+									<Pill key={r.id} color="info" className="mr-1">
+										{r.name}
+									</Pill>
+								))}
+							</div>
 						</Table.TableCell>
 						<Table.TableCell>
 							<Text>{new Date(user.createdAt).toLocaleString("en-br")}</Text>

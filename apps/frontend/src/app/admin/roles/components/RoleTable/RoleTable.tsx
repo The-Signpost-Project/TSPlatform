@@ -24,11 +24,13 @@ export function RoleTable({ roles, allPolicies }: RoleTableProps) {
 							</Text>
 						</Table.TableCell>
 						<Table.TableCell>
-							{role.policies.map((p) => (
-								<Pill key={p.id} color="info" className="mr-1">
-									{p.name}
-								</Pill>
-							))}
+							<div className="flex flex-wrap gap-1">
+								{role.policies.map((p) => (
+									<Pill key={p.id} color="info">
+										{p.name}
+									</Pill>
+								))}
+							</div>
 						</Table.TableCell>
 						<Table.TableCell>
 							<div className="flex gap-2">
