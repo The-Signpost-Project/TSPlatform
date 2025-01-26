@@ -1,6 +1,6 @@
 "use client";
 import type { CaseCardProps } from "./types";
-import { Card, Text } from "@lib/components";
+import { Card, Text, Button } from "@lib/components";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
 import { ImportanceText } from "../ImportanceText";
@@ -12,10 +12,9 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 			title={data.peddlerCodename}
 			date={data.interactionDate.toLocaleDateString()}
 			description={data.id}
-			className={twMerge(isStale ? "animate-pulse" : "", "px-2 cursor-pointer")}
+			className={twMerge(isStale ? "animate-pulse" : "", "px-2")}
 			descriptionClassName="break-all text-xs sm:text-xs"
-			innerClassName="gap-2 px-2"
-			onClick={() => router.push(`/cases/${data.id}`)}
+			innerClassName="gap-2 px-2 flex flex-col justify-between h-full"
 		>
 			<Text className="grid grid-cols-2 gap-2">
 				<span className="font-semibold justify-start">Created At: </span>
@@ -29,6 +28,9 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 					<ImportanceText importance={data.importance} />
 				</span>
 			</Text>
+			<Button onClick={() => router.push(`/cases/${data.id}`)} className="w-full">
+				View Case
+			</Button>
 		</Card>
 	);
 }

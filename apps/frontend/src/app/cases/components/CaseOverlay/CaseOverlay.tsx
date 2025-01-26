@@ -63,10 +63,10 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 					<div className="px-4 flex flex-col gap-4">
 						<Title order={5}>Case {caseId}</Title>
 						{error && !isPending ? (
-							<>
+							<div className="flex flex-col gap-6">
 								<Text>{error.name}</Text>
 								<Text>Cause: {error.cause}</Text>
-							</>
+							</div>
 						) : (
 							<>
 								{isPending && <Loader />}
