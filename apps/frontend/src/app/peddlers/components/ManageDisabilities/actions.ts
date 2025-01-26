@@ -32,5 +32,6 @@ export async function createDisability(input: CreateDisabilityInput) {
 		},
 		validator: DisabilitySchema,
 	});
+	console.log(data, error);
 	return { data, error };
 }

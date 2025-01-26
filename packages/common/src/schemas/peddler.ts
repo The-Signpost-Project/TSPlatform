@@ -13,9 +13,7 @@ import type {
 
 export const PeddlerSchema = z.object({
 	id: z.string(),
-	codename: z
-		.string()
-		.regex(/^[a-zA-Z]+_[a-zA-Z]+_[MF]$/) as z.ZodType<`${string}_${string}_${"M" | "F"}`>,
+	codename: z.string().regex(/^.*_.*_[MF]$/) as z.ZodType<`${string}_${string}_${"M" | "F"}`>,
 	mainRegion: z.object({
 		id: z.string(),
 		name: z.string(),

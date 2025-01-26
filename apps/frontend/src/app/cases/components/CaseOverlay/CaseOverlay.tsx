@@ -4,7 +4,7 @@ import type { CaseOverlayProps } from "./types";
 import { useKeybinds } from "@lib/hooks";
 import { ModalCloseButton, Text, Title, Loader, Image } from "@lib/components";
 import { useEffect, useTransition, useState } from "react";
-import type { StrictCase } from "@shared/common/types";
+import type { StrictCase, ErrorResponse } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { ImportanceText } from "../ImportanceText";
 
@@ -17,7 +17,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 	});
 	const [isPending, startTransition] = useTransition();
 	const [caseData, setCaseData] = useState<StrictCase | null>(null);
-	const [error, setError] = useState<{ path: string; name: string; cause: string } | null>(null);
+	const [error, setError] = useState<ErrorResponse | null>(null);
 
 	useEffect(() => {
 		document.body.style.overflow = "hidden";

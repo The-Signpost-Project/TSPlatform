@@ -1,4 +1,4 @@
-import { AddPeddler, ManageDisabilitiesWrapper, PeddlerCard } from "./components";
+import { AddPeddler, ManageDisabilities, PeddlerCard } from "./components";
 import { Title, Text } from "@lib/components";
 import { PeddlerSchema } from "@shared/common/schemas";
 import { query, getSessionCookieHeader } from "@utils";
@@ -39,7 +39,7 @@ export default async function RegionPage() {
 				</div>
 				<div className="flex gap-2">
 					<AddPeddler />
-					<ManageDisabilitiesWrapper />
+					<ManageDisabilities />
 				</div>
 			</div>
 
