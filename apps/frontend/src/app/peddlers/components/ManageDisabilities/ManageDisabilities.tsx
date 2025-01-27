@@ -17,7 +17,7 @@ import { createDisability, getDisabilities, deleteDisability } from "./actions";
 import { toast } from "react-hot-toast";
 
 export function ManageDisabilities() {
-	const { user } = useContext(AuthContext);
+	const { userHasPermission } = useContext(AuthContext);
 	const [modalOpen, setModalOpen] = useState(false);
 	useEffect(() => {
 		getDisabilities().then(({ data, error }) => {
@@ -82,10 +82,7 @@ export function ManageDisabilities() {
 		});
 	};
 
-	if (
-		!user ||
-		!user.roles.flatMap((r) => r.policies).some((p) => hasPermission(p, "disability", "read"))
-	) {
+	if (!userHasPermission("disability", "read")) {
 		return null;
 	}
 

@@ -2,10 +2,11 @@
 
 import { useState, createContext, useEffect, useRef } from "react";
 import type { AuthContextProps, AuthProviderProps } from "./types";
-import type { SafeUser, SignInInput, SignUpInput } from "@shared/common/types";
+import type { Action, Resource, SafeUser, SignInInput, SignUpInput } from "@shared/common/types";
 import { NullSchema, SafeUserSchema } from "@shared/common/schemas";
 import { signOut, getUser } from "@lib/actions";
 import { query } from "@utils";
+import { hasPermission } from "@shared/common/abac";
 import dynamic from "next/dynamic";
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -17,6 +18,7 @@ export const AuthContext = createContext<AuthContextProps>({
 	signUp: async () => 0,
 	updateUser: async () => ({ error: null }),
 	syncUser: () => {},
+	userHasPermission: () => false,
 });
 
 function _AuthProvider({ children }: AuthProviderProps) {
@@ -26,6 +28,20 @@ function _AuthProvider({ children }: AuthProviderProps) {
 
 	// AbortController to cancel updateUser requests
 	const updateUserAbortController = useRef<AbortController | null>(null);
+
+	function userHasPermission(
+		resource: Resource,
+		action: Action,
+		resourceObj?: Record<string, any>,
+	) {
+		return !!(
+			!loading &&
+			user &&
+			user.roles
+				.flatMap((r) => r.policies)
+				.some((p) => hasPermission(p, resource, action, resourceObj))
+		);
+	}
 
 	function syncUser() {
 		setLoading(true);
@@ -135,6 +151,7 @@ function _AuthProvider({ children }: AuthProviderProps) {
 				signUp: handleSignUp,
 				updateUser,
 				syncUser,
+				userHasPermission,
 			}}
 		>
 			{children}
