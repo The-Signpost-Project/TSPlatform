@@ -7,6 +7,7 @@ import { useEffect, useTransition, useState, useCallback } from "react";
 import type { StrictPeddler } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { EditPeddler } from "../EditPeddler";
+import { DeletePeddler } from "../DeletePeddler";
 
 export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps) {
 	const router = useRouter();
@@ -120,9 +121,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 											</Button>
 											<div className="flex gap-2">
 												<EditPeddler peddler={peddlerData} revalidate={revalidate} />
-												<Button onClick={() => {}} color="danger" className="w-full">
-													Delete
-												</Button>
+												<DeletePeddler id={peddlerData.id} codename={peddlerData.codename} />
 											</div>
 										</div>
 									</div>

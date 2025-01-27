@@ -141,8 +141,8 @@ model Peddler {
 
 model PeddlerDisability {
   id           String     @id @default(uuid(7))
-  peddler      Peddler    @relation(fields: [peddlerId], references: [id])
-  disability   Disability @relation(fields: [disabilityId], references: [id])
+  peddler      Peddler    @relation(fields: [peddlerId], references: [id], onDelete: Cascade)
+  disability   Disability @relation(fields: [disabilityId], references: [id], onDelete: Restrict)
   peddlerId    String
   disabilityId String
 }
@@ -164,14 +164,14 @@ model Region {
 
 model Case {
   id               String      @id @default(uuid(7))
-  peddler          Peddler     @relation(fields: [peddlerId], references: [id])
+  peddler          Peddler     @relation(fields: [peddlerId], references: [id], onDelete: Cascade)
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
-  createdBy        User        @relation(fields: [createdById], references: [id])
+  createdBy        User        @relation(fields: [createdById], references: [id], onDelete: Restrict)
   createdById      String
   interactionDate  DateTime
   regionId         String
-  region           Region      @relation(fields: [regionId], references: [id])
+  region           Region      @relation(fields: [regionId], references: [id], onDelete: Restrict)
   location         String
   photos           CasePhoto[]
   notes            String
@@ -190,11 +190,11 @@ model CasePhoto {
 
 model PeddlerMergeRequest {
   id            String  @id @default(uuid(7))
-  peddlerNew    Peddler @relation(name: "peddlerNew", fields: [peddlerNewId], references: [id])
+  peddlerNew    Peddler @relation(name: "peddlerNew", fields: [peddlerNewId], references: [id], onDelete: Cascade)
   peddlerNewId  String
-  peddlerOld    Peddler @relation(name: "peddlerOld", fields: [peddlerOldId], references: [id])
+  peddlerOld    Peddler @relation(name: "peddlerOld", fields: [peddlerOldId], references: [id], onDelete: Cascade)
   peddlerOldId  String
-  requestedBy   User    @relation(fields: [requestedById], references: [id])
+  requestedBy   User    @relation(fields: [requestedById], references: [id], onDelete: Cascade)
   requestedById String
   notes         String
 }
