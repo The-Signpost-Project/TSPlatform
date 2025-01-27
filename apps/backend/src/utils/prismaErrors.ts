@@ -9,6 +9,7 @@ export function handleDatabaseError(error: unknown): never {
 	if (error instanceof Prisma.PrismaClientKnownRequestError) {
 		if (Object.keys(prismaErrors).includes(error.code)) {
 			console.error(error.message);
+			console.error(`Trace: ${JSON.stringify(error)}`);
 			throw new AppError(prismaErrors[error.code as keyof typeof prismaErrors]);
 		}
 		throw new AppError(AppErrorTypes.DatabaseError("Unknown", 500, error.message));

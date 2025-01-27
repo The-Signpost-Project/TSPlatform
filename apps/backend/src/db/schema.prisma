@@ -133,7 +133,7 @@ model Peddler {
   createdAt DateTime @default(now())
 
   disabilities     PeddlerDisability[]
-  mainRegion       Region                @relation(fields: [mainRegionId], references: [id])
+  mainRegion       Region                @relation(fields: [mainRegionId], references: [id], onDelete: Restrict)
   cases            Case[]
   mergeRequestsNew PeddlerMergeRequest[] @relation(name: "peddlerNew")
   mergeRequestsOld PeddlerMergeRequest[] @relation(name: "peddlerOld")
