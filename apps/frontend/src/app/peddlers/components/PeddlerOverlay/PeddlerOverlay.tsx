@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import type { PeddlerOverlayProps } from "./types";
 import { useKeybinds } from "@lib/hooks";
 import { ModalCloseButton, Text, Title, Loader, List, Link, Button } from "@lib/components";
-import { useEffect, useTransition, useState } from "react";
+import { useEffect, useTransition, useState, useCallback } from "react";
 import type { StrictPeddler } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { EditPeddler } from "../EditPeddler";
@@ -26,25 +26,27 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 		};
 	}, []);
 
-  const revalidate = (controller: AbortController) => {
-    
-    startTransition(async () => {
-      const { data, error } = await fetchCase(peddlerId, controller.signal);
+	const revalidate = useCallback(
+		(controller: AbortController) => {
+			startTransition(async () => {
+				const { data, error } = await fetchCase(peddlerId, controller.signal);
 
-      if (error) {
-        setError(error);
-        return;
-      }
-      setError(null);
-      setPeddlerData(data);
-    });
-  }
+				if (error) {
+					setError(error);
+					return;
+				}
+				setError(null);
+				setPeddlerData(data);
+			});
+		},
+		[peddlerId],
+	);
 
 	useEffect(() => {
 		const controller = new AbortController();
 		revalidate(controller);
 		return () => controller.abort();
-	}, [peddlerId]);
+	}, [revalidate]);
 
 	return (
 		<section

@@ -32,6 +32,7 @@ function _AuthProvider({ children }: AuthProviderProps) {
 	function userHasPermission(
 		resource: Resource,
 		action: Action,
+		// biome-ignore lint/suspicious/noExplicitAny: resourceObj is a generic object
 		resourceObj?: Record<string, any>,
 	) {
 		return !!(
