@@ -4,6 +4,7 @@ import {
 	DisabilitySchema,
 	CreateDisabilityInputSchema,
 	UpdateDisabilityInputSchema,
+	NullSchema,
 } from "@shared/common/schemas";
 import { z } from "zod";
 import type { CreateDisabilityInput, UpdateDisabilityInput } from "@shared/common/types";
@@ -33,5 +34,30 @@ export async function createDisability(input: CreateDisabilityInput) {
 		validator: DisabilitySchema,
 	});
 	console.log(data, error);
+	return { data, error };
+}
+
+export async function updateDisability(id: string, input: UpdateDisabilityInput) {
+	const { data, error } = await query({
+		path: `/peddler/disability/${id}`,
+		init: {
+			method: "PATCH",
+			headers: await getSessionCookieHeader(),
+			body: JSON.stringify(input),
+		},
+		validator: DisabilitySchema,
+	});
+	return { data, error };
+}
+
+export async function deleteDisability(id: string) {
+	const { data, error } = await query({
+		path: `/peddler/disability/${id}`,
+		init: {
+			method: "DELETE",
+			headers: await getSessionCookieHeader(),
+		},
+		validator: NullSchema,
+	});
 	return { data, error };
 }

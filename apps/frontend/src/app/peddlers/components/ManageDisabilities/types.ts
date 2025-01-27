@@ -5,7 +5,7 @@ import type { HTMLAttributes } from "react";
 export interface ManageDisabilitiesProps {}
 
 export interface DisabilityPillProps extends HTMLAttributes<HTMLDivElement> {
+	id: string;
 	defaultName: string;
-	onDelete: () => void;
-	onUpdate: (newName: string) => void;
+	onDelete: (id: string) => void;
 }

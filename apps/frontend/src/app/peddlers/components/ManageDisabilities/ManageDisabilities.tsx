@@ -7,19 +7,13 @@ import {
 	Text,
 	Button,
 	AddButton,
-	FileDrop,
 } from "@lib/components";
 import { useState, useTransition, useContext, useOptimistic, useEffect } from "react";
 import { AuthContext } from "@/lib/providers";
 import { hasPermission } from "@shared/common/abac";
-import { CreateDisabilityInputSchema, UpdateDisabilityInputSchema } from "@shared/common/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
 import type { ErrorResponse, Disability } from "@shared/common/types";
-import { useRouter } from "next/navigation";
-import { supportedFileTypes } from "@shared/common/constants";
-import type { ManageDisabilitiesProps } from "./types";
 import { DisabilityPill } from "./DisabilityPill";
-import { createDisability, getDisabilities } from "./actions";
+import { createDisability, getDisabilities, deleteDisability } from "./actions";
 import { toast } from "react-hot-toast";
 
 export function ManageDisabilities() {
@@ -46,7 +40,6 @@ export function ManageDisabilities() {
 	const [newName, setNewName] = useState("");
 
 	const [isPending, startTransition] = useTransition();
-	const router = useRouter();
 
 	const createDisabilityCb = async (input: string) => {
 		startTransition(async () => {
@@ -57,6 +50,27 @@ export function ManageDisabilities() {
 				return;
 			}
 			toast.success("Disability created successfully");
+			const { data, error } = await getDisabilities();
+			console.log(data, error);
+
+			startTransition(() => {
+				if (data) {
+					setData(data);
+				}
+
+				setError(error);
+			});
+		});
+	};
+
+	const deleteDisabilityCb = async (id: string) => {
+		startTransition(async () => {
+			const { error: deleteError } = await deleteDisability(id);
+			if (deleteError) {
+				toast.error(deleteError.cause);
+				return;
+			}
+			toast.success("Disability deleted successfully");
 			const { data, error } = await getDisabilities();
 			console.log(data, error);
 
@@ -101,11 +115,13 @@ export function ManageDisabilities() {
 						value={newName}
 						onChange={(e) => setNewName(e.target.value)}
 						className="w-full"
+						disabled={isPending}
 					/>
 					<Button
 						onClick={() => createDisabilityCb(newName)}
 						className="h-10 min-w-10 flex items-center justify-center p-0"
 						color="success"
+						disabled={isPending}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -113,9 +129,9 @@ export function ManageDisabilities() {
 							viewBox="0 0 24 24"
 							strokeWidth={1.5}
 							stroke="currentColor"
-							className="h-6 w-6 flex-grow"
+							className="size-6"
 						>
-							<path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+							<path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 						</svg>
 					</Button>
 				</div>
@@ -129,10 +145,9 @@ export function ManageDisabilities() {
 					optimisticData.map((disability) => (
 						<DisabilityPill
 							key={disability.id}
+							id={disability.id}
 							defaultName={disability.name}
-							onDelete={() => console.info("delete")}
-							onUpdate={(newName) => console.info(newName)}
-							className="mt-2"
+							onDelete={deleteDisabilityCb}
 						/>
 					))}
 			</Modal>
