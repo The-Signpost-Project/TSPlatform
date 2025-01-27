@@ -91,7 +91,9 @@ export function ManageDisabilities() {
 
 	return (
 		<>
-			<AddButton onClick={() => setModalOpen(true)} subject="Disabilities" />
+			<Button onClick={() => setModalOpen(true)} type="button">
+				Manage Disabilities
+			</Button>
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}

@@ -37,7 +37,7 @@ export default async function RegionPage() {
 					<Title order={2}>Peddlers</Title>
 					<Text description>Manage the profiles and cases linked to tissue sellers.</Text>
 				</div>
-				<div className="flex gap-2">
+				<div className="flex gap-2 flex-wrap">
 					<AddPeddler />
 					<ManageDisabilities />
 				</div>

@@ -103,12 +103,22 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 												</List.UnorderedList>
 											)}
 										</div>
-										<Button
-											href={`/cases?peddlerCodename=${peddlerData.codename}`}
-											className="w-full"
-										>
-											View Cases
-										</Button>
+										<div className="flex flex-col gap-2">
+											<Button
+												href={`/cases?peddlerCodename=${peddlerData.codename}`}
+												className="w-full"
+											>
+												View Cases
+											</Button>
+											<div className="flex gap-2">
+												<Button onClick={() => {}} color="warning" className="w-full">
+													Edit
+												</Button>
+												<Button onClick={() => {}} color="danger" className="w-full">
+													Delete
+												</Button>
+											</div>
+										</div>
 									</div>
 								)}
 							</>
