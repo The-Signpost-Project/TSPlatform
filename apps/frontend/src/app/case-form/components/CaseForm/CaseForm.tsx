@@ -296,7 +296,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 					</div>
 					<div className="flex flex-col gap-2">
 						<Text description order="sm">
-							Disability
+							Disabilities
 						</Text>
 						<Text description order="xs">
 							Please insert only confirmed physical or mental disabilities.

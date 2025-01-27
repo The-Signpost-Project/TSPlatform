@@ -1,16 +1,7 @@
 "use client";
-import {
-	Modal,
-	TextInput,
-	Title,
-	ModalCloseButton,
-	Text,
-	Button,
-	AddButton,
-} from "@lib/components";
+import { Modal, TextInput, Title, ModalCloseButton, Text, Button } from "@lib/components";
 import { useState, useTransition, useContext, useOptimistic, useEffect } from "react";
 import { AuthContext } from "@/lib/providers";
-import { hasPermission } from "@shared/common/abac";
 import type { ErrorResponse, Disability } from "@shared/common/types";
 import { DisabilityPill } from "./DisabilityPill";
 import { createDisability, getDisabilities, deleteDisability } from "./actions";

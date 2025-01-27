@@ -6,6 +6,7 @@ import { ModalCloseButton, Text, Title, Loader, List, Link, Button } from "@lib/
 import { useEffect, useTransition, useState } from "react";
 import type { StrictPeddler } from "@shared/common/types";
 import { fetchCase } from "./utils";
+import { EditPeddler } from "../EditPeddler";
 
 export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps) {
 	const router = useRouter();
@@ -25,18 +26,23 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 		};
 	}, []);
 
+  const revalidate = (controller: AbortController) => {
+    
+    startTransition(async () => {
+      const { data, error } = await fetchCase(peddlerId, controller.signal);
+
+      if (error) {
+        setError(error);
+        return;
+      }
+      setError(null);
+      setPeddlerData(data);
+    });
+  }
+
 	useEffect(() => {
 		const controller = new AbortController();
-		startTransition(async () => {
-			const { data, error } = await fetchCase(peddlerId, controller.signal);
-
-			if (error) {
-				setError(error);
-				return;
-			}
-			setError(null);
-			setPeddlerData(data);
-		});
+		revalidate(controller);
 		return () => controller.abort();
 	}, [peddlerId]);
 
@@ -111,9 +117,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 												View Cases
 											</Button>
 											<div className="flex gap-2">
-												<Button onClick={() => {}} color="warning" className="w-full">
-													Edit
-												</Button>
+												<EditPeddler peddler={peddlerData} revalidate={revalidate} />
 												<Button onClick={() => {}} color="danger" className="w-full">
 													Delete
 												</Button>
