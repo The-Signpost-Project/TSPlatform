@@ -7,7 +7,7 @@ import type { DeletePeddlerProps } from "./types";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@lib/providers";
 
-export function DeletePeddler({ id, codename }: DeletePeddlerProps) {
+export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps) {
 	const { userHasPermission } = useContext(AuthContext);
 	const [modalOpen, setModalOpen] = useState(false);
 	const router = useRouter();
@@ -15,10 +15,9 @@ export function DeletePeddler({ id, codename }: DeletePeddlerProps) {
 	async function onSubmit() {
 		const { status, error } = await deletePeddler(id);
 		if (status === 200) {
-			toast.success(`Policy ${name} deleted.`);
+			toast.success(`Peddler ${codename} deleted.`);
 			setModalOpen(false);
-			router.push("/peddlers");
-			router.refresh();
+			navigateBack();
 			return;
 		}
 

@@ -121,7 +121,11 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 											</Button>
 											<div className="flex gap-2">
 												<EditPeddler peddler={peddlerData} revalidate={revalidate} />
-												<DeletePeddler id={peddlerData.id} codename={peddlerData.codename} />
+												<DeletePeddler
+													id={peddlerData.id}
+													codename={peddlerData.codename}
+													navigateBack={navigate}
+												/>
 											</div>
 										</div>
 									</div>
