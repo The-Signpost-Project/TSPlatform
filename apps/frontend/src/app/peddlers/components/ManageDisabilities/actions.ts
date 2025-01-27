@@ -1,11 +1,6 @@
 "use server";
 import { query, getSessionCookieHeader } from "@utils";
-import {
-	DisabilitySchema,
-	CreateDisabilityInputSchema,
-	UpdateDisabilityInputSchema,
-	NullSchema,
-} from "@shared/common/schemas";
+import { DisabilitySchema, NullSchema } from "@shared/common/schemas";
 import { z } from "zod";
 import type { CreateDisabilityInput, UpdateDisabilityInput } from "@shared/common/types";
 
@@ -33,7 +28,6 @@ export async function createDisability(input: CreateDisabilityInput) {
 		},
 		validator: DisabilitySchema,
 	});
-	console.log(data, error);
 	return { data, error };
 }
 

@@ -51,7 +51,6 @@ export function ManageDisabilities() {
 			}
 			toast.success("Disability created successfully");
 			const { data, error } = await getDisabilities();
-			console.log(data, error);
 
 			startTransition(() => {
 				if (data) {
@@ -72,7 +71,6 @@ export function ManageDisabilities() {
 			}
 			toast.success("Disability deleted successfully");
 			const { data, error } = await getDisabilities();
-			console.log(data, error);
 
 			startTransition(() => {
 				if (data) {
@@ -131,6 +129,7 @@ export function ManageDisabilities() {
 							stroke="currentColor"
 							className="size-6"
 						>
+							<title>Add disability</title>
 							<path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 						</svg>
 					</Button>

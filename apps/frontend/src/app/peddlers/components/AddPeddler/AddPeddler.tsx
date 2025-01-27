@@ -7,15 +7,12 @@ import {
 	Text,
 	Button,
 	AddButton,
-	FileDrop,
 } from "@lib/components";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { CreateRegionInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateRegionInput } from "@shared/common/types";
-import { useRouter } from "next/navigation";
-import { supportedFileTypes } from "@shared/common/constants";
 
 export function AddPeddler() {
 	const [modalOpen, setModalOpen] = useState(false);
@@ -23,11 +20,7 @@ export function AddPeddler() {
 		resolver: zodResolver(CreateRegionInputSchema),
 	});
 
-	const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
-
 	const [isPending, startTransition] = useTransition();
-	const router = useRouter();
-
 	async function onSubmit(data: Omit<CreateRegionInput, "photo">) {
 		console.info(data);
 		/*
@@ -74,16 +67,6 @@ export function AddPeddler() {
 						variant={formState.errors.name ? "error" : undefined}
 						helperText={formState.errors.name?.message as string}
 					/>
-					<div className="flex flex-col gap-1">
-						<Text description order="sm">
-							Upload a photo
-						</Text>
-						<FileDrop
-							optional
-							onChange={(e) => setUploadedFiles(e.target.files)}
-							accept={supportedFileTypes}
-						/>
-					</div>
 
 					<Button type="submit" color="success" disabled={isPending}>
 						Create Region

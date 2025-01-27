@@ -11,7 +11,6 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 		name,
 		(_state, newName: string) => newName,
 	);
-	const isUpdating = name !== optimisticName;
 	const [isPending, startTransition] = useTransition();
 	const [isEditing, setIsEditing] = useState(false);
 	const updateDisabilityCb = async () => {
@@ -65,6 +64,7 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 							stroke="currentColor"
 							className="size-4 translate-x-[30%]"
 						>
+							<title>Confirm edit disability</title>
 							<path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
 						</svg>
 					</Button>
@@ -82,6 +82,7 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 							stroke="currentColor"
 							className="size-4 translate-x-[30%]"
 						>
+							<title>Edit disabilities</title>
 							<path
 								strokeLinecap="round"
 								strokeLinejoin="round"
