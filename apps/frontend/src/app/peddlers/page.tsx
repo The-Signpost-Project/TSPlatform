@@ -50,7 +50,7 @@ export default async function RegionPage() {
 							return (
 								<div key={region} className="flex flex-col gap-2">
 									<Title order={4}>{region}</Title>
-									<div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
+									<div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2 self-start">
 										{peddlers.map((peddler) => (
 											<PeddlerCard key={peddler.id} data={peddler} />
 										))}

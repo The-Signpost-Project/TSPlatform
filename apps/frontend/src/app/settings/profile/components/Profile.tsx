@@ -3,7 +3,7 @@ import { UpdateUserInputSchema } from "@shared/common/schemas";
 import { useContext } from "react";
 import { AuthContext } from "@lib/providers";
 import { toast } from "react-hot-toast";
-import { TextSettingsRow } from "..";
+import { TextSettingsRow } from "../../components";
 import {
 	Text,
 	Table,

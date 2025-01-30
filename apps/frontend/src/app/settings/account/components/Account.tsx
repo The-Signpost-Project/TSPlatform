@@ -1,6 +1,6 @@
 "use client";
 import { UpdateUserInputSchema } from "@shared/common/schemas";
-import { ButtonSettingsRow, TextSettingsRow } from "..";
+import { ButtonSettingsRow, TextSettingsRow } from "../../components";
 import { useState, useContext } from "react";
 import { AuthContext } from "@lib/providers";
 import { DeleteAccountModal } from "./DeleteAccountModal";

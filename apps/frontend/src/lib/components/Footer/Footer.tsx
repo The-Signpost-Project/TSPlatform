@@ -3,7 +3,7 @@ import { Text, Link, Title } from "@lib/components";
 export function Footer() {
 	return (
 		<footer>
-			<div className="flex flex-col justify-center items-center px-4 sm:px-16 pt-12 pb-4 mt-2 border-t-2 border-zinc-200 dark:border-zinc-700">
+			<div className="flex flex-col justify-center items-center px-4 sm:px-16 pt-12 pb-4 border-t-2 border-gray-800/20 dark:border-gray-50/20">
 				<section className="flex items-center justify-center mb-4 sm:flex-row flex-col">
 					<div className="flex flex-col gap-2 items-center w-full sm:w-1/3 mb-12 sm:mr-24">
 						<Title order={6}>The Signpost Project, Singapore</Title>
