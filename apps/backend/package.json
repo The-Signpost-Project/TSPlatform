@@ -49,7 +49,7 @@
 		"@types/handlebars": "^4.1.0",
 		"@types/jest": "^29.5.14",
 		"arctic": "^3.2.1",
-		"bun": "1.1.45",
+		"bun": "^1.2.1",
 		"cookie-parser": "^1.4.7",
 		"express": "5.0.1",
 		"googleapis": "^144.0.0",
