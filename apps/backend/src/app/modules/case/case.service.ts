@@ -193,12 +193,83 @@ export class CaseService extends CrudService<StrictCase> {
 		return this.getById(user.id);
 	}
 
-	// @ts-expect-error
 	async updateById(id: string, data: UpdateCaseInput) {
-		// TODO
+		const existingCase = await this.prisma.case.findUnique({
+			where: { id },
+			select: {
+				photos: {
+					select: {
+						photoPath: true,
+					},
+				},
+			},
+		});
+
+		if (!existingCase) {
+			throw new AppError(AppErrorTypes.NotFound);
+		}
+
+		if (data.photos) {
+			// delete old photos
+			await Promise.all(
+				existingCase.photos.map(async (photo) => {
+					await this.s3.remove(photo.photoPath);
+				}),
+			);
+
+			// upload new photos
+			const photoPaths = await Promise.all(
+				data.photos.map(
+					async (photo) =>
+						await this.s3.upload(photo, { dir: "case-photos", contentType: photo.mimetype }),
+				),
+			);
+
+			await this.prisma.case.update({
+				where: { id },
+				data: {
+					photos: {
+						deleteMany: {},
+						create: photoPaths.map((photoPath) => ({ photoPath })),
+					},
+				},
+			});
+		}
+
+		const { photos, ...updateData } = data;
+
+		await this.prisma.case.update({
+			where: { id },
+			data: updateData,
+		});
+
+		return this.getById(id);
 	}
 
 	async deleteById(id: string) {
-		// TODO
+		const existingCase = await this.prisma.case.findUnique({
+      where: { id },
+      select: {
+        photos: {
+          select: {
+            photoPath: true,
+          },
+        },
+      },
+    });
+
+    if (!existingCase) {
+      throw new AppError(AppErrorTypes.NotFound);
+    }
+
+    await Promise.all(
+      existingCase.photos.map(async (photo) => {
+        await this.s3.remove(photo.photoPath);
+      }),
+    );
+
+    await this.prisma.case.delete({
+      where: { id },
+    });
 	}
 }
