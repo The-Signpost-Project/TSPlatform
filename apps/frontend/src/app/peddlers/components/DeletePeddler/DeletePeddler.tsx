@@ -4,13 +4,11 @@ import { useContext, useState } from "react";
 import { deletePeddler } from "./actions";
 import { toast } from "react-hot-toast";
 import type { DeletePeddlerProps } from "./types";
-import { useRouter } from "next/navigation";
 import { AuthContext } from "@lib/providers";
 
 export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps) {
 	const { userHasPermission } = useContext(AuthContext);
 	const [modalOpen, setModalOpen] = useState(false);
-	const router = useRouter();
 
 	async function onSubmit() {
 		const { status, error } = await deletePeddler(id);
