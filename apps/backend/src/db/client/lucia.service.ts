@@ -3,7 +3,6 @@ import { PrismaService } from "./prisma.service";
 import { ConfigService } from "@nestjs/config";
 import { Session, User } from "@prisma/client";
 import { randomBytes, createHash } from "node:crypto";
-import { handleDatabaseError } from "@utils/prismaErrors";
 import type { Response } from "express";
 import { TokenCookie } from "@shared/common/types";
 
@@ -34,11 +33,9 @@ export class LuciaService {
 			userId,
 			expiresAt: new Date(Date.now() + this.sessionDuration),
 		};
-		try {
-			await this.prismaService.session.create({ data: session });
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+
+		await this.prismaService.session.create({ data: session });
+
 		return session;
 	}
 
@@ -55,35 +52,24 @@ export class LuciaService {
 
 		// delete session if expired
 		if (session.expiresAt.getTime() < Date.now()) {
-			try {
-				await this.prismaService.session.delete({ where: { id: sessionId } });
-			} catch (error) {
-				handleDatabaseError(error);
-			}
+			await this.prismaService.session.delete({ where: { id: sessionId } });
+
 			return { session: null, user: null };
 		}
 
 		// refresh if under half the duration left
 		if (session.expiresAt.getTime() - Date.now() < this.sessionDuration / 2) {
-			try {
-				await this.prismaService.session.update({
-					where: { id: sessionId },
-					data: { expiresAt: new Date(Date.now() + this.sessionDuration) },
-				});
-			} catch (error) {
-				handleDatabaseError(error);
-			}
+			await this.prismaService.session.update({
+				where: { id: sessionId },
+				data: { expiresAt: new Date(Date.now() + this.sessionDuration) },
+			});
 		}
 
 		return { session, user };
 	}
 
 	async invalidateSession(sessionId: string): Promise<void> {
-		try {
-			await this.prismaService.session.delete({ where: { id: sessionId } });
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+		await this.prismaService.session.delete({ where: { id: sessionId } });
 	}
 
 	setSessionCookie(res: Response, cookieName: string, token: TokenCookie): void {

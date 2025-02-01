@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService, S3Service, LuciaService } from "@db/client";
-import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type { CreateCaseInput, UpdateCaseInput } from "@shared/common/types";
 import { CrudService } from "@base";
@@ -81,102 +80,86 @@ export class CaseService extends CrudService<StrictCase> {
 	}
 
 	async create(data: CreateCaseInput) {
-		try {
-			let photoPaths: string[] = [];
-			if (data.photos) {
-				photoPaths = await Promise.all(
-					data.photos.map(
-						async (photo) =>
-							await this.s3.upload(photo, { dir: "case-photos", contentType: photo.mimetype }),
-					),
-				);
-			}
-			const res = await this.prisma.case.create({
-				data: {
-					createdBy: {
-						connect: { id: data.createdById },
-					},
-					region: {
-						connect: { id: data.regionId },
-					},
-					peddler: {
-						connect: { id: data.peddlerId },
-					},
-					interactionDate: data.interactionDate,
-					location: data.location,
-					notes: data.notes,
-					importance: data.importance,
-					firstInteraction: data.firstInteraction,
-					photos: {
-						create: photoPaths.map((photoPath) => ({ photoPath })),
-					},
-				},
-				select: this.rawCaseFindFields,
-			});
-			return this.parseCase(res);
-		} catch (error) {
-			handleDatabaseError(error);
+		let photoPaths: string[] = [];
+		if (data.photos) {
+			photoPaths = await Promise.all(
+				data.photos.map(
+					async (photo) =>
+						await this.s3.upload(photo, { dir: "case-photos", contentType: photo.mimetype }),
+				),
+			);
 		}
+		const res = await this.prisma.case.create({
+			data: {
+				createdBy: {
+					connect: { id: data.createdById },
+				},
+				region: {
+					connect: { id: data.regionId },
+				},
+				peddler: {
+					connect: { id: data.peddlerId },
+				},
+				interactionDate: data.interactionDate,
+				location: data.location,
+				notes: data.notes,
+				importance: data.importance,
+				firstInteraction: data.firstInteraction,
+				photos: {
+					create: photoPaths.map((photoPath) => ({ photoPath })),
+				},
+			},
+			select: this.rawCaseFindFields,
+		});
+		return this.parseCase(res);
 	}
 
 	async getAll() {
-		try {
-			const res = await this.prisma.case.findMany({
-				select: this.rawCaseFindFields,
-			});
-			return Promise.all(res.map(this.parseCase));
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+		const res = await this.prisma.case.findMany({
+			select: this.rawCaseFindFields,
+		});
+		return Promise.all(res.map(this.parseCase));
 	}
 
 	async getById(id: string) {
-		try {
-			const res = await this.prisma.case.findUnique({
-				where: { id },
-				select: this.rawCaseFindFields,
-			});
-			if (!res) {
-				throw new AppError(AppErrorTypes.NotFound);
-			}
-			return this.parseCase(res);
-		} catch (error) {
-			handleDatabaseError(error);
+		const res = await this.prisma.case.findUnique({
+			where: { id },
+			select: this.rawCaseFindFields,
+		});
+		if (!res) {
+			throw new AppError(AppErrorTypes.NotFound);
 		}
+		return this.parseCase(res);
 	}
 
 	async getFiltered(filters: CaseFilters) {
-		try {
-			const res = await this.prisma.case.findMany({
-				where: {
-					regionId: filters.regionId,
-					peddlerId: filters.peddlerId,
-					importance: filters.importance
-						? {
-								in: filters.importance,
-							}
-						: undefined,
-					createdBy: filters.teamId
-						? {
-								teams: {
-									some: {
-										id: filters.teamId,
-									},
+		const res = await this.prisma.case.findMany({
+			where: {
+				regionId: filters.regionId,
+				peddlerId: filters.peddlerId,
+				importance: filters.importance
+					? {
+							in: filters.importance,
+						}
+					: undefined,
+				createdBy: filters.teamId
+					? {
+							teams: {
+								some: {
+									id: filters.teamId,
 								},
-							}
-						: undefined,
-				},
-				select: this.rawCaseFindFields,
-				orderBy: {
-					[filters.sortBy || "updatedAt"]: filters.order || "desc",
-				},
-				skip: filters.offset,
-				take: filters.limit,
-			});
-			return Promise.all(res.map(this.parseCase));
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+							},
+						}
+					: undefined,
+			},
+			select: this.rawCaseFindFields,
+			orderBy: {
+				[filters.sortBy || "updatedAt"]: filters.order || "desc",
+			},
+			skip: filters.offset,
+			take: filters.limit,
+		});
+		return Promise.all(res.map(this.parseCase));
 	}
 
 	async getOwn(tokenId: string | undefined) {
@@ -248,28 +231,28 @@ export class CaseService extends CrudService<StrictCase> {
 
 	async deleteById(id: string) {
 		const existingCase = await this.prisma.case.findUnique({
-      where: { id },
-      select: {
-        photos: {
-          select: {
-            photoPath: true,
-          },
-        },
-      },
-    });
+			where: { id },
+			select: {
+				photos: {
+					select: {
+						photoPath: true,
+					},
+				},
+			},
+		});
 
-    if (!existingCase) {
-      throw new AppError(AppErrorTypes.NotFound);
-    }
+		if (!existingCase) {
+			throw new AppError(AppErrorTypes.NotFound);
+		}
 
-    await Promise.all(
-      existingCase.photos.map(async (photo) => {
-        await this.s3.remove(photo.photoPath);
-      }),
-    );
+		await Promise.all(
+			existingCase.photos.map(async (photo) => {
+				await this.s3.remove(photo.photoPath);
+			}),
+		);
 
-    await this.prisma.case.delete({
-      where: { id },
-    });
+		await this.prisma.case.delete({
+			where: { id },
+		});
 	}
 }

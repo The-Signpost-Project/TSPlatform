@@ -7,7 +7,6 @@ import type {
 	ForgotPasswordReset,
 	ChangePasswordInput,
 } from "@shared/common/types";
-import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { PrismaService, LuciaService } from "@db/client";
 
@@ -28,26 +27,23 @@ export class AuthService {
 
 	async signUp(data: SignUpInput): Promise<TokenCookie> {
 		const passwordHash = await this.hashPassword(data.password);
-		try {
-			const user = await this.prisma.user.create({
-				data: {
-					id: this.lucia.generateUserId(),
-					username: data.username,
-					email: data.email,
-					passwordHash,
-				},
-			});
 
-			const token = this.lucia.generateSessionToken();
-			const session = await this.lucia.createSession(token, user.id);
+		const user = await this.prisma.user.create({
+			data: {
+				id: this.lucia.generateUserId(),
+				username: data.username,
+				email: data.email,
+				passwordHash,
+			},
+		});
 
-			return {
-				value: token,
-				expiresAt: session.expiresAt,
-			};
-		} catch (error: unknown) {
-			handleDatabaseError(error);
-		}
+		const token = this.lucia.generateSessionToken();
+		const session = await this.lucia.createSession(token, user.id);
+
+		return {
+			value: token,
+			expiresAt: session.expiresAt,
+		};
 	}
 
 	async signIn(data: SignInInput): Promise<TokenCookie> {

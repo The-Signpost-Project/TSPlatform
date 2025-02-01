@@ -8,7 +8,6 @@ import type {
 	UpdateUserInput,
 	UpdateUserRolesInput,
 } from "@shared/common/types";
-import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { CrudService } from "@base";
 import type { Prisma } from "@prisma/client";
@@ -56,44 +55,40 @@ export class UserService extends CrudService<SafeUser> {
 	}
 
 	private async getUserRoles(userId: string): Promise<StrictRole[]> {
-		try {
-			const roles = await this.prisma.userRole.findMany({
-				where: { userId },
-				select: {
-					// select table Role
-					role: {
-						include: {
-							// navigate join table RolePolicy
-							policies: {
-								include: {
-									// select table Policy and all the conditions in it
-									policy: {
-										include: {
-											conditions: true,
-										},
+		const roles = await this.prisma.userRole.findMany({
+			where: { userId },
+			select: {
+				// select table Role
+				role: {
+					include: {
+						// navigate join table RolePolicy
+						policies: {
+							include: {
+								// select table Policy and all the conditions in it
+								policy: {
+									include: {
+										conditions: true,
 									},
 								},
 							},
 						},
 					},
 				},
-			});
+			},
+		});
 
-			if (!roles) {
-				return [];
-			}
-			// all the roles the user has
-
-			return roles.map((r) => ({
-				...r.role,
-				policies: r.role.policies.map((p) => ({
-					...p.policy,
-					conditions: p.policy.conditions,
-				})) as StrictPolicy[],
-			}));
-		} catch (error: unknown) {
-			handleDatabaseError(error);
+		if (!roles) {
+			return [];
 		}
+		// all the roles the user has
+
+		return roles.map((r) => ({
+			...r.role,
+			policies: r.role.policies.map((p) => ({
+				...p.policy,
+				conditions: p.policy.conditions,
+			})) as StrictPolicy[],
+		}));
 	}
 
 	async getBySessionId(tokenId: string | undefined): Promise<SafeUser> {
@@ -129,28 +124,25 @@ export class UserService extends CrudService<SafeUser> {
 
 	async updateById(id: string, data: UpdateUserInput & UpdateUserRolesInput): Promise<SafeUser> {
 		const { roles, ...userData } = data;
-		try {
-			await this.prisma.user.update({
-				where: { id },
-				data: userData,
+
+		await this.prisma.user.update({
+			where: { id },
+			data: userData,
+		});
+		if (roles) {
+			await this.prisma.userRole.deleteMany({
+				where: {
+					userId: id,
+				},
 			});
-			if (roles) {
-				await this.prisma.userRole.deleteMany({
-					where: {
-						userId: id,
-					},
-				});
-				await this.prisma.userRole.createMany({
-					data: roles.map((role) => ({
-						userId: id,
-						roleId: role.roleId,
-					})),
-				});
-			}
-			return this.getById(id);
-		} catch (error: unknown) {
-			handleDatabaseError(error);
+			await this.prisma.userRole.createMany({
+				data: roles.map((role) => ({
+					userId: id,
+					roleId: role.roleId,
+				})),
+			});
 		}
+		return this.getById(id);
 	}
 
 	async deleteById(id: string): Promise<void> {
@@ -162,13 +154,9 @@ export class UserService extends CrudService<SafeUser> {
 			throw new AppError(AppErrorTypes.UserNotFound);
 		}
 
-		try {
-			await this.prisma.user.delete({
-				where: { id },
-			});
-		} catch (error: unknown) {
-			handleDatabaseError(error);
-		}
+		await this.prisma.user.delete({
+			where: { id },
+		});
 	}
 
 	async getAll(): Promise<SafeUser[]> {

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "@db/client";
-import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import type { CreateDisabilityInput, UpdateDisabilityInput } from "@shared/common/types";
 import { CrudService } from "@base";
@@ -13,49 +12,29 @@ export class DisabilityService extends CrudService<Disability> {
 	}
 
 	async create(data: CreateDisabilityInput) {
-		try {
-			if (!data.name) {
-				throw new AppError(AppErrorTypes.EmptyInput);
-			}
-			return await this.prisma.disability.create({ data });
-		} catch (error) {
-			handleDatabaseError(error);
+		if (!data.name) {
+			throw new AppError(AppErrorTypes.EmptyInput);
 		}
+		return await this.prisma.disability.create({ data });
 	}
 
 	async getAll() {
-		try {
-			return await this.prisma.disability.findMany();
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+		return await this.prisma.disability.findMany();
 	}
 
 	async getById(id: string) {
-		try {
-			const disability = await this.prisma.disability.findUnique({ where: { id } });
-			if (!disability) {
-				throw new AppError(AppErrorTypes.NotFound);
-			}
-			return disability;
-		} catch (error) {
-			handleDatabaseError(error);
+		const disability = await this.prisma.disability.findUnique({ where: { id } });
+		if (!disability) {
+			throw new AppError(AppErrorTypes.NotFound);
 		}
+		return disability;
 	}
 
 	async updateById(id: string, data: UpdateDisabilityInput) {
-		try {
-			return await this.prisma.disability.update({ where: { id }, data });
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+		return await this.prisma.disability.update({ where: { id }, data });
 	}
 
 	async deleteById(id: string) {
-		try {
-			await this.prisma.disability.delete({ where: { id } });
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+		await this.prisma.disability.delete({ where: { id } });
 	}
 }

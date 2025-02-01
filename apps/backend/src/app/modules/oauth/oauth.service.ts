@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { generateState, generateCodeVerifier, Google, type OAuth2Tokens } from "arctic";
 import type { TokenCookie, OAuthProvider } from "@shared/common/types";
 import { validateSchema } from "@utils/validateSchema";
-import { handleDatabaseError } from "@utils/prismaErrors";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { PrismaService, LuciaService } from "@db/client";
 import { ConfigService } from "@nestjs/config";
@@ -82,46 +81,38 @@ export class OpenAuthService {
 
 		// if user exists, create oauth account and session. link user to oauth account
 		if (user) {
-			try {
-				await this.prisma.oAuthAccount.create({
-					data: {
-						providerId: provider,
-						providerUserId: id,
-						userId: user.id,
-					},
-				});
-			} catch (error) {
-				handleDatabaseError(error);
-			}
+			await this.prisma.oAuthAccount.create({
+				data: {
+					providerId: provider,
+					providerUserId: id,
+					userId: user.id,
+				},
+			});
 
 			return await this.makeSessionCookie(user.id);
 		}
 
 		// if user does not exist, create new user, oauth account, and session
 
-		try {
-			const userId = this.lucia.generateUserId();
+		const userId = this.lucia.generateUserId();
 
-			await this.prisma.user.create({
-				data: {
-					id: userId,
-					username,
-					email,
-				},
-			});
+		await this.prisma.user.create({
+			data: {
+				id: userId,
+				username,
+				email,
+			},
+		});
 
-			await this.prisma.oAuthAccount.create({
-				data: {
-					providerId: provider,
-					providerUserId: id,
-					userId,
-				},
-			});
+		await this.prisma.oAuthAccount.create({
+			data: {
+				providerId: provider,
+				providerUserId: id,
+				userId,
+			},
+		});
 
-			return await this.makeSessionCookie(userId);
-		} catch (error) {
-			handleDatabaseError(error);
-		}
+		return await this.makeSessionCookie(userId);
 	}
 
 	private async getOAuthTokens(

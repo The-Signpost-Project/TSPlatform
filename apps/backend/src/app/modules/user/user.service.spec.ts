@@ -80,9 +80,6 @@ describe("UserService", () => {
 		});
 
 		it("should throw an error if the user does not exist", async () => {
-			prisma.user.update = mock(() => {
-				throw new Error();
-			});
 			await expect(service.updateById(faker.string.uuid(), {})).rejects.toThrowError(AppError);
 		});
 
