@@ -40,7 +40,6 @@ export class AuthController {
 	) {}
 
 	@Post("signup")
-	@HttpCode(201)
 	async signUp(
 		@Body(new ValidationPipe(SignUpInputSchema)) input: SignUpInput,
 		@Res({ passthrough: true }) res: Response,
@@ -50,7 +49,6 @@ export class AuthController {
 	}
 
 	@Post("signin")
-	@HttpCode(201)
 	async signIn(
 		@Body(new ValidationPipe(SignInInputSchema)) input: SignInInput,
 		@Res({ passthrough: true }) res: Response,
@@ -60,14 +58,12 @@ export class AuthController {
 	}
 
 	@Delete("signout/:tokenId")
-	@HttpCode(204)
 	async signOut(@Param("tokenId", new ValidationPipe(TokenIdSchema)) tokenId: string) {
 		await this.authService.signOut(tokenId);
 	}
 
 	@Post("change-password/:id")
 	@UseGuards(SelfServeGuard("params", "id"))
-	@HttpCode(201)
 	async changePassword(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(ChangePasswordInputSchema)) input: ChangePasswordInput,

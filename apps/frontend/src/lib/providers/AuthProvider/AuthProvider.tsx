@@ -102,7 +102,7 @@ function _AuthProvider({ children }: AuthProviderProps) {
 		setLoading(true);
 		const { status } = await signOut();
 
-		if (status === 204) {
+		if (status === 200) {
 			setUser(null);
 			setTokenId(null);
 		}

@@ -143,7 +143,7 @@ describe("AuthController", () => {
 					path: `/auth/signout/${cookie}`,
 				},
 				callback: (response) => {
-					expect(response.status).toBe(204);
+					expect(response.status).toBe(200);
 				},
 			});
 		});

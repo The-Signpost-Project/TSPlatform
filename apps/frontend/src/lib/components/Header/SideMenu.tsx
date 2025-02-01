@@ -30,7 +30,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 
 	const signOutResponse = useCallback(() => {
 		signOut().then((status) => {
-			if (status === 204) {
+			if (status === 200) {
 				toast.success("Signed out successfully");
 				router.refresh();
 			} else {
