@@ -3,17 +3,39 @@ import { Request } from "express";
 import { LuciaService } from "@db/client";
 import { sessionCookieName } from "@shared/common/constants";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
-import { type RequestSource, CheckRequestGuard } from "@base";
 
+type RequestSource = "params" | "query" | "body" | "headers";
 /**
  * This function creates a guard that checks if the user is authenticated.
  * Used to protect self-serve routes, ie. routes that users access to modify their own data.
  */
 export const SelfServeGuard = (source: RequestSource, key: string) => {
 	@Injectable()
-	class SelfServeGuardMixin extends CheckRequestGuard implements CanActivate {
-		constructor(private readonly luciaService: LuciaService) {
-			super();
+	class SelfServeGuardMixin implements CanActivate {
+		constructor(private readonly luciaService: LuciaService) {}
+		private getValueFromRequest(
+			request: Request,
+			source: RequestSource,
+			key: string,
+		): string | null {
+			switch (source) {
+				case "params":
+					return request.params[key];
+				case "query":
+					if (typeof request.query[key] === "string") {
+						return request.query[key];
+					}
+					return null;
+				case "body":
+					return request.body[key];
+				case "headers":
+					if (typeof request.headers[key] === "string") {
+						return request.headers[key];
+					}
+					return null;
+				default:
+					return null;
+			}
 		}
 
 		async canActivate(context: ExecutionContext): Promise<true> {
