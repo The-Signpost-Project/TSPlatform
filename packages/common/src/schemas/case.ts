@@ -30,6 +30,8 @@ export const CreateCaseInputSchema = z.object({
 	peddlerId: z.string(),
 }) satisfies z.ZodType<Omit<CreateCaseInput, "photos">>;
 
+export const UpdateCaseInputSchema = CreateCaseInputSchema.partial();
+
 export const CaseFiltersSchema = z
 	.object({
 		regionId: z.string().optional(),

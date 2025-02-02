@@ -9,6 +9,7 @@ import {
 	UploadedFiles,
 	Query,
 	UseGuards,
+	Patch,
 } from "@nestjs/common";
 import { CaseService } from "./case.service";
 import { ValidationPipe, FileValidationPipe } from "@pipes";
@@ -16,8 +17,14 @@ import {
 	NonEmptyStringSchema,
 	CreateCaseInputSchema,
 	CaseFiltersSchema,
+	UpdateCaseInputSchema,
 } from "@shared/common/schemas";
-import type { StrictRole, CreateCaseInput, CaseFilters } from "@shared/common/types";
+import type {
+	StrictRole,
+	CreateCaseInput,
+	CaseFilters,
+	UpdateCaseInput,
+} from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
@@ -84,19 +91,18 @@ export class CaseController {
 		return await this.caseService.create({ ...data, photos });
 	}
 
-	/*
 	@Patch(":id")
 	async updateDisabilityById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Body(new ValidationPipe(UpdateDisabilityInputSchema)) data: UpdateDisabilityInput,
+		@Body(new ValidationPipe(UpdateCaseInputSchema)) data: UpdateCaseInput,
 		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
-			return await this.disabilityService.updateById(id, data);
+		if (rolesHavePermission(roles, "case", "readWrite", { id })) {
+			return await this.caseService.updateById(id, data);
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
-
+	/*
 	@Delete(":id")
 	async deleteDisabilityById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,

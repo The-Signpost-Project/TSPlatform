@@ -6,15 +6,18 @@ import { createTransport } from "nodemailer";
 import { compile, type TemplateDelegate } from "handlebars";
 import { readdirSync, readFileSync } from "node:fs";
 import { randomBytes } from "node:crypto";
-import * as path from "node:path";
+import { join } from "node:path";
 import { google } from "googleapis";
+import { Templater } from "@base";
 
 @Injectable()
-export class EmailService {
+export class EmailService extends Templater {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly config: ConfigService,
-	) {}
+	) {
+		super();
+	}
 
 	private emailFrom!: string;
 	private emailTemplates!: Record<string, TemplateDelegate>;
@@ -24,7 +27,7 @@ export class EmailService {
 		const templates = readdirSync(dir);
 		return templates.reduce(
 			(acc, template) => {
-				const templatePath = `${dir}/${template}`;
+				const templatePath = join(dir, template);
 				const templateContent = readFileSync(templatePath, "utf-8");
 				const compiledTemplate = compile(templateContent);
 				acc[template] = compiledTemplate;
@@ -51,9 +54,7 @@ export class EmailService {
 
 		this.emailFrom = this.config.get<string>("GOOGLE_OAUTH_EMAIL_USER") ?? "";
 
-		this.emailTemplates = this.compileTemplatesFromDir(
-			path.join(process.cwd(), "src", "public", "emailTemplates"),
-		);
+		this.emailTemplates = this.compileTemplatesFromDir(join(this.publicDir, "emailTemplates"));
 	}
 
 	private async sendEmail(

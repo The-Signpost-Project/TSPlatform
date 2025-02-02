@@ -13,6 +13,7 @@
 		"prisma:generate": "dotenv -e .env.development -- prisma generate --schema src/db/schema.prisma",
 		"prisma:migrate": "dotenv -e .env.development -- prisma migrate dev --schema src/db/schema.prisma",
 		"prisma:format": "prisma format --schema src/db/schema.prisma",
+		"prisma:studio": "dotenv -e .env.development -- prisma studio --schema src/db/schema.prisma --port 5555",
 		"turso:migrate": "f() { turso db shell tsproject < src/db/migrations/${1}/migration.sql; }; f"
 	},
 	"devDependencies": {
@@ -51,6 +52,7 @@
 		"arctic": "^3.2.1",
 		"bun": "^1.2.1",
 		"cookie-parser": "^1.4.7",
+		"docx-templates": "^4.13.0",
 		"express": "5.0.1",
 		"googleapis": "^144.0.0",
 		"handlebars": "^4.7.8",

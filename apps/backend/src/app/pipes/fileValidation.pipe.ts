@@ -1,4 +1,5 @@
 import { PipeTransform, type ArgumentMetadata } from "@nestjs/common";
+import { supportedFileTypes } from "@shared/common/constants";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 
 interface FileValidationPipeOptions {
@@ -10,7 +11,6 @@ export class FileValidationPipe implements PipeTransform {
 	private optional: boolean;
 	private multiple: boolean;
 	private maxFileSize = 1024 * 1024 * 10; // 10MB
-	private acceptedMimeTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/webp"];
 
 	constructor({ optional = false, multiple = false }: FileValidationPipeOptions = {}) {
 		this.optional = optional;
@@ -38,7 +38,7 @@ export class FileValidationPipe implements PipeTransform {
 			);
 		}
 
-		if (!this.acceptedMimeTypes.includes(value.mimetype as string)) {
+		if (!supportedFileTypes.includes(value.mimetype as string)) {
 			throw new AppError(
 				AppErrorTypes.FormValidationError(
 					"File type is not supported. Supported types are: png, jpeg, jpg, gif, webp.",

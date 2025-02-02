@@ -16,9 +16,9 @@ export async function signOut() {
 		},
 		validator: NullSchema,
 	});
-  if (status === 200) {
-    cookieStore.delete(sessionCookieName);
-  }
+	if (status === 200) {
+		cookieStore.delete(sessionCookieName);
+	}
 	return {
 		status,
 	};

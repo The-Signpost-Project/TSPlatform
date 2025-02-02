@@ -109,7 +109,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 				<FileDrop
 					onChange={(e) => setPhotos(e.target.files)}
 					disabled={isPending}
-					accept={supportedFileTypes}
+					accept={supportedFileTypes.join(",")}
 					multiple
 				/>
 			</div>

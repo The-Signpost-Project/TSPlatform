@@ -80,7 +80,7 @@ export function AddRegion() {
 						<FileDrop
 							optional
 							onChange={(e) => setUploadedFiles(e.target.files)}
-							accept={supportedFileTypes}
+							accept={supportedFileTypes.join(",")}
 						/>
 					</div>
 
