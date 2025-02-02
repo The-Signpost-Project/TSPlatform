@@ -12,10 +12,10 @@ import { NonEmptyStringSchema } from "@shared/common/schemas";
 export class ReportController {
 	constructor(private readonly reportService: ReportService) {}
 
-	@Get(":id")
+	@Get(":peddlerId")
 	async getReport(
 		@Res() res: Response,
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
+		@Param("peddlerId", new ValidationPipe(NonEmptyStringSchema)) id: string,
 	): Promise<void> {
 		const doc = await this.reportService.generateReport(id);
 		res.setHeader(
