@@ -1,6 +1,7 @@
 {
 	"name": "frontend",
 	"private": true,
+  "version": "0.0.0",
 	"scripts": {
 		"dev": "bunx dotenv -e .env.development -- next dev --turbo -H 0.0.0.0 -p 3000",
 		"build": "bunx dotenv -e .env.production -- next build",

@@ -6,8 +6,8 @@
 	"scripts": {
 		"format": "bunx biome format --write .",
 		"lint": "bunx biome lint --write ./src",
-		"dev:generate-admin": "bun run ./src/generateAdmin.ts",
-		"dev:init-minio": "bun run ./src/initMinio.ts"
+		"generate-admin": "bun run ./src/generateAdmin.ts",
+		"init-minio": "bun run ./src/initMinio.ts"
 	},
 	"dependencies": {
 		"find-up": "^7.0.0",

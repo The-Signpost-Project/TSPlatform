@@ -2,6 +2,7 @@
 	"name": "backend",
 	"module": "index.ts",
 	"type": "module",
+  "version": "0.0.0",
 	"scripts": {
 		"dev": "NODE_ENV=development bun run --watch src/index.ts",
 		"build": "NODE_ENV=production bun build src/index.ts --outdir dist --minify-whitespace --minify-syntax --target bun --sourcemap=linked -e '@nestjs/websockets' -e '@nestjs/microservices' -e 'class-transformer' -e 'class-validator'",
@@ -50,7 +51,7 @@
 		"@types/handlebars": "^4.1.0",
 		"@types/jest": "^29.5.14",
 		"arctic": "^3.2.1",
-		"bun": "^1.2.1",
+		"bun": "^1.2.2",
 		"cookie-parser": "^1.4.7",
 		"docx-templates": "^4.13.0",
 		"express": "5.0.1",
