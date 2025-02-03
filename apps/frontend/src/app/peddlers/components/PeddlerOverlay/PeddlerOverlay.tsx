@@ -8,6 +8,7 @@ import type { StrictPeddler } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { EditPeddler } from "../EditPeddler";
 import { DeletePeddler } from "../DeletePeddler";
+import { DownloadReport } from "./DownloadReport";
 
 export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps) {
 	const router = useRouter();
@@ -32,12 +33,14 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 			startTransition(async () => {
 				const { data, error } = await fetchCase(peddlerId, controller.signal);
 
-				if (error) {
-					setError(error);
-					return;
-				}
-				setError(null);
-				setPeddlerData(data);
+				startTransition(() => {
+					if (error) {
+						setError(error);
+						return;
+					}
+					setError(null);
+					setPeddlerData(data);
+				});
 			});
 		},
 		[peddlerId],
@@ -119,6 +122,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 											>
 												View Cases
 											</Button>
+											<DownloadReport peddlerId={peddlerData.id} />
 											<div className="flex gap-2">
 												<EditPeddler peddler={peddlerData} revalidate={revalidate} />
 												<DeletePeddler

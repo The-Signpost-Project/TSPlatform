@@ -10,7 +10,7 @@ import {
 	Query,
 	UseGuards,
 	Patch,
-  Delete,
+	Delete,
 } from "@nestjs/common";
 import { CaseService } from "./case.service";
 import { ValidationPipe, FileValidationPipe } from "@pipes";
@@ -103,15 +103,15 @@ export class CaseController {
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
-	
-  @Delete(":id")
-  async deleteCaseById(
-    @Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-    @Roles() roles: StrictRole[],
-  ) {
-    if (rolesHavePermission(roles, "case", "readWrite", { id })) {
-      return await this.caseService.deleteById(id);
-    }
-    throw new AppError(AppErrorTypes.NoPermission);
-  }
+
+	@Delete(":id")
+	async deleteCaseById(
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "case", "readWrite", { id })) {
+			return await this.caseService.deleteById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
+	}
 }

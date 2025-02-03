@@ -1,19 +1,17 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "@db/client";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { CaseService } from "@modules/case";
 import { PeddlerService } from "@modules/peddler";
 import { ReportData } from "./types";
 import createReport from "docx-templates";
 import { Templater } from "@base";
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { supportedFileTypes } from "@shared/common/constants";
 
 @Injectable()
 export class ReportService extends Templater {
 	constructor(
-		private readonly prisma: PrismaService,
 		private readonly caseService: CaseService,
 		private readonly peddlerService: PeddlerService,
 	) {

@@ -1,6 +1,4 @@
 import { Controller, Get, UseInterceptors, Res, Param } from "@nestjs/common";
-import { createReadStream } from "fs";
-import { join } from "path";
 import { ReportService } from "./report.service";
 import { RoleInterceptor } from "@interceptors";
 import type { Response } from "express";
