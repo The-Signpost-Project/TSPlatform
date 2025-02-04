@@ -28,30 +28,29 @@ export function EditRegion({ region }: EditRegionProps) {
 
 	async function onSubmit(data: Omit<UpdateRegionInput, "photo">) {
 		const formData = new FormData();
-    const changes = await diffChanges(region, data);
+		const changes = await diffChanges(region, data);
 		for (const [k, v] of Object.entries(changes)) {
 			formData.append(k, v);
 		}
 		if (uploadedFiles) {
 			formData.append("photo", uploadedFiles[0]);
 		}
-		
+
 		const { status, error } = await updateRegion(region.id, formData);
 
 		if (status === 200) {
 			toast.success("Region updated successfully");
 			router.refresh();
-      setModalOpen(false);
+			setModalOpen(false);
 			return;
 		}
 		toast.error(error?.cause || "An error occurred");
-    
 	}
 
 	return (
 		<>
-			<Button onClick={() => setModalOpen(true)} color="warning">
-				Edit Region
+			<Button onClick={() => setModalOpen(true)} color="warning" className="w-full">
+				Edit
 			</Button>
 			<Modal
 				isOpen={modalOpen}
@@ -85,7 +84,7 @@ export function EditRegion({ region }: EditRegionProps) {
 							optional
 							onChange={(e) => setUploadedFiles(e.target.files)}
 							accept={supportedFileTypes.join(",")}
-              disabled={isPending}
+							disabled={isPending}
 						/>
 					</div>
 

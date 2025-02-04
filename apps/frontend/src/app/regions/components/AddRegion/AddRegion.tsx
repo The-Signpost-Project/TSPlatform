@@ -41,7 +41,7 @@ export function AddRegion() {
 		if (status === 201) {
 			toast.success("Region created successfully");
 			router.refresh();
-      setModalOpen(false);
+			setModalOpen(false);
 			return;
 		}
 		toast.error(error?.cause || "An error occurred");
@@ -82,7 +82,7 @@ export function AddRegion() {
 							optional
 							onChange={(e) => setUploadedFiles(e.target.files)}
 							accept={supportedFileTypes.join(",")}
-              disabled={isPending}
+							disabled={isPending}
 						/>
 					</div>
 

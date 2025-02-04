@@ -43,12 +43,13 @@ export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps
 				onClose={() => setModalOpen(false)}
 				onClick={(e) => e.stopPropagation()}
 				className="min-w-72 sm:min-w-96 flex flex-col justify-center cursor-default"
+				modalClassName="fixed"
 			>
 				<div className="flex justify-between">
 					<Title order={5}>Delete Peddler {codename}</Title>
 					<ModalCloseButton onClick={() => setModalOpen(false)} />
 				</div>
-				<Text description>
+				<Text order="sm" description className="text-start">
 					You are deleting peddler: <Code>{codename}</Code>. Any case associated with this peddler
 					will be removed.
 				</Text>

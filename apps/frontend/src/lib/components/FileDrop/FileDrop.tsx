@@ -53,7 +53,7 @@ export function FileDrop({ optional, className, disabled, ...props }: FileDropPr
 			ref={containerRef}
 			className={twMerge(
 				"w-full h-full py-4 border-2 border-dashed border-orange-500 dark:border-orange-400 rounded-lg flex flex-col items-center justify-center gap-2",
-        disabled ? "cursor-not-allowed" : "cursor-pointer",
+				disabled ? "cursor-not-allowed" : "cursor-pointer",
 				className,
 			)}
 		>
@@ -81,7 +81,9 @@ export function FileDrop({ optional, className, disabled, ...props }: FileDropPr
 					</Text>
 					<Text description order="xs" className="flex flex-col">
 						{Array.from(uploadedFiles).map((file) => (
-							<span key={file.name} className="break-all">{file.name}</span>
+							<span key={file.name} className="break-all">
+								{file.name}
+							</span>
 						))}
 					</Text>
 				</div>
@@ -93,7 +95,7 @@ export function FileDrop({ optional, className, disabled, ...props }: FileDropPr
 					ref={inputRef}
 					type="file"
 					className="hidden"
-          disabled={disabled}
+					disabled={disabled}
 					{...props}
 					onChange={(e) => {
 						setUploadedFiles(e.target.files);

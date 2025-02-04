@@ -1,6 +1,7 @@
 import { Button, Card } from "@lib/components";
 import type { RegionCardProps } from "./types";
 import { EditRegion } from "../EditRegion";
+import { DeleteRegion } from "../DeleteRegion";
 
 export function RegionCard({ region, className }: RegionCardProps) {
 	return (
@@ -15,7 +16,7 @@ export function RegionCard({ region, className }: RegionCardProps) {
 			</Button>
 			<div className="flex gap-2 w-full">
 				<EditRegion region={region} />
-				<Button color="danger">Delete</Button>
+				<DeleteRegion region={region} />
 			</div>
 		</Card>
 	);
