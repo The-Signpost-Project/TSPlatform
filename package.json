@@ -2,6 +2,7 @@
 	"name": "tsplatform",
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
+		"husky": "^9.1.7",
 		"turbo": "^2.4.0",
 		"typescript": "^5.7.3"
 	},
@@ -16,7 +17,12 @@
 		"start": "NODE_ENV=production bunx turbo run start",
 		"test": "bunx turbo test",
 		"format": "bunx turbo format",
-		"lint": "bunx turbo lint"
+		"lint": "bunx turbo lint",
+		"prepare": "husky"
 	},
-	"workspaces": ["apps/*", "packages/*", "scripts/*"]
+	"workspaces": [
+		"apps/*",
+		"packages/*",
+		"scripts/*"
+	]
 }
