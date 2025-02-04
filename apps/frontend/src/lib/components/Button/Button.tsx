@@ -30,7 +30,7 @@ export function Button({
 
 	const wrapWithLink = (element: ReactNode) => {
 		return href ? (
-			<NextLink href={href} tabIndex={-1}>
+			<NextLink href={href} tabIndex={-1} className={mergedStyles}>
 				{element}
 			</NextLink>
 		) : (
@@ -38,7 +38,12 @@ export function Button({
 		);
 	};
 	return wrapWithLink(
-		<button type={type} className={mergedStyles} disabled={isNotClickable} {...rest}>
+		<button
+			type={type}
+			className={!href ? mergedStyles : undefined}
+			disabled={isNotClickable}
+			{...rest}
+		>
 			{loading ? styledLoader : children}
 		</button>,
 	);

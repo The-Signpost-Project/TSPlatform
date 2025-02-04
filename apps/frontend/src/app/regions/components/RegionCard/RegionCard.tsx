@@ -1,5 +1,6 @@
 import { Button, Card } from "@lib/components";
 import type { RegionCardProps } from "./types";
+import { EditRegion } from "../EditRegion";
 
 export function RegionCard({ region, className }: RegionCardProps) {
 	return (
@@ -12,6 +13,10 @@ export function RegionCard({ region, className }: RegionCardProps) {
 			<Button href={`/cases?regionName=${region.name}`} className="w-full">
 				View Cases
 			</Button>
+			<div className="flex gap-2 w-full">
+				<EditRegion region={region} />
+				<Button color="danger">Delete</Button>
+			</div>
 		</Card>
 	);
 }

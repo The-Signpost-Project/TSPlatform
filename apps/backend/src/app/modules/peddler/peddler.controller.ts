@@ -47,7 +47,7 @@ export class PeddlerController {
 		private readonly regionService: RegionService,
 	) {}
 
-  // public route
+	// public route
 	@Post()
 	@UseGuards(LoggedInGuard)
 	async create(@Body(new ValidationPipe(CreatePeddlerInputSchema)) data: CreatePeddlerInput) {
@@ -58,23 +58,26 @@ export class PeddlerController {
 	async updateById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePeddlerInputSchema)) data: UpdatePeddlerInput,
-    @Roles() roles: StrictRole[],
+		@Roles() roles: StrictRole[],
 	) {
-    if (rolesHavePermission(roles, "peddler", "readWrite", { id })) {
-      return await this.peddlerService.updateById(id, data);
-    }
-    throw new AppError(AppErrorTypes.NoPermission);
+		if (rolesHavePermission(roles, "peddler", "readWrite", { id })) {
+			return await this.peddlerService.updateById(id, data);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
 	@Delete(":id")
-	async deleteById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string, @Roles() roles: StrictRole[]) {
-    if (rolesHavePermission(roles, "peddler", "readWrite", { id })) {
-      return await this.peddlerService.deleteById(id);
-    }
-    throw new AppError(AppErrorTypes.NoPermission);
+	async deleteById(
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "peddler", "readWrite", { id })) {
+			return await this.peddlerService.deleteById(id);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-  // public route
+	// public route
 	@Get("all")
 	async getAll() {
 		return await this.peddlerService.getAll();
@@ -85,7 +88,7 @@ export class PeddlerController {
 		return await this.peddlerService.getById(id);
 	}
 
-  // public route
+	// public route
 	@Get("disability/all")
 	@UseGuards(LoggedInGuard)
 	async getAllDisabilities() {
@@ -137,7 +140,7 @@ export class PeddlerController {
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-  // public route
+	// public route
 	@Get("region/all")
 	@UseGuards(LoggedInGuard)
 	async getAllRegions() {

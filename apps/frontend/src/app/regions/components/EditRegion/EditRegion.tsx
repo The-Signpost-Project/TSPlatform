@@ -1,28 +1,24 @@
 "use client";
-import {
-	Modal,
-	TextInput,
-	Title,
-	ModalCloseButton,
-	Text,
-	Button,
-	AddButton,
-	FileDrop,
-} from "@lib/components";
+import { Modal, TextInput, Title, ModalCloseButton, Text, Button, FileDrop } from "@lib/components";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { CreateRegionInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { CreateRegionInput } from "@shared/common/types";
+import type { UpdateRegionInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
-import { createRegion } from "./actions";
+import { updateRegion } from "./actions";
 import { toast } from "react-hot-toast";
 import { supportedFileTypes } from "@shared/common/constants";
+import type { EditRegionProps } from "./types";
+import { diffChanges } from "@utils";
 
-export function AddRegion() {
+export function EditRegion({ region }: EditRegionProps) {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { register, handleSubmit, formState } = useForm<Omit<CreateRegionInput, "photo">>({
+	const { register, handleSubmit, formState } = useForm<Omit<UpdateRegionInput, "photo">>({
 		resolver: zodResolver(CreateRegionInputSchema),
+		defaultValues: {
+			name: region.name,
+		},
 	});
 
 	const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
@@ -30,33 +26,40 @@ export function AddRegion() {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
-	async function onSubmit(data: Omit<CreateRegionInput, "photo">) {
+	async function onSubmit(data: Omit<UpdateRegionInput, "photo">) {
 		const formData = new FormData();
-		formData.append("name", data.name);
+    const changes = await diffChanges(region, data);
+		for (const [k, v] of Object.entries(changes)) {
+			formData.append(k, v);
+		}
 		if (uploadedFiles) {
 			formData.append("photo", uploadedFiles[0]);
 		}
-		const { status, error } = await createRegion(formData);
+		
+		const { status, error } = await updateRegion(region.id, formData);
 
-		if (status === 201) {
-			toast.success("Region created successfully");
+		if (status === 200) {
+			toast.success("Region updated successfully");
 			router.refresh();
       setModalOpen(false);
 			return;
 		}
 		toast.error(error?.cause || "An error occurred");
+    
 	}
 
 	return (
 		<>
-			<AddButton onClick={() => setModalOpen(true)} subject="Region" />
+			<Button onClick={() => setModalOpen(true)} color="warning">
+				Edit Region
+			</Button>
 			<Modal
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
 				className="min-w-72 sm:min-w-96"
 			>
 				<div className="flex justify-between">
-					<Title order={5}>Add a Region</Title>
+					<Title order={5}>Edit Region {region.name}</Title>
 					<ModalCloseButton onClick={() => setModalOpen(false)} />
 				</div>
 				<Text order="sm" description>
@@ -87,7 +90,7 @@ export function AddRegion() {
 					</div>
 
 					<Button type="submit" color="success" disabled={isPending}>
-						Create Region
+						Update Region
 					</Button>
 				</form>
 			</Modal>

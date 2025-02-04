@@ -4,7 +4,7 @@ import type { FileDropProps } from "./types";
 import { useRef, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-export function FileDrop({ optional, className, ...props }: FileDropProps) {
+export function FileDrop({ optional, className, disabled, ...props }: FileDropProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [uploadedFiles, setUploadedFiles] = useState<FileList | null>(null);
@@ -53,6 +53,7 @@ export function FileDrop({ optional, className, ...props }: FileDropProps) {
 			ref={containerRef}
 			className={twMerge(
 				"w-full h-full py-4 border-2 border-dashed border-orange-500 dark:border-orange-400 rounded-lg flex flex-col items-center justify-center gap-2",
+        disabled ? "cursor-not-allowed" : "cursor-pointer",
 				className,
 			)}
 		>
@@ -80,7 +81,7 @@ export function FileDrop({ optional, className, ...props }: FileDropProps) {
 					</Text>
 					<Text description order="xs" className="flex flex-col">
 						{Array.from(uploadedFiles).map((file) => (
-							<span key={file.name}>{file.name}</span>
+							<span key={file.name} className="break-all">{file.name}</span>
 						))}
 					</Text>
 				</div>
@@ -92,6 +93,7 @@ export function FileDrop({ optional, className, ...props }: FileDropProps) {
 					ref={inputRef}
 					type="file"
 					className="hidden"
+          disabled={disabled}
 					{...props}
 					onChange={(e) => {
 						setUploadedFiles(e.target.files);
