@@ -8,9 +8,9 @@ export default function Layout({
 	children: ReactNode;
 }) {
 	return (
-		<>
+		<div className="flex-grow">
 			{id}
 			{children}
-		</>
+		</div>
 	);
 }

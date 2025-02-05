@@ -63,7 +63,7 @@ export default async function CaseFormPage() {
 	}
 
 	return (
-		<section className="p-4 sm:p-8 flex flex-col gap-4">
+		<section className="p-4 sm:p-8 flex flex-col gap-4 flex-grow">
 			<div className="flex flex-col gap-1">
 				<Title className="text-xl sm:text-3xl">The Signpost Project Combined Case Form</Title>
 				<Text description className="text-sm sm:text-base">

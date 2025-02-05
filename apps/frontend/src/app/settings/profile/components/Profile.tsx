@@ -77,11 +77,11 @@ export function Profile() {
 														<Text>{role.name}</Text>
 													</Table.TableCell>
 													<Table.TableCell>
-                            <div className="flex flex-wrap gap-1">
-														{role.policies.map((policy) => (
-															<PolicyInfoModal key={policy.id} policy={policy} />
-														))}
-                            </div>
+														<div className="flex flex-wrap gap-1">
+															{role.policies.map((policy) => (
+																<PolicyInfoModal key={policy.id} policy={policy} />
+															))}
+														</div>
 													</Table.TableCell>
 												</Table.TableRow>
 											))}

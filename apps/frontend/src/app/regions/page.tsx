@@ -18,7 +18,7 @@ export default async function RegionPage() {
 
 	if (!data || error) {
 		return (
-			<div className="p-4 flex flex-col gap-1">
+			<div className="p-4 flex flex-col gap-1 flex-grow">
 				<Title order={2}>Regions</Title>
 				<Text description>Regions are real-world locations where peddlers are located.</Text>
 				<div className="mt-4">
@@ -31,7 +31,7 @@ export default async function RegionPage() {
 	}
 
 	return (
-		<section className="flex flex-col gap-2 sm:p-8 p-4">
+		<section className="flex flex-col gap-2 sm:p-8 p-4 flex-grow">
 			<div className="flex justify-between gap-6 sm:items-center sm:flex-row flex-col">
 				<div className="flex flex-col gap-1">
 					<Title order={1}>Regions</Title>
