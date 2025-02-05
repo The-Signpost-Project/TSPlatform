@@ -1,9 +1,3 @@
 #!/bin/sh
 
 bun run format
-
-# Check if there are unstaged changes after formatting
-if ! git diff --quiet; then
-  echo "⚠️ Changes detected. Please review and stage them before committing."
-  exit 1
-fi

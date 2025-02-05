@@ -25,9 +25,9 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<AuthProvider>
 					<ClientProvider>
-						<main className="bg-zinc-50 dark:bg-black min-h-screen w-full transition-all">
+						<main className="bg-zinc-50 dark:bg-black min-h-screen w-full flex flex-col transition-all">
 							<Header />
-							<section>{children}</section>
+							<section className="flex-grow flex flex-col">{children}</section>
 							<Footer />
 							<Toaster
 								position="bottom-right"
