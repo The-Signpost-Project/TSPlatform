@@ -91,7 +91,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 				disabled={isPending}
 				variant={formState.errors.regionId ? "error" : undefined}
 				helperText={formState.errors.regionId?.message as string}
-				className="md:w-1/2"
+				className="md:w-4/5"
 			/>
 			<TextInput
 				label="Specific Location of Individual"
@@ -104,7 +104,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 			/>
 			<div className="md:w-1/2 flex flex-col gap-1">
 				<Text description order="sm">
-					Photo of Peddler/Location
+					Photo(s) of Peddler/Location
 				</Text>
 				<FileDrop
 					onChange={(e) => setPhotos(e.target.files)}

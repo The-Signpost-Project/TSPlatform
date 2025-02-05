@@ -7,6 +7,7 @@ import { useEffect, useTransition, useState } from "react";
 import type { StrictCase, ErrorResponse } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { ImportanceText } from "../ImportanceText";
+import { EditCase } from "../EditCase";
 
 export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 	const router = useRouter();
@@ -71,53 +72,58 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 							<>
 								{isPending && <Loader />}
 								{caseData && (
-									<div className="flex flex-col gap-6">
-										<div className="grid grid-cols-[1fr_2fr] gap-2">
-											<Text className="font-semibold">Region: </Text>
-											<Text>{caseData.regionName}</Text>
-											<Text className="font-semibold">Specific Location: </Text>
-											<Text>{caseData.location}</Text>
-											<Text className="font-semibold">Peddler Codename: </Text>
-											<Text>{caseData.peddlerCodename}</Text>
-											<Text className="font-semibold">Interaction Date: </Text>
-											<Text>{caseData.interactionDate.toLocaleDateString()}</Text>
-											<Text className="font-semibold">Importance: </Text>
-											<Text>
-												<ImportanceText importance={caseData.importance} />
-											</Text>
-											<Text className="font-semibold">Notes: </Text>
-											<Text className="break-words whitespace-pre-wrap">
-												{caseData.notes || "No notes available."}
-											</Text>
-										</div>
-										{caseData.photoPaths.length > 0 && (
-											<div>
-												<Text className="font-semibold">Photos:</Text>
-												<div className="flex overflow-x-scroll gap-1">
-													{caseData.photoPaths.map((photo) => (
-														<div
-															className="relative min-w-64 h-64 cursor-pointer"
-															key={photo}
-															onClick={() => window.open(photo)}
-															onKeyDown={() => window.open(photo)}
-														>
-															<Image src={photo} alt="Case photo" />
-														</div>
-													))}
-												</div>
+									<>
+										<div className="flex flex-col gap-6">
+											<div className="grid grid-cols-[1fr_2fr] gap-2">
+												<Text className="font-semibold">Region: </Text>
+												<Text>{caseData.regionName}</Text>
+												<Text className="font-semibold">Specific Location: </Text>
+												<Text>{caseData.location}</Text>
+												<Text className="font-semibold">Peddler Codename: </Text>
+												<Text>{caseData.peddlerCodename}</Text>
+												<Text className="font-semibold">Interaction Date: </Text>
+												<Text>{caseData.interactionDate.toLocaleDateString()}</Text>
+												<Text className="font-semibold">Importance: </Text>
+												<Text>
+													<ImportanceText importance={caseData.importance} />
+												</Text>
+												<Text className="font-semibold">Notes: </Text>
+												<Text className="break-words whitespace-pre-wrap">
+													{caseData.notes || "No notes available."}
+												</Text>
 											</div>
-										)}
-										<div className="grid grid-cols-[1fr_2fr] gap-2">
-											<Text className="font-semibold">Created By: </Text>
-											<Text>{caseData.createdByUsername}</Text>
-											<Text className="font-semibold">Created At: </Text>
-											<Text>{caseData.createdAt.toLocaleString()}</Text>
-											<Text className="font-semibold">Updated At: </Text>
-											<Text>{caseData.updatedAt.toLocaleString()}</Text>
-											<Text className="font-semibold">First Interaction: </Text>
-											<Text>{caseData.firstInteraction ? "Yes" : "No"}</Text>
+											{caseData.photoPaths.length > 0 && (
+												<div>
+													<Text className="font-semibold">Photos:</Text>
+													<div className="flex overflow-x-scroll gap-1">
+														{caseData.photoPaths.map((photo) => (
+															<div
+																className="relative min-w-64 h-64 cursor-pointer"
+																key={photo}
+																onClick={() => window.open(photo)}
+																onKeyDown={() => window.open(photo)}
+															>
+																<Image src={photo} alt="Case photo" />
+															</div>
+														))}
+													</div>
+												</div>
+											)}
+											<div className="grid grid-cols-[1fr_2fr] gap-2">
+												<Text className="font-semibold">Created By: </Text>
+												<Text>{caseData.createdByUsername}</Text>
+												<Text className="font-semibold">Created At: </Text>
+												<Text>{caseData.createdAt.toLocaleString()}</Text>
+												<Text className="font-semibold">Updated At: </Text>
+												<Text>{caseData.updatedAt.toLocaleString()}</Text>
+												<Text className="font-semibold">First Interaction: </Text>
+												<Text>{caseData.firstInteraction ? "Yes" : "No"}</Text>
+											</div>
 										</div>
-									</div>
+										<div className="flex gap-2">
+											<EditCase initialCase={caseData} revalidate={router.refresh} />
+										</div>
+									</>
 								)}
 							</>
 						)}

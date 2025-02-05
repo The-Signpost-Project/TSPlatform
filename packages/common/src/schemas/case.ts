@@ -20,14 +20,14 @@ export const StrictCaseSchema = z.object({
 }) satisfies z.ZodType<StrictCase>;
 
 export const CreateCaseInputSchema = z.object({
-	createdById: z.string(),
-	regionId: z.string(),
+	createdById: z.string().min(1),
+	regionId: z.string().min(1),
 	interactionDate: z.coerce.date(),
-	location: z.string(),
-	notes: z.string(),
+	location: z.string().min(1),
+	notes: z.string().min(1),
 	importance: z.coerce.number().int().min(1).max(5) as z.ZodType<1 | 2 | 3 | 4 | 5>,
 	firstInteraction: z.coerce.boolean(),
-	peddlerId: z.string(),
+	peddlerId: z.string().min(1),
 }) satisfies z.ZodType<Omit<CreateCaseInput, "photos">>;
 
 export const UpdateCaseInputSchema = CreateCaseInputSchema.partial();
