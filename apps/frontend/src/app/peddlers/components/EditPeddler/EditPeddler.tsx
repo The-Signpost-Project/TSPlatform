@@ -30,7 +30,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 	const [allRegions, setAllRegions] = useState<Region[]>([]);
 	const [error, setError] = useState<ErrorResponse[]>([]);
 	useEffect(() => {
-    if (!modalOpen) return;
+		if (!modalOpen) return;
 		const fetchData = async () => {
 			try {
 				const [disabilitiesResponse, regionsResponse] = await Promise.all([
