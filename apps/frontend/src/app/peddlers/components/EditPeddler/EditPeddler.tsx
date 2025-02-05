@@ -30,6 +30,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 	const [allRegions, setAllRegions] = useState<Region[]>([]);
 	const [error, setError] = useState<ErrorResponse[]>([]);
 	useEffect(() => {
+    if (!modalOpen) return;
 		const fetchData = async () => {
 			try {
 				const [disabilitiesResponse, regionsResponse] = await Promise.all([
@@ -56,7 +57,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 		};
 
 		fetchData();
-	}, []);
+	}, [modalOpen]);
 
 	const { register, handleSubmit, formState, setValue, watch, reset } = useForm<UpdatePeddlerInput>(
 		{
@@ -97,7 +98,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 		toast.error(error?.cause);
 	}
 
-	if (!userHasPermission("policy", "readWrite")) {
+	if (!userHasPermission("policy", "readWrite", peddler)) {
 		return null;
 	}
 

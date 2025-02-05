@@ -22,7 +22,7 @@ export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps
 		toast.error(error?.cause);
 	}
 
-	if (!userHasPermission("policy", "readWrite")) {
+	if (!userHasPermission("policy", "readWrite", { id })) {
 		return null;
 	}
 
