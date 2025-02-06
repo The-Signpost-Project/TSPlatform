@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
 	experimental: {
 		reactCompiler: true,
+		serverActions: {
+			bodySizeLimit: "100mb", // max 10 * 10mb photos
+		},
 	},
 	images: {
 		remotePatterns: [
@@ -16,6 +19,7 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
+
 	/*
   watchOptions: {
     pollIntervalMs: 1000,

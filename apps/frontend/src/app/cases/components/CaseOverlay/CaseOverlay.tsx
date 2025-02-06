@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import type { CaseOverlayProps } from "./types";
 import { useKeybinds } from "@lib/hooks";
 import { ModalCloseButton, Text, Title, Loader, Image } from "@lib/components";
-import { useEffect, useTransition, useState } from "react";
+import { useEffect, useTransition, useState, useCallback } from "react";
 import type { StrictCase, ErrorResponse } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { ImportanceText } from "../ImportanceText";
@@ -27,20 +27,27 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 		};
 	}, []);
 
+	const revalidate = useCallback(
+		(signal: AbortSignal) => {
+			startTransition(async () => {
+				const { data, error } = await fetchCase(caseId, signal);
+
+				if (error) {
+					setError(error);
+					return;
+				}
+				setError(null);
+				setCaseData(data);
+			});
+		},
+		[caseId],
+	);
+
 	useEffect(() => {
 		const controller = new AbortController();
-		startTransition(async () => {
-			const { data, error } = await fetchCase(caseId, controller.signal);
-
-			if (error) {
-				setError(error);
-				return;
-			}
-			setError(null);
-			setCaseData(data);
-		});
+		revalidate(controller.signal);
 		return () => controller.abort();
-	}, [caseId]);
+	}, [revalidate]);
 
 	return (
 		<section
@@ -121,7 +128,13 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 											</div>
 										</div>
 										<div className="flex gap-2">
-											<EditCase initialCase={caseData} revalidate={router.refresh} />
+											<EditCase
+												initialCase={caseData}
+												revalidate={() => {
+													const controller = new AbortController();
+													revalidate(controller.signal);
+												}}
+											/>
 										</div>
 									</>
 								)}

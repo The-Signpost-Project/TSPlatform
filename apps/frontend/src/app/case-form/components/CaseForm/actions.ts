@@ -57,7 +57,7 @@ export async function createCaseFromForm(
 		location: form.location,
 		notes: form.notes,
 		importance: form.importance,
-		firstInteraction: true,
+		firstInteraction: form.firstInteraction,
 		peddlerId: peddlerId,
 	} satisfies Omit<CreateCaseInput, "photos">;
 

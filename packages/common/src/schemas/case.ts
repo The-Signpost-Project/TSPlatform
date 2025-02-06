@@ -26,7 +26,10 @@ export const CreateCaseInputSchema = z.object({
 	location: z.string().min(1),
 	notes: z.string().min(1),
 	importance: z.coerce.number().int().min(1).max(5) as z.ZodType<1 | 2 | 3 | 4 | 5>,
-	firstInteraction: z.coerce.boolean(),
+	firstInteraction: z.preprocess(
+		(v) => (v === "true" ? true : v === "false" ? false : v),
+		z.boolean(),
+	) as z.ZodType<boolean>,
 	peddlerId: z.string().min(1),
 }) satisfies z.ZodType<Omit<CreateCaseInput, "photos">>;
 

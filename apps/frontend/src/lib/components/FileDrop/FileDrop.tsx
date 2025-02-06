@@ -75,7 +75,7 @@ export function FileDrop({ optional, className, disabled, ...props }: FileDropPr
 					Drop files here, or
 				</Text>
 			) : (
-				<div className="flex flex-col items-center justify-center gap-0.5">
+				<div className="flex flex-col items-center justify-center gap-0.5 px-1">
 					<Text description>
 						{uploadedFiles.length} file{uploadedFiles.length > 1 ? "s" : ""} selected
 					</Text>
@@ -89,7 +89,7 @@ export function FileDrop({ optional, className, disabled, ...props }: FileDropPr
 				</div>
 			)}
 
-			<Button onClick={() => inputRef.current?.click()}>
+			<Button onClick={() => inputRef.current?.click()} disabled={disabled}>
 				{uploadedFiles === null ? "Select files" : "Reselect files"}
 				<input
 					ref={inputRef}

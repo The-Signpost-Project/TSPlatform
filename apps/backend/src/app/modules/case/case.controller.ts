@@ -93,13 +93,16 @@ export class CaseController {
 	}
 
 	@Patch(":id")
+	@UseInterceptors(FilesInterceptor("photos", 10))
 	async updateCaseById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateCaseInputSchema)) data: UpdateCaseInput,
 		@Roles() roles: StrictRole[],
+		@UploadedFiles(new FileValidationPipe({ optional: true, multiple: true }))
+		photos: Express.Multer.File[],
 	) {
 		if (rolesHavePermission(roles, "case", "readWrite", { id })) {
-			return await this.caseService.updateById(id, data);
+			return await this.caseService.updateById(id, { ...data, photos });
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
 	}

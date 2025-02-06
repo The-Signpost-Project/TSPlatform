@@ -192,7 +192,7 @@ export class CaseService extends CrudService<StrictCase> {
 			throw new AppError(AppErrorTypes.NotFound);
 		}
 
-		if (data.photos) {
+		if (data.photos && data.photos.length > 0) {
 			// delete old photos
 			await Promise.all(
 				existingCase.photos.map(async (photo) => {
@@ -223,10 +223,12 @@ export class CaseService extends CrudService<StrictCase> {
 
 		await this.prisma.case.update({
 			where: { id },
-			data: updateData,
+			data: {
+				...updateData,
+				updatedAt: new Date(),
+			},
 		});
-
-		return this.getById(id);
+		return await this.getById(id);
 	}
 
 	async deleteById(id: string) {

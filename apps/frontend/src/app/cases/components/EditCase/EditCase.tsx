@@ -22,7 +22,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Region, ErrorResponse, UpdateCaseInput } from "@shared/common/types";
 import type { EditCaseProps } from "./types";
 import { AuthContext } from "@lib/providers";
-import { getRegions } from "./actions";
+import { getRegions, updateCase } from "./actions";
+import { diffChanges } from "@utils";
+import { toast } from "react-hot-toast";
 
 export function EditCase({ initialCase, revalidate }: EditCaseProps) {
 	const { userHasPermission } = useContext(AuthContext);
@@ -69,32 +71,25 @@ export function EditCase({ initialCase, revalidate }: EditCaseProps) {
 	const [isPending, startTransition] = useTransition();
 
 	async function onSubmit(data: Omit<UpdateCaseInput, "photos">) {
-		console.log(data, photos);
-		/*
-		const changes = await diffChanges(
-			{
-				...peddler,
-				mainRegionId: peddler.mainRegion.id,
-				disabilityIds: peddler.disabilities.map((d) => d.id),
-			} satisfies UpdatePeddlerInput,
-			data,
-		);
+		const changes = await diffChanges(initialCase satisfies Omit<UpdateCaseInput, "photos">, data);
 
-		const {
-			status,
-			error,
-			data: response,
-		} = await updatePeddler(peddler.id, changes as Required<UpdatePeddlerInput>);
+		const fd = new FormData();
+		for (const key in changes) {
+			fd.append(key, String(changes[key]));
+		}
+		if (photos) {
+			for (const photo of photos) {
+				fd.append("photos", photo);
+			}
+		}
+		const { status, error } = await updateCase(initialCase.id, fd);
 		if (status === 200) {
-			toast.success(`Peddler ${response?.codename} updated.`);
+			toast.success(`Case ${initialCase.id} updated.`);
 			setModalOpen(false);
-			const revalidateController = new AbortController();
-			revalidate(revalidateController);
+			revalidate();
 			return;
 		}
-
 		toast.error(error?.cause);
-    */
 	}
 
 	if (!userHasPermission("case", "readWrite", initialCase)) {
@@ -163,7 +158,7 @@ export function EditCase({ initialCase, revalidate }: EditCaseProps) {
 									setValue("regionId", region.id);
 								}
 							}}
-							value={initialCase.regionName}
+							defaultValue={initialCase.regionName}
 							onClickOutside={() => setValue("regionId", "")}
 							placeholder="eg. Bishan"
 							disabled={isPending}
