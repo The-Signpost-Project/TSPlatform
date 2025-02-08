@@ -18,7 +18,7 @@ export class CaseService extends CrudService<StrictCase> {
 		this.parseCase = this.parseCase.bind(this);
 	}
 
-	private rawCaseFindFields = {
+	private static rawCaseFindFields = {
 		createdBy: {
 			select: {
 				id: true,
@@ -54,7 +54,7 @@ export class CaseService extends CrudService<StrictCase> {
 
 	private async parseCase(
 		input: Prisma.CaseGetPayload<{
-			select: InstanceType<typeof CaseService>["rawCaseFindFields"];
+			select: (typeof CaseService)["rawCaseFindFields"];
 		}>,
 	): Promise<StrictCase> {
 		return {
@@ -109,14 +109,14 @@ export class CaseService extends CrudService<StrictCase> {
 					create: photoPaths.map((photoPath) => ({ photoPath })),
 				},
 			},
-			select: this.rawCaseFindFields,
+			select: CaseService.rawCaseFindFields,
 		});
 		return this.parseCase(res);
 	}
 
 	async getAll() {
 		const res = await this.prisma.case.findMany({
-			select: this.rawCaseFindFields,
+			select: CaseService.rawCaseFindFields,
 		});
 		return Promise.all(res.map(this.parseCase));
 	}
@@ -124,7 +124,7 @@ export class CaseService extends CrudService<StrictCase> {
 	async getById(id: string) {
 		const res = await this.prisma.case.findUnique({
 			where: { id },
-			select: this.rawCaseFindFields,
+			select: CaseService.rawCaseFindFields,
 		});
 		if (!res) {
 			throw new AppError(AppErrorTypes.NotFound);
@@ -152,7 +152,7 @@ export class CaseService extends CrudService<StrictCase> {
 						}
 					: undefined,
 			},
-			select: this.rawCaseFindFields,
+			select: CaseService.rawCaseFindFields,
 			orderBy: {
 				[filters.sortBy || "updatedAt"]: filters.order || "desc",
 			},

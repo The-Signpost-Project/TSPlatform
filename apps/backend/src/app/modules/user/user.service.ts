@@ -21,7 +21,7 @@ export class UserService extends CrudService<SafeUser> {
 		super();
 	}
 
-	private rawUserFindFields = {
+	public static rawUserFindFields = {
 		id: true,
 		username: true,
 		email: true,
@@ -36,9 +36,9 @@ export class UserService extends CrudService<SafeUser> {
 		},
 	} as const;
 
-	private cleanUserData(
+	public cleanUserData(
 		data: Prisma.UserGetPayload<{
-			select: InstanceType<typeof UserService>["rawUserFindFields"];
+			select: (typeof UserService)["rawUserFindFields"];
 		}>,
 	): Omit<SafeUser, "roles"> {
 		// find any oAuth providers that the user has connected
@@ -48,7 +48,6 @@ export class UserService extends CrudService<SafeUser> {
 
 		return {
 			...data,
-
 			oAuthProviders: oAuthProviders,
 			hasPassword: !!data.passwordHash,
 		};
@@ -108,7 +107,7 @@ export class UserService extends CrudService<SafeUser> {
 	async getById(id: string): Promise<SafeUser> {
 		const rawUser = await this.prisma.user.findUnique({
 			where: { id },
-			select: this.rawUserFindFields,
+			select: UserService.rawUserFindFields,
 		});
 		if (!rawUser) {
 			throw new AppError(AppErrorTypes.UserNotFound);
@@ -161,7 +160,7 @@ export class UserService extends CrudService<SafeUser> {
 
 	async getAll(): Promise<SafeUser[]> {
 		const rawUsers = await this.prisma.user.findMany({
-			select: this.rawUserFindFields,
+			select: UserService.rawUserFindFields,
 		});
 
 		return Promise.all(
