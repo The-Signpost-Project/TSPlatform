@@ -3,7 +3,7 @@ import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { CaseService } from "@modules/case";
 import { PeddlerService } from "@modules/peddler";
 import { ReportData } from "./types";
-import createReport from "docx-templates";
+import { createReport } from "docx-templates";
 import { Templater } from "@base";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -102,9 +102,11 @@ export class ReportService extends Templater {
 				}
 			} else {
 				// Not an array of template errors, indicating something more serious.
-				throw new AppError(AppErrorTypes.GenericError("Failed to generate report"));
+				throw new AppError(
+					AppErrorTypes.GenericError(`Failed to generate report: ${JSON.stringify(e)}`),
+				);
 			}
 		}
-		throw new AppError(AppErrorTypes.GenericError("Failed to generate report"));
+		throw new AppError(AppErrorTypes.GenericError("Failed to generate report, panic"));
 	}
 }
