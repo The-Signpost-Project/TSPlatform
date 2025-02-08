@@ -158,49 +158,52 @@ export class UserService extends CrudService<SafeUser> {
 		});
 	}
 
-  async getAll(): Promise<SafeUser[]> {
-    const rawUsers = await this.prisma.user.findMany({
-      select: UserService.rawUserFindFields,
-    });
+	async getAll(): Promise<SafeUser[]> {
+		const rawUsers = await this.prisma.user.findMany({
+			select: UserService.rawUserFindFields,
+		});
 
-    const userIds = rawUsers.map(user => user.id);
-    const roles = await this.prisma.userRole.findMany({
-      where: { userId: { in: userIds } },
-      select: {
-        userId: true,
-        role: {
-          include: {
-            policies: {
-              include: {
-                policy: {
-                  include: {
-                    conditions: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+		const userIds = rawUsers.map((user) => user.id);
+		const roles = await this.prisma.userRole.findMany({
+			where: { userId: { in: userIds } },
+			select: {
+				userId: true,
+				role: {
+					include: {
+						policies: {
+							include: {
+								policy: {
+									include: {
+										conditions: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
 
-    const rolesMap = roles.reduce((acc, userRole) => {
-      if (!acc[userRole.userId]) {
-        acc[userRole.userId] = [];
-      }
-      acc[userRole.userId].push({
-        ...userRole.role,
-        policies: userRole.role.policies.map(p => ({
-          ...p.policy,
-          conditions: p.policy.conditions,
-        })) as StrictPolicy[],
-      });
-      return acc;
-    }, {} as Record<string, StrictRole[]>);
+		const rolesMap = roles.reduce(
+			(acc, userRole) => {
+				if (!acc[userRole.userId]) {
+					acc[userRole.userId] = [];
+				}
+				acc[userRole.userId].push({
+					...userRole.role,
+					policies: userRole.role.policies.map((p) => ({
+						...p.policy,
+						conditions: p.policy.conditions,
+					})) as StrictPolicy[],
+				});
+				return acc;
+			},
+			{} as Record<string, StrictRole[]>,
+		);
 
-    return rawUsers.map(rawUser => ({
-      ...this.cleanUserData(rawUser),
-      roles: rolesMap[rawUser.id] || [],
-    }));
-  }
+		return rawUsers.map((rawUser) => ({
+			...this.cleanUserData(rawUser),
+			roles: rolesMap[rawUser.id] || [],
+		}));
+	}
 }
