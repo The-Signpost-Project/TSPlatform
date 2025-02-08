@@ -54,7 +54,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 
 	return (
 		<section
-			className="fixed w-screen h-svh top-0 bg-gray-900 bg-opacity-50 z-50 overflow-y-scroll"
+			className="fixed w-screen h-svh top-0 bg-gray-900/40 backdrop-blur-sm z-50 overflow-y-scroll"
 			onClick={navigate}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") navigate();
@@ -128,7 +128,10 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 												<DeletePeddler
 													id={peddlerData.id}
 													codename={peddlerData.codename}
-													navigateBack={navigate}
+													navigateBack={() => {
+                            navigate()
+                            router.refresh();
+                          }}
 												/>
 											</div>
 										</div>

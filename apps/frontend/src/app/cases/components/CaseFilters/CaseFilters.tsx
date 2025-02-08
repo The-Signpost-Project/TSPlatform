@@ -184,7 +184,7 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 			</div>
 			<CaseGrid cases={filteredCases} isStale={isStale} />
 			<Pagination
-				disableNext={filteredCases.length < casesPerPage}
+				disableNext={filteredCases.length <= casesPerPage}
 				disablePrevious={deferredFilters.offset === 0}
 				onClickNext={() =>
 					setFilters((prev) => ({

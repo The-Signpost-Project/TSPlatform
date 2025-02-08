@@ -8,6 +8,7 @@ import type { StrictCase, ErrorResponse } from "@shared/common/types";
 import { fetchCase } from "./utils";
 import { ImportanceText } from "../ImportanceText";
 import { EditCase } from "../EditCase";
+import { DeleteCase } from "../DeleteCase";
 
 export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 	const router = useRouter();
@@ -51,7 +52,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 
 	return (
 		<section
-			className="fixed w-screen h-svh top-0 bg-gray-900 bg-opacity-50 z-50 overflow-y-scroll"
+			className="fixed w-screen h-svh top-0 bg-gray-900/40 backdrop-blur-sm z-50 overflow-y-scroll"
 			onClick={navigate}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") navigate();
@@ -135,6 +136,13 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 													revalidate(controller.signal);
 												}}
 											/>
+                      <DeleteCase
+                        id={caseId}
+                        navigateBack={() => {
+                          navigate();
+                          router.refresh()
+                        }}
+                      />
 										</div>
 									</>
 								)}
