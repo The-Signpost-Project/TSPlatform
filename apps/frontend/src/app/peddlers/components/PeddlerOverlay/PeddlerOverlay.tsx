@@ -129,9 +129,9 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 													id={peddlerData.id}
 													codename={peddlerData.codename}
 													navigateBack={() => {
-                            navigate()
-                            router.refresh();
-                          }}
+														navigate();
+														router.refresh();
+													}}
 												/>
 											</div>
 										</div>

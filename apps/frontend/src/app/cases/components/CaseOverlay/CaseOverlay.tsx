@@ -136,13 +136,13 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 													revalidate(controller.signal);
 												}}
 											/>
-                      <DeleteCase
-                        id={caseId}
-                        navigateBack={() => {
-                          navigate();
-                          router.refresh()
-                        }}
-                      />
+											<DeleteCase
+												id={caseId}
+												navigateBack={() => {
+													navigate();
+													router.refresh();
+												}}
+											/>
 										</div>
 									</>
 								)}
