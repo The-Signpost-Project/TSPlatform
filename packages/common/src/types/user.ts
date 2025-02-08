@@ -38,3 +38,22 @@ export type UpdateUserRolesInput = {
 export type DeleteUserInput = {
 	username: string;
 };
+
+export type Team = {
+	id: string;
+	name: string;
+	photoPath: string | null;
+	members: Omit<SafeUser, "roles">[];
+};
+
+export type CreateTeamInput = {
+	name: string;
+	photo: Express.Multer.File | null;
+};
+
+export type UpdateTeamInput = Partial<CreateTeamInput>;
+
+export type UserTeamInput = {
+	userId: string;
+	teamId: string;
+};

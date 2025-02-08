@@ -26,10 +26,14 @@ import { RoleInterceptor, Roles } from "@interceptors";
 import type { StrictRole } from "@shared/common/types";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { rolesHavePermission } from "@utils/rolesHavePermission";
+import { TeamService } from "./team.service";
 
 @Controller("user")
 export class UserController {
-	constructor(private readonly userService: UserService) {}
+	constructor(
+		private readonly userService: UserService,
+		private readonly teamService: TeamService,
+	) {}
 
 	@Get("me")
 	async user(@Req() req: Request) {
@@ -75,13 +79,7 @@ export class UserController {
 	@UseInterceptors(RoleInterceptor)
 	async getAll(@Roles() roles: StrictRole[]) {
 		// at the moment, only allow unconditional access if the role has a policy that allows all users and has no conditions
-		if (
-			roles.some((role) =>
-				role.policies.some(
-					(policy) => policy.resource === "allUsers" && policy.conditions.length === 0,
-				),
-			)
-		) {
+		if (rolesHavePermission(roles, "allUsers", "read")) {
 			return await this.userService.getAll();
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
