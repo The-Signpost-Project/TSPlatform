@@ -16,7 +16,7 @@ export const protectedPages = {
 	"/admin/roles": [RESOURCES.ROLE],
 	"/admin/policies": [RESOURCES.POLICY],
 	"/regions": [RESOURCES.REGION],
-	"/teams": [RESOURCES.TEAM],
+	"/teams": [RESOURCES.TEAM, RESOURCES.ALL_USERS],
 	"/case-form": MUST_LOGIN,
 	"/cases": [RESOURCES.CASE, RESOURCES.PEDDLER, RESOURCES.TEAM],
 	"/peddlers": [RESOURCES.PEDDLER],

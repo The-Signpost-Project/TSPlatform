@@ -52,7 +52,7 @@ export default async function CasesPage() {
 					Search for encounters with tissue peddlers here.
 				</Text>
 				<div className="mt-4">
-					<Text description>There was an error fetching the disabilities or regions.</Text>
+					<Text description>There was an error fetching the disabilities, regions or teams.</Text>
 					<Text description>
 						Error:{" "}
 						{[fetchRegionsError, fetchPeddlersError, fetchTeamsError]
