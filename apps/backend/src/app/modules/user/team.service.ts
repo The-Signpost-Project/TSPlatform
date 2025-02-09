@@ -118,4 +118,31 @@ export class TeamService extends CrudService<Team> {
 			where: { id },
 		});
 	}
+
+	async getAll() {
+		const raw = await this.prisma.team.findMany({
+			include: {
+				members: {
+					select: {
+						user: {
+							select: UserService.rawUserFindFields,
+						},
+					},
+				},
+			},
+		});
+
+		const computed = Promise.all(
+			raw.map(
+				async (team) =>
+					({
+						...team,
+						members: team.members.map((member) => this.userService.cleanUserData(member.user)),
+						photoPath: team.photoPath ? await this.s3.getUrl(team.photoPath) : null,
+					}) satisfies Team,
+			),
+		);
+
+		return computed;
+	}
 }

@@ -111,6 +111,15 @@ export class UserController {
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
+	@Get("team/all")
+	@UseInterceptors(RoleInterceptor)
+	async getAllTeams(@Roles() roles: StrictRole[]) {
+		if (rolesHavePermission(roles, "team", "read")) {
+			return await this.teamService.getAll();
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
+	}
+
 	@Get("team/:id")
 	@UseInterceptors(RoleInterceptor)
 	async getTeam(
