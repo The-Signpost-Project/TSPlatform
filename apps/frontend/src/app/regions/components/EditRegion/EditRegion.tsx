@@ -76,9 +76,12 @@ export function EditRegion({ region }: EditRegionProps) {
 						variant={formState.errors.name ? "error" : undefined}
 						helperText={formState.errors.name?.message as string}
 					/>
-					<div className="flex flex-col gap-1">
+					<div className="flex flex-col gap-1 items-start">
 						<Text description order="sm">
 							Upload a photo
+						</Text>
+						<Text order="xs" description>
+							⚠️This will replace the existing photo.
 						</Text>
 						<FileDrop
 							optional
