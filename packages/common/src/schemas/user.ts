@@ -1,14 +1,14 @@
 import type {
-	GetUserInput,
 	UpdateUserInput,
 	SafeUser,
 	DeleteUserInput,
 	UpdateUserRolesInput,
+	Team,
+	CreateTeamInput,
+	UserTeamInput,
 } from "@shared/common/types";
 import { StrictRoleSchema } from "./role";
 import { z } from "zod";
-
-export const GetUserInputSchema = z.string() satisfies z.ZodType<GetUserInput>;
 
 export const UpdateUserInputSchema = z.object({
 	username: z.string().optional(),
@@ -36,3 +36,21 @@ export const SafeUserSchema = z.object({
 	createdAt: z.coerce.date(),
 	roles: z.array(StrictRoleSchema),
 }) satisfies z.ZodType<SafeUser>;
+
+export const TeamSchema = z.object({
+	id: z.string(),
+	name: z.string(),
+	photoPath: z.string().nullable(),
+	members: SafeUserSchema.omit({ roles: true }).array(),
+}) satisfies z.ZodType<Team>;
+
+export const CreateTeamInputSchema = z.object({
+	name: z.string(),
+}) satisfies z.ZodType<Omit<CreateTeamInput, "photo">>;
+
+export const UpdateTeamInputSchema = CreateTeamInputSchema.partial();
+
+export const UserTeamInputSchema = z.object({
+	userId: z.string(),
+	teamId: z.string(),
+}) satisfies z.ZodType<UserTeamInput>;

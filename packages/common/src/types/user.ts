@@ -28,7 +28,6 @@ export type RawUser = {
 	allowEmailNotifications: boolean;
 };
 
-export type GetUserInput = string;
 export type UpdateUserInput = Prettify<
 	Partial<Pick<SafeUser, "username" | "email" | "verified" | "allowEmailNotifications">>
 >;
