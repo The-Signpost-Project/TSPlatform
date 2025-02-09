@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 
 //TODO: add team filter
 
-export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
+export function CaseFilters({ allRegions, allPeddlers, allTeams }: CaseFiltersProps) {
 	const params = useSearchParams();
 
 	const [filters, setFilters] = useState<CaseFiltersOptions>(() => {
@@ -25,23 +25,22 @@ export function CaseFilters({ allRegions, allPeddlers }: CaseFiltersProps) {
 
 		const peddlerCodename = params.get("peddlerCodename") ?? "";
 		const regionName = params.get("regionName") ?? "";
+		const teamName = params.get("teamName") ?? "";
 
 		// find ids from names
 		const peddlerId = allPeddlers.find((p) => p.codename === peddlerCodename)?.id;
 		const regionId = allRegions.find((r) => r.name === regionName)?.id;
+		const teamId = allTeams.find((t) => t.name === teamName)?.id;
 
-		const ret = {
+		const ret: CaseFiltersOptions = {
 			limit,
 			offset,
 			sortBy,
 			order,
-			peddlerId,
-			regionId,
 		};
-		// biome-ignore lint/performance/noDelete: better to be explicit
-		if (!peddlerId) delete ret.peddlerId;
-		// biome-ignore lint/performance/noDelete: better to be explicit
-		if (!regionId) delete ret.regionId;
+		if (peddlerId) ret.peddlerId = peddlerId;
+		if (regionId) ret.regionId = regionId;
+		if (teamId) ret.teamId = teamId;
 		return ret;
 	});
 	const deferredFilters = useDeferredValue(filters);

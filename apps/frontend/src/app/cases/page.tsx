@@ -3,10 +3,11 @@ import { CaseFilters } from "./components";
 import { query } from "@utils";
 import { z } from "zod";
 import { getSessionCookieHeader } from "@utils";
-import { RegionSchema, PeddlerSchema } from "@shared/common/schemas";
+import { RegionSchema, PeddlerSchema, TeamSchema } from "@shared/common/schemas";
 
 const RegionsSchema = z.array(RegionSchema);
 const PeddlersSchema = z.array(PeddlerSchema);
+const TeamsSchema = z.array(TeamSchema);
 
 export default async function CasesPage() {
 	const { data: allRegions, error: fetchRegionsError } = await query({
@@ -27,7 +28,23 @@ export default async function CasesPage() {
 		},
 	});
 
-	if (!allRegions || fetchRegionsError || !allPeddlers || fetchPeddlersError) {
+	const { data: allTeams, error: fetchTeamsError } = await query({
+		path: "/user/team/all",
+		validator: TeamsSchema,
+		init: {
+			method: "GET",
+			headers: await getSessionCookieHeader(),
+		},
+	});
+
+	if (
+		!allRegions ||
+		fetchRegionsError ||
+		!allPeddlers ||
+		fetchPeddlersError ||
+		!allTeams ||
+		fetchTeamsError
+	) {
 		return (
 			<div className="p-4 flex flex-col gap-1">
 				<Title className="text-xl sm:text-3xl">Cases</Title>
@@ -38,7 +55,7 @@ export default async function CasesPage() {
 					<Text description>There was an error fetching the disabilities or regions.</Text>
 					<Text description>
 						Error:{" "}
-						{[fetchRegionsError, fetchPeddlersError]
+						{[fetchRegionsError, fetchPeddlersError, fetchTeamsError]
 							.filter(Boolean)
 							.map((e) => JSON.stringify(e))
 							.join(", ")}
@@ -56,7 +73,7 @@ export default async function CasesPage() {
 					Search for encounters with tissue peddlers here.
 				</Text>
 			</div>
-			<CaseFilters allRegions={allRegions} allPeddlers={allPeddlers} />
+			<CaseFilters allRegions={allRegions} allPeddlers={allPeddlers} allTeams={allTeams} />
 		</section>
 	);
 }
