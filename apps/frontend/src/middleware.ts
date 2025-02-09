@@ -6,15 +6,15 @@ import type { Resource } from "@shared/common/types";
 export async function middleware(request: NextRequest) {
 	// loop through the protected pages and check if the current page is protected, using a regex to match the URL
 	// if the page is protected, get the required resource for the page
-	let requiredResource: Resource | "mustLogin" | undefined;
-	for (const [path, resource] of Object.entries(protectedPages)) {
+	let requiredResource: readonly Resource[] | typeof MUST_LOGIN | undefined;
+	for (const [path, resources] of Object.entries(protectedPages)) {
 		if (new RegExp(path).test(request.nextUrl.pathname)) {
-			requiredResource = resource;
+			requiredResource = resources;
 		}
 	}
 
 	// if no required resource is found, the page is not protected
-	if (!requiredResource) {
+	if (requiredResource === undefined) {
 		return NextResponse.next();
 	}
 
@@ -31,13 +31,14 @@ export async function middleware(request: NextRequest) {
 
 	// check if the user has the required permission to access the page
 	const availablePolicies = data.roles.flatMap((role) => role.policies);
-	const allowed = availablePolicies.some((policy) =>
+	const missingPolicies = requiredResource.filter((resource) =>
 		// read access is the minimum access level required to access a protected page
-		hasPermission(policy, requiredResource, "read"),
+		availablePolicies.every((policy) => !hasPermission(policy, resource, "read")),
 	);
 
-	if (allowed) {
+	if (missingPolicies.length === 0) {
 		return NextResponse.next();
 	}
-	return NextResponse.redirect(new URL("/error/forbidden", request.url));
+	const missingPoliciesString = new URLSearchParams({ missing: missingPolicies.join(",") });
+	return NextResponse.redirect(new URL(`/error/forbidden?${missingPoliciesString}`, request.url));
 }

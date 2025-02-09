@@ -12,12 +12,12 @@ export const MUST_LOGIN = "mustLogin";
  */
 export const protectedPages = {
 	"/settings": MUST_LOGIN,
-	"/admin": RESOURCES.ALL_USERS,
-	"/admin/roles": RESOURCES.ROLE,
-	"/admin/policies": RESOURCES.POLICY,
-	"/regions": RESOURCES.REGION,
-	"/teams": RESOURCES.TEAM,
+	"/admin": [RESOURCES.ALL_USERS],
+	"/admin/roles": [RESOURCES.ROLE],
+	"/admin/policies": [RESOURCES.POLICY],
+	"/regions": [RESOURCES.REGION],
+	"/teams": [RESOURCES.TEAM],
 	"/case-form": MUST_LOGIN,
-	"/cases": RESOURCES.CASE,
-	"/peddlers": RESOURCES.PEDDLER,
+	"/cases": [RESOURCES.CASE, RESOURCES.PEDDLER, RESOURCES.TEAM],
+	"/peddlers": [RESOURCES.PEDDLER],
 } as const;
