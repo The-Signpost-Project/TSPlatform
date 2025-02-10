@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService, S3Service } from "@db/client";
-import type { Team, CreateTeamInput, UpdateTeamInput, } from "@shared/common/types";
+import type { Team, CreateTeamInput, UpdateTeamInput } from "@shared/common/types";
 import { CrudService } from "@base";
 import { UserService } from "./user.service";
 import type { Prisma } from "@prisma/client";
@@ -17,16 +17,15 @@ export class TeamService extends CrudService<Team> {
 	}
 
 	async create(input: CreateTeamInput) {
-    const { photo, ...rest } = input;
-    
-    let photoPath: string | null = null;
+		const { photo, ...rest } = input;
+
+		let photoPath: string | null = null;
 		if (photo) {
 			photoPath = await this.s3.upload(photo, {
 				dir: "team",
 				contentType: photo.mimetype,
 			});
 		}
-
 
 		const raw = await this.prisma.team.create({
 			data: {
@@ -79,8 +78,8 @@ export class TeamService extends CrudService<Team> {
 
 	async updateById(id: string, data: UpdateTeamInput) {
 		const team = await this.getById(id);
-    
-    const { photo, ...rest } = data;
+
+		const { photo, ...rest } = data;
 		if (photo) {
 			if (team.photoPath) {
 				await this.s3.remove(team.photoPath);

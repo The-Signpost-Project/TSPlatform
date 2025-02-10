@@ -2,6 +2,7 @@ import { Title, Text } from "@lib/components";
 import { TeamSchema, SafeUserSchema } from "@shared/common/schemas";
 import { query, getSessionCookieHeader } from "@utils";
 import { z } from "zod";
+import { TeamTabs, AddTeam } from "./components";
 
 const TeamsSchema = z.array(TeamSchema);
 const UsersSchema = z.array(SafeUserSchema);
@@ -57,10 +58,9 @@ export default async function TeamsPage() {
 						regions.
 					</Text>
 				</div>
-				{/*<AddRegion />*/}
+				<AddTeam />
 			</div>
-			{JSON.stringify(allTeamsData)}
-			{JSON.stringify(allUsersData)}
+			<TeamTabs teams={allTeamsData} />
 		</section>
 	);
 }
