@@ -1,6 +1,5 @@
-import type { SidebarItemProps, SidebarProps } from "./types";
+import type { SidebarProps } from "./types";
 import { twMerge } from "tailwind-merge";
-import { Link } from "@lib/components";
 
 export function Sidebar({ children, ...props }: SidebarProps) {
 	return (
@@ -17,28 +16,5 @@ export function Sidebar({ children, ...props }: SidebarProps) {
 				<ul>{children}</ul>
 			</div>
 		</aside>
-	);
-}
-
-export function SidebarItem({
-	children,
-	href,
-	onClick,
-	active = false,
-	...props
-}: SidebarItemProps) {
-	return (
-		<li
-			{...props}
-			className={twMerge(
-				"p-2 text-gray-900 rounded-lg dark:text-white group",
-				active ? "bg-orange-600/25" : "hover:bg-zinc-200 dark:hover:bg-zinc-700",
-				props.className,
-			)}
-		>
-			<Link unstyled href={href ? href : ""} onClick={onClick} className="flex items-center">
-				{children}
-			</Link>
-		</li>
 	);
 }

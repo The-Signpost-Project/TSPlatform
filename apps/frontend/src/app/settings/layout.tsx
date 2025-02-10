@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { SidebarSettingsNav } from "./components";
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+export default function SettingsLayout({ children }: { children: ReactNode }) {
 	return (
 		<div className="flex flex-grow">
 			<SidebarSettingsNav />
