@@ -13,7 +13,7 @@ export function TeamTabs({ teams, allUsers }: TeamTabsProps) {
 				))}
 			</Tabs.TabList>
 			{teams.map((team) => (
-				<Tabs.TabPanel key={team.id} className="flex pt-2 gap-2">
+				<Tabs.TabPanel key={team.id} className="flex pt-2 gap-2 md:flex-row flex-col">
 					<TeamInfo team={team} />
 					<TeamContent team={team} allUsers={allUsers} />
 				</Tabs.TabPanel>

@@ -38,6 +38,8 @@ export function CaseFilters({ allRegions, allPeddlers, allTeams }: CaseFiltersPr
 			sortBy,
 			order,
 		};
+
+		// add peddlerId, regionId, and teamId to filters if they exist
 		if (peddlerId) ret.peddlerId = peddlerId;
 		if (regionId) ret.regionId = regionId;
 		if (teamId) ret.teamId = teamId;
@@ -104,6 +106,29 @@ export function CaseFilters({ allRegions, allPeddlers, allTeams }: CaseFiltersPr
 							setFilters((prev) => {
 								// remove regionId from filters
 								const { regionId, ...rest } = prev;
+								return rest;
+							})
+						}
+					/>
+					<Autocomplete
+						defaultValue={params.get("teamName") ?? undefined}
+						items={allTeams.reduce((acc, team) => {
+							acc.push(team.name);
+							return acc;
+						}, [] as string[])}
+						label="Filter by Team"
+						handleChange={(val) => {
+							const team = allTeams.find((r) => r.name === val);
+							if (team) {
+								setFilters((prev) => ({ ...prev, teamId: team.id }));
+							}
+						}}
+						placeholder="eg. XJC East"
+						className="md:w-1/2"
+						onClickOutside={() =>
+							setFilters((prev) => {
+								// remove teamId from filters
+								const { teamId, ...rest } = prev;
 								return rest;
 							})
 						}

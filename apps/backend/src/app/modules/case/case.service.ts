@@ -146,7 +146,7 @@ export class CaseService extends CrudService<StrictCase> {
 					? {
 							teams: {
 								some: {
-									id: filters.teamId,
+									teamId: filters.teamId,
 								},
 							},
 						}

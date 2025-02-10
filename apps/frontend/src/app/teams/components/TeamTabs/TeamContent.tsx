@@ -1,6 +1,6 @@
 "use client";
 import type { TeamContentProps } from "./types";
-import { Button, Text, TextInput } from "@lib/components";
+import { Button, Text, TextInput, Title } from "@lib/components";
 import { useState, useTransition } from "react";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/navigation";
@@ -59,9 +59,13 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 	};
 
 	return (
-		<div className="flex flex-col gap-2 flex-grow">
+		<div className="flex flex-col gap-2 flex-grow mt-1">
+			<hr className="border-t-2 border-gray-300 dark:border-gray-700 h-1 md:hidden" />
 			{isEditing ? (
 				<div className="flex flex-col gap-1">
+					<Title order={6} className="text-lg">
+						Team {team.name} members
+					</Title>
 					<div className="flex gap-2 justify-between items-end">
 						<TextInput
 							label="Search"
@@ -84,7 +88,12 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 					</Text>
 				</div>
 			) : (
-				<Button onClick={() => setIsEditing(true)}>Manage members in {team.name}</Button>
+				<div className="flex gap-2 justify-between items-center">
+					<Title order={6} className="text-base">
+						Team {team.name} members
+					</Title>
+					<Button onClick={() => setIsEditing(true)}>Manage</Button>
+				</div>
 			)}
 			{isEditing ? (
 				<>
