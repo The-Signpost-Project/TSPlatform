@@ -24,14 +24,14 @@ import {
 	UpdateUserInputSchema,
 	UpdateUserRolesInputSchema,
 	UpdateTeamInputSchema,
-  UserTeamInputSchema,
+	UserTeamInputSchema,
 } from "@shared/common/schemas";
 import type {
 	CreateTeamInput,
 	UpdateTeamInput,
 	UpdateUserInput,
 	UpdateUserRolesInput,
-  UserTeamInput,
+	UserTeamInput,
 } from "@shared/common/types";
 import { RoleInterceptor, Roles } from "@interceptors";
 import type { StrictRole } from "@shared/common/types";
@@ -122,31 +122,31 @@ export class UserController {
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
-  @Post("team/:id/member")
-  @UseInterceptors(RoleInterceptor)
-  async addTeamMember(
-    @Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-    @Body(new ValidationPipe(UserTeamInputSchema)) data: UserTeamInput,
-    @Roles() roles: StrictRole[],
-  ) {
-    if (rolesHavePermission(roles, "team", "readWrite")) {
-      return await this.teamService.addMember(id, data.userId);
-    }
-    throw new AppError(AppErrorTypes.NoPermission);
-  }
+	@Post("team/:id/member")
+	@UseInterceptors(RoleInterceptor)
+	async addTeamMember(
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
+		@Body(new ValidationPipe(UserTeamInputSchema)) data: UserTeamInput,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "team", "readWrite")) {
+			return await this.teamService.addMember(id, data.userId);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
+	}
 
-  @Delete("team/:id/member")
-  @UseInterceptors(RoleInterceptor)
-  async removeTeamMember(
-    @Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-    @Body(new ValidationPipe(UserTeamInputSchema)) data: UserTeamInput,
-    @Roles() roles: StrictRole[],
-  ) {
-    if (rolesHavePermission(roles, "team", "readWrite")) {
-      return await this.teamService.deleteMember(id, data.userId);
-    }
-    throw new AppError(AppErrorTypes.NoPermission);
-  }
+	@Delete("team/:id/member")
+	@UseInterceptors(RoleInterceptor)
+	async removeTeamMember(
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
+		@Body(new ValidationPipe(UserTeamInputSchema)) data: UserTeamInput,
+		@Roles() roles: StrictRole[],
+	) {
+		if (rolesHavePermission(roles, "team", "readWrite")) {
+			return await this.teamService.deleteMember(id, data.userId);
+		}
+		throw new AppError(AppErrorTypes.NoPermission);
+	}
 
 	@Get("team/:id")
 	@UseInterceptors(RoleInterceptor)
