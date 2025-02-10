@@ -77,6 +77,8 @@ model UserTeam {
   team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
   userId String
   teamId String
+
+  @@unique([userId, teamId])
 }
 
 model Policy {
@@ -94,6 +96,8 @@ model PolicyRole {
   role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   policyId String
   roleId   String
+
+  @@unique([policyId, roleId])
 }
 
 model Condition {
@@ -118,6 +122,8 @@ model UserRole {
   role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   userId String
   roleId String
+
+  @@unique([userId, roleId])
 }
 
 model Peddler {
@@ -145,6 +151,8 @@ model PeddlerDisability {
   disability   Disability @relation(fields: [disabilityId], references: [id], onDelete: Restrict)
   peddlerId    String
   disabilityId String
+
+  @@unique([peddlerId, disabilityId])
 }
 
 model Disability {

@@ -66,7 +66,7 @@ export default async function TeamsPage() {
 				</div>
 			) : (
 				<div>
-					<TeamTabs teams={allTeamsData} />
+					<TeamTabs teams={allTeamsData} allUsers={allUsersData} />
 				</div>
 			)}
 		</section>
