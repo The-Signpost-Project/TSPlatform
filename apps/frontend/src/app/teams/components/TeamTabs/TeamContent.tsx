@@ -63,7 +63,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 			<hr className="border-t-2 border-gray-300 dark:border-gray-700 h-1 md:hidden" />
 			{isEditing ? (
 				<div className="flex flex-col gap-1">
-					<Title order={6} className="text-lg">
+					<Title order={6} className="text-base">
 						Team {team.name} members
 					</Title>
 					<div className="flex gap-2 justify-between items-end">
@@ -123,6 +123,12 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 				</>
 			) : (
 				<>
+					{team.members.length === 0 && (
+						<Text description order="sm">
+							This team has no members. Click the "Manage" button to add members.
+						</Text>
+					)}
+
 					{team.members.map((member) => (
 						<div
 							className="bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded w-full"
