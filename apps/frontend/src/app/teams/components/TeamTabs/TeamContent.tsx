@@ -25,7 +25,6 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 	const router = useRouter();
 
 	const selectUserCb = (user: SafeUser & { isMember: boolean }) => {
-		console.log(user.id, user.isMember);
 		if (isPending) return;
 		if (user.isMember) {
 			// Remove user from team
@@ -36,12 +35,12 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 					if (result.status === 200) {
 						toast.success(`Removed ${user.username} from ${team.name}`);
 						router.refresh();
-            return;
+						return;
 					}
 					toast.error(result.error?.cause || "An error occurred");
 				});
 			});
-      return
+			return;
 		}
 		// else add user to team
 
@@ -49,11 +48,10 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 			const result = await addMemberToTeam(team.id, user.id);
 
 			startTransition(() => {
-				console.log(result);
 				if (result.status === 201) {
 					toast.success(`Added ${user.username} to ${team.name}`);
 					router.refresh();
-          return;
+					return;
 				}
 				toast.error(result.error?.cause || "An error occurred");
 			});
@@ -101,6 +99,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 							)}
 							key={user.id}
 							onClick={() => selectUserCb(user)}
+							onKeyDown={() => selectUserCb(user)}
 						>
 							<Text
 								className={twMerge(
