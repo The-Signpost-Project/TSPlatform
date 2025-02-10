@@ -1,6 +1,7 @@
 "use client";
 import { Tabs } from "@lib/components";
 import type { TeamTabsProps } from "./types";
+import { TeamInfo } from "./TeamInfo";
 
 export function TeamTabs({ teams }: TeamTabsProps) {
 	return (
@@ -11,8 +12,9 @@ export function TeamTabs({ teams }: TeamTabsProps) {
 				))}
 			</Tabs.TabList>
 			{teams.map((team) => (
-				<Tabs.TabPanel key={team.id}>
-					<div>{JSON.stringify(team)}</div>
+				<Tabs.TabPanel key={team.id} className="flex pt-2 gap-2">
+					<TeamInfo team={team} />
+					<div></div>
 				</Tabs.TabPanel>
 			))}
 		</Tabs.Tabs>

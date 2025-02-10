@@ -73,8 +73,8 @@ model Team {
 
 model UserTeam {
   id     String @id @default(uuid(7))
-  user   User   @relation(fields: [userId], references: [id])
-  team   Team   @relation(fields: [teamId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
   userId String
   teamId String
 }

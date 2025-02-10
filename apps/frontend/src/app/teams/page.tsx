@@ -60,7 +60,15 @@ export default async function TeamsPage() {
 				</div>
 				<AddTeam />
 			</div>
-			<TeamTabs teams={allTeamsData} />
+			{allTeamsData.length === 0 ? (
+				<div className="mt-4">
+					<Text>No teams found. Add one first!</Text>
+				</div>
+			) : (
+				<div>
+					<TeamTabs teams={allTeamsData} />
+				</div>
+			)}
 		</section>
 	);
 }

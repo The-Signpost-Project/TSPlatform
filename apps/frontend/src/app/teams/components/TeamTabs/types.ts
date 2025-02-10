@@ -4,3 +4,7 @@ import type { Team } from "@shared/common/types";
 export interface TeamTabsProps {
 	teams: Team[];
 }
+
+export interface TeamInfoProps {
+	team: Team;
+}
