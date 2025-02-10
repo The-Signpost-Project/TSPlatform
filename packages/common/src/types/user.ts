@@ -54,5 +54,4 @@ export type UpdateTeamInput = Partial<CreateTeamInput>;
 
 export type UserTeamInput = {
 	userId: string;
-	teamId: string;
 };

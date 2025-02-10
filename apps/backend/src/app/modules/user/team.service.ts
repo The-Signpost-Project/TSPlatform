@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService, S3Service } from "@db/client";
-import type { Team, CreateTeamInput, UpdateTeamInput } from "@shared/common/types";
+import type { Team, CreateTeamInput, UpdateTeamInput, UserTeamInput } from "@shared/common/types";
 import { CrudService } from "@base";
 import { UserService } from "./user.service";
 import type { Prisma } from "@prisma/client";
@@ -144,5 +144,32 @@ export class TeamService extends CrudService<Team> {
 		);
 
 		return computed;
+	}
+
+	async addMember(teamId: string, userId: string) {
+		
+		await this.prisma.userTeam.create({
+			data: {
+				user: {
+					connect: {
+						id: userId,
+					},
+				},
+				team: {
+					connect: {
+						id: teamId,
+					},
+				},
+			} satisfies Prisma.UserTeamCreateInput,
+		});
+	}
+
+	async deleteMember(teamId: string, userId: string) {
+		await this.prisma.userTeam.deleteMany({
+			where: {
+				userId,
+				teamId,
+			},
+		});
 	}
 }

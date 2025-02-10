@@ -52,5 +52,4 @@ export const UpdateTeamInputSchema = CreateTeamInputSchema.partial();
 
 export const UserTeamInputSchema = z.object({
 	userId: z.string(),
-	teamId: z.string(),
 }) satisfies z.ZodType<UserTeamInput>;
