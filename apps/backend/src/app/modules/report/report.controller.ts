@@ -1,4 +1,4 @@
-import { Controller, Get, UseInterceptors, Res, Param, UseGuards } from "@nestjs/common";
+import { Controller, Get, Res, Param, UseGuards } from "@nestjs/common";
 import { ReportService } from "./report.service";
 import { LoggedInGuard } from "@guards";
 import type { Response } from "express";

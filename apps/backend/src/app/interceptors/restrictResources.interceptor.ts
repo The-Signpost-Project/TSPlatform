@@ -119,9 +119,11 @@ export function RestrictResourcesInterceptor(resource: Resource, action: Action)
 				map((data) => {
 					const { result, partial } = filterResourceByRoles(roles, resource, action, data);
 					if (partial) {
-						response.setHeader("X-Partial-Content", "true");
+						// partial content means that some of the resources were filtered out due to permissions restrictions
+						response.setHeader("X-Content-Partial", "true");
 					} else {
-						response.setHeader("X-Partial-Content", "false");
+						// no partial content means that all resources were returned
+						response.setHeader("X-Content-Partial", "false");
 					}
 					return result;
 				}),

@@ -2,11 +2,10 @@ import { hasPermission } from "@shared/common/abac";
 import type { Action, Resource, ResourceObject, StrictRole } from "@shared/common/types";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 
-export function rolesHavePermission(
+function rolesHavePermission(
 	roles: StrictRole[],
 	resource: Resource,
 	action: Action,
-
 	resourceObj?: ResourceObject,
 ) {
 	return roles.some((role) =>

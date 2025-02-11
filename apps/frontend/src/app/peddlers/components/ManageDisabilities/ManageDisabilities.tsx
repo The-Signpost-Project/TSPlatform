@@ -41,6 +41,7 @@ export function ManageDisabilities() {
 				return;
 			}
 			toast.success("Disability created successfully");
+			setNewName("");
 			const { data, error } = await getDisabilities();
 
 			startTransition(() => {
