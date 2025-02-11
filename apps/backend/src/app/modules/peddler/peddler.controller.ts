@@ -30,16 +30,12 @@ import type {
 	UpdatePeddlerInput,
 	CreateRegionInput,
 	UpdateRegionInput,
-	StrictRole,
 } from "@shared/common/types";
-import { RoleInterceptor, Roles } from "@interceptors";
-import { rolesHavePermission } from "@utils/rolesHavePermission";
-import { AppError, AppErrorTypes } from "@utils/appErrors";
+import { RestrictResourcesInterceptor } from "@interceptors";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { LoggedInGuard } from "@guards";
 
 @Controller("peddler")
-@UseInterceptors(RoleInterceptor)
 export class PeddlerController {
 	constructor(
 		private readonly peddlerService: PeddlerService,
@@ -47,7 +43,6 @@ export class PeddlerController {
 		private readonly regionService: RegionService,
 	) {}
 
-	// public route
 	@Post()
 	@UseGuards(LoggedInGuard)
 	async create(@Body(new ValidationPipe(CreatePeddlerInputSchema)) data: CreatePeddlerInput) {
@@ -55,35 +50,28 @@ export class PeddlerController {
 	}
 
 	@Patch(":id")
+	@UseInterceptors(RestrictResourcesInterceptor("peddler", "readWrite"))
 	async updateById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePeddlerInputSchema)) data: UpdatePeddlerInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "peddler", "readWrite", { id })) {
-			return await this.peddlerService.updateById(id, data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.peddlerService.updateById(id, data);
 	}
 
 	@Delete(":id")
-	async deleteById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "peddler", "readWrite", { id })) {
-			return await this.peddlerService.deleteById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("peddler", "readWrite"))
+	async deleteById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.peddlerService.deleteById(id);
 	}
 
-	// public route
 	@Get("all")
+	@UseGuards(LoggedInGuard)
 	async getAll() {
 		return await this.peddlerService.getAll();
 	}
 
 	@Get(":id")
+	@UseInterceptors(RestrictResourcesInterceptor("peddler", "read"))
 	async getById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
 		return await this.peddlerService.getById(id);
 	}
@@ -96,48 +84,32 @@ export class PeddlerController {
 	}
 
 	@Get("disability/:id")
-	async getDisabilityById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "disability", "read", { id })) {
-			return await this.disabilityService.getById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("disability", "read"))
+	async getDisabilityById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.disabilityService.getById(id);
 	}
 
 	@Post("disability")
+	@UseInterceptors(RestrictResourcesInterceptor("disability", "readWrite"))
 	async createDisability(
 		@Body(new ValidationPipe(CreateDisabilityInputSchema)) data: CreateDisabilityInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "disability", "readWrite")) {
-			return await this.disabilityService.create(data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.disabilityService.create(data);
 	}
 
 	@Patch("disability/:id")
+	@UseInterceptors(RestrictResourcesInterceptor("disability", "readWrite"))
 	async updateDisabilityById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateDisabilityInputSchema)) data: UpdateDisabilityInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
-			return await this.disabilityService.updateById(id, data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.disabilityService.updateById(id, data);
 	}
 
 	@Delete("disability/:id")
-	async deleteDisabilityById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "disability", "readWrite", { id })) {
-			return await this.disabilityService.deleteById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("disability", "readWrite"))
+	async deleteDisabilityById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.disabilityService.deleteById(id);
 	}
 
 	// public route
@@ -148,51 +120,35 @@ export class PeddlerController {
 	}
 
 	@Get("region/:id")
-	async getRegionById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "region", "read", { id })) {
-			return await this.regionService.getById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("region", "read"))
+	async getRegionById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.regionService.getById(id);
 	}
 
 	@Post("region")
 	@UseInterceptors(FileInterceptor("photo"))
+	@UseInterceptors(RestrictResourcesInterceptor("region", "readWrite"))
 	async createRegion(
 		@Body(new ValidationPipe(CreateRegionInputSchema)) data: CreateRegionInput,
 		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File | null,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "region", "readWrite")) {
-			return await this.regionService.create({ ...data, photo });
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.regionService.create({ ...data, photo });
 	}
 
 	@Patch("region/:id")
 	@UseInterceptors(FileInterceptor("photo"))
+	@UseInterceptors(RestrictResourcesInterceptor("region", "readWrite"))
 	async updateRegionById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRegionInputSchema)) data: UpdateRegionInput,
 		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File | null,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "region", "readWrite", { id })) {
-			return await this.regionService.updateById(id, { ...data, photo });
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.regionService.updateById(id, { ...data, photo });
 	}
 
 	@Delete("region/:id")
-	async deleteRegionById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "region", "readWrite", { id })) {
-			return await this.regionService.deleteById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("region", "readWrite"))
+	async deleteRegionById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.regionService.deleteById(id);
 	}
 }

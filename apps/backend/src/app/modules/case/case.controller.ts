@@ -20,15 +20,7 @@ import {
 	CaseFiltersSchema,
 	UpdateCaseInputSchema,
 } from "@shared/common/schemas";
-import type {
-	StrictRole,
-	CreateCaseInput,
-	CaseFilters,
-	UpdateCaseInput,
-} from "@shared/common/types";
-import { RoleInterceptor, Roles } from "@interceptors";
-import { rolesHavePermission } from "@utils/rolesHavePermission";
-import { AppError, AppErrorTypes } from "@utils/appErrors";
+import type { CreateCaseInput, CaseFilters, UpdateCaseInput } from "@shared/common/types";
 import type { Request } from "express";
 import { sessionCookieName } from "@shared/common/constants";
 import { FilesInterceptor } from "@nestjs/platform-express";
@@ -36,31 +28,27 @@ import { LoggedInGuard } from "@guards";
 import { RestrictResourcesInterceptor } from "@interceptors";
 
 @Controller("case")
-@UseInterceptors(RoleInterceptor)
 export class CaseController {
 	constructor(private readonly caseService: CaseService) {}
 
 	@Get("all")
 	@UseInterceptors(RestrictResourcesInterceptor("case", "read"))
-	async getAllCases(@Roles() roles: StrictRole[]) {
+	async getAllCases() {
 		return await this.caseService.getAll();
 	}
 
 	@Get("filter")
+	@UseInterceptors(RestrictResourcesInterceptor("case", "read"))
 	async getFilteredCases(
 		// due to query string serialization, importance is a string of comma separated numbers and not an array of numbers
 		@Query(new ValidationPipe(CaseFiltersSchema)) filters: Omit<CaseFilters, "importance"> & {
 			importance?: string;
 		},
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "case", "read")) {
-			return await this.caseService.getFiltered({
-				...filters,
-				importance: filters.importance?.split(",").map(Number) as (1 | 2 | 3 | 4 | 5)[],
-			});
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.caseService.getFiltered({
+			...filters,
+			importance: filters.importance?.split(",").map(Number) as (1 | 2 | 3 | 4 | 5)[],
+		});
 	}
 
 	@Get("me")
@@ -71,14 +59,9 @@ export class CaseController {
 	}
 
 	@Get(":id")
-	async getCaseById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "case", "read", { id })) {
-			return await this.caseService.getById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("case", "read"))
+	async getCaseById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.caseService.getById(id);
 	}
 
 	@Post()
@@ -94,27 +77,20 @@ export class CaseController {
 
 	@Patch(":id")
 	@UseInterceptors(FilesInterceptor("photos", 10))
+	@UseInterceptors(RestrictResourcesInterceptor("case", "readWrite"))
 	async updateCaseById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateCaseInputSchema)) data: UpdateCaseInput,
-		@Roles() roles: StrictRole[],
+
 		@UploadedFiles(new FileValidationPipe({ optional: true, multiple: true }))
 		photos: Express.Multer.File[],
 	) {
-		if (rolesHavePermission(roles, "case", "readWrite", { id })) {
-			return await this.caseService.updateById(id, { ...data, photos });
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.caseService.updateById(id, { ...data, photos });
 	}
 
 	@Delete(":id")
-	async deleteCaseById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "case", "readWrite", { id })) {
-			return await this.caseService.deleteById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("case", "readWrite"))
+	async deleteCaseById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.caseService.deleteById(id);
 	}
 }

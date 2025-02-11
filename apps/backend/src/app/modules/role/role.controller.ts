@@ -14,14 +14,10 @@ import type {
 	CreateRoleInput,
 	UpdatePolicyInput,
 	UpdateRoleInput,
-	StrictRole,
 } from "@shared/common/types";
-import { RoleInterceptor, Roles } from "@interceptors";
-import { AppError, AppErrorTypes } from "@utils/appErrors";
-import { rolesHavePermission } from "@utils/rolesHavePermission";
+import { RestrictResourcesInterceptor } from "@interceptors";
 
 @Controller("role")
-@UseInterceptors(RoleInterceptor)
 export class RoleController {
 	constructor(
 		private readonly roleService: RoleService,
@@ -29,17 +25,13 @@ export class RoleController {
 	) {}
 
 	@Post()
-	async create(
-		@Body(new ValidationPipe(CreateRoleInputSchema)) data: CreateRoleInput,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "role", "readWrite")) {
-			return await this.roleService.create(data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("role", "readWrite"))
+	async create(@Body(new ValidationPipe(CreateRoleInputSchema)) data: CreateRoleInput) {
+		return await this.roleService.create(data);
 	}
 
 	@Patch(":id")
+	@UseInterceptors(RestrictResourcesInterceptor("role", "readWrite"))
 	async updateById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateRoleInputSchema)) data: UpdateRoleInput,
@@ -48,84 +40,53 @@ export class RoleController {
 	}
 
 	@Delete(":id")
-	async deleteById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "role", "readWrite", { id })) {
-			return await this.roleService.deleteById(id);
-		}
+	@UseInterceptors(RestrictResourcesInterceptor("role", "readWrite"))
+	async deleteById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.roleService.deleteById(id);
 	}
 
 	@Get("all")
-	async getAll(@Roles() roles: StrictRole[]) {
-		if (rolesHavePermission(roles, "role", "read")) {
-			return await this.roleService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("role", "read"))
+	async getAll() {
+		return await this.roleService.getAll();
 	}
 
 	@Get(":id")
-	async getById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "role", "read", { id })) {
-			return await this.roleService.getById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("role", "read"))
+	async getById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.roleService.getById(id);
 	}
 
 	@Get("policy/all")
-	async getAllPolicies(@Roles() roles: StrictRole[]) {
-		if (rolesHavePermission(roles, "policy", "read")) {
-			return await this.policyService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("policy", "read"))
+	async getAllPolicies() {
+		return await this.policyService.getAll();
 	}
 
 	@Get("policy/:id")
-	async getPolicyById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "policy", "read", { id })) {
-			return await this.policyService.getById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("policy", "read"))
+	async getPolicyById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.policyService.getById(id);
 	}
 
 	@Post("policy")
-	async createPolicy(
-		@Body(new ValidationPipe(CreatePolicyInputSchema)) data: CreatePolicyInput,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "policy", "readWrite")) {
-			return await this.policyService.create(data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("policy", "readWrite"))
+	async createPolicy(@Body(new ValidationPipe(CreatePolicyInputSchema)) data: CreatePolicyInput) {
+		return await this.policyService.create(data);
 	}
 
 	@Patch("policy/:id")
+	@UseInterceptors(RestrictResourcesInterceptor("policy", "readWrite"))
 	async updatePolicyById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdatePolicyInputSchema)) data: UpdatePolicyInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "policy", "readWrite", { id })) {
-			return await this.policyService.updateById(id, data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.policyService.updateById(id, data);
 	}
 
 	@Delete("policy/:id")
-	async deletePolicyById(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "policy", "readWrite", { id })) {
-			return await this.policyService.deleteById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("policy", "readWrite"))
+	async deletePolicyById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.policyService.deleteById(id);
 	}
 }

@@ -33,10 +33,7 @@ import type {
 	UpdateUserRolesInput,
 	UserTeamInput,
 } from "@shared/common/types";
-import { RoleInterceptor, Roles } from "@interceptors";
-import type { StrictRole } from "@shared/common/types";
-import { AppError, AppErrorTypes } from "@utils/appErrors";
-import { rolesHavePermission } from "@utils/rolesHavePermission";
+import { RestrictResourcesInterceptor } from "@interceptors";
 import { TeamService } from "./team.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FileValidationPipe } from "@pipes";
@@ -69,17 +66,14 @@ export class UserController {
 	}
 
 	@Put(":id/role")
-	@UseInterceptors(RoleInterceptor)
+
+	@UseInterceptors(RestrictResourcesInterceptor("allUsers", "readWrite"))
 	async updateRole(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateUserRolesInputSchema))
 		data: UpdateUserRolesInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "allUsers", "readWrite", { id })) {
-			return await this.userService.updateById(id, data);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.userService.updateById(id, data);
 	}
 
 	@Delete(":id")
@@ -89,101 +83,68 @@ export class UserController {
 	}
 
 	@Get("all")
-	@UseInterceptors(RoleInterceptor)
-	async getAll(@Roles() roles: StrictRole[]) {
+	@UseInterceptors(RestrictResourcesInterceptor("allUsers", "read"))
+	async getAll() {
 		// at the moment, only allow unconditional access if the role has a policy that allows all users and has no conditions
-		if (rolesHavePermission(roles, "allUsers", "read")) {
-			return await this.userService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+
+		return await this.userService.getAll();
 	}
 
 	@Post("team")
-	@UseInterceptors(RoleInterceptor)
 	@UseInterceptors(FileInterceptor("photo"))
+	@UseInterceptors(RestrictResourcesInterceptor("team", "readWrite"))
 	async createTeam(
 		@Body(new ValidationPipe(CreateTeamInputSchema))
 		data: CreateTeamInput,
 		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "team", "readWrite")) {
-			return await this.teamService.create({ ...data, photo } satisfies CreateTeamInput);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.teamService.create({ ...data, photo });
 	}
 
 	@Get("team/all")
-	@UseInterceptors(RoleInterceptor)
-	async getAllTeams(@Roles() roles: StrictRole[]) {
-		if (rolesHavePermission(roles, "team", "read")) {
-			return await this.teamService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("team", "read"))
+	async getAllTeams() {
+		return await this.teamService.getAll();
 	}
 
 	@Post("team/:id/member")
-	@UseInterceptors(RoleInterceptor)
+	@UseInterceptors(RestrictResourcesInterceptor("team", "readWrite"))
 	async addTeamMember(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UserTeamInputSchema)) data: UserTeamInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "team", "readWrite")) {
-			return await this.teamService.addMember(id, data.userId);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.teamService.addMember(id, data.userId);
 	}
 
 	@Delete("team/:id/member")
-	@UseInterceptors(RoleInterceptor)
+	@UseInterceptors(RestrictResourcesInterceptor("team", "readWrite"))
 	async removeTeamMember(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UserTeamInputSchema)) data: UserTeamInput,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "team", "readWrite")) {
-			return await this.teamService.deleteMember(id, data.userId);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.teamService.deleteMember(id, data.userId);
 	}
 
 	@Get("team/:id")
-	@UseInterceptors(RoleInterceptor)
-	async getTeam(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "team", "read")) {
-			return await this.teamService.getById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("team", "read"))
+	async getTeam(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.teamService.getById(id);
 	}
 
 	@Patch("team/:id")
-	@UseInterceptors(RoleInterceptor)
 	@UseInterceptors(FileInterceptor("photo"))
+	@UseInterceptors(RestrictResourcesInterceptor("team", "readWrite"))
 	async updateTeam(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
 		@Body(new ValidationPipe(UpdateTeamInputSchema)) data: Omit<UpdateTeamInput, "photo">,
 		@UploadedFile(new FileValidationPipe({ optional: true })) photo: Express.Multer.File,
-		@Roles() roles: StrictRole[],
 	) {
-		if (rolesHavePermission(roles, "team", "readWrite")) {
-			return await this.teamService.updateById(id, { ...data, photo } satisfies UpdateTeamInput);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.teamService.updateById(id, { ...data, photo } satisfies UpdateTeamInput);
 	}
 
 	@Delete("team/:id")
-	@UseInterceptors(RoleInterceptor)
-	async deleteTeam(
-		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Roles() roles: StrictRole[],
-	) {
-		if (rolesHavePermission(roles, "team", "readWrite")) {
-			return await this.teamService.deleteById(id);
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+	@UseInterceptors(RestrictResourcesInterceptor("team", "readWrite"))
+	async deleteTeam(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.teamService.deleteById(id);
 	}
 }
