@@ -1,4 +1,4 @@
-import type { StrictCondition, StrictPolicy, Resource, Operator } from "@shared/common/types";
+import type { StrictPolicy, Resource, Operator } from "@shared/common/types";
 
 export const OPERATOR = {
 	EQ: "eq",

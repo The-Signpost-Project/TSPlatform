@@ -33,6 +33,7 @@ import type { Request } from "express";
 import { sessionCookieName } from "@shared/common/constants";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { LoggedInGuard } from "@guards";
+import { RestrictResourcesInterceptor } from "@interceptors";
 
 @Controller("case")
 @UseInterceptors(RoleInterceptor)
@@ -40,11 +41,9 @@ export class CaseController {
 	constructor(private readonly caseService: CaseService) {}
 
 	@Get("all")
+	@UseInterceptors(RestrictResourcesInterceptor("case", "read"))
 	async getAllCases(@Roles() roles: StrictRole[]) {
-		if (rolesHavePermission(roles, "case", "read")) {
-			return await this.caseService.getAll();
-		}
-		throw new AppError(AppErrorTypes.NoPermission);
+		return await this.caseService.getAll();
 	}
 
 	@Get("filter")

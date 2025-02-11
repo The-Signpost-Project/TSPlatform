@@ -58,7 +58,7 @@ export class PolicyService extends CrudService<StrictPolicy> {
 		const policyConditionsToInsert = conditions.map((c) => ({
 			...c,
 			policyId: policy.id,
-			value: JSON.stringify(c.value),
+			value: c.value as string,
 		}));
 
 		await this.prisma.condition.createMany({ data: policyConditionsToInsert });
@@ -103,7 +103,7 @@ export class PolicyService extends CrudService<StrictPolicy> {
 		const policyConditions = conditions.map((c) => ({
 			...c,
 			policyId: policy.id,
-			value: JSON.stringify(c.value),
+			value: c.value as string,
 		}));
 		await this.prisma.condition.deleteMany({ where: { policyId: policy.id } });
 		await this.prisma.condition.createMany({ data: policyConditions });
