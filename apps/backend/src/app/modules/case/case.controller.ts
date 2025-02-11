@@ -64,6 +64,13 @@ export class CaseController {
 		throw new AppError(AppErrorTypes.NoPermission);
 	}
 
+	@Get("me")
+	@UseGuards(LoggedInGuard)
+	async getOwnCases(@Req() req: Request) {
+		const tokenId = req.cookies[sessionCookieName] as string | undefined;
+		return await this.caseService.getOwn(tokenId);
+	}
+
 	@Get(":id")
 	async getCaseById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
@@ -73,12 +80,6 @@ export class CaseController {
 			return await this.caseService.getById(id);
 		}
 		throw new AppError(AppErrorTypes.NoPermission);
-	}
-
-	@Get("me")
-	async getOwnCases(@Req() req: Request) {
-		const tokenId = req.cookies[sessionCookieName] as string | undefined;
-		return await this.caseService.getOwn(tokenId);
 	}
 
 	@Post()

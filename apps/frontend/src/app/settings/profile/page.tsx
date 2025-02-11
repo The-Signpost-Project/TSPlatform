@@ -1,7 +1,22 @@
 import { Profile } from "./components";
 import { Title, Text } from "@lib/components";
+import { getSessionCookieHeader, query } from "@utils";
+import { StrictCaseSchema } from "@shared/common/schemas";
+import { z } from "zod";
+import { SelfCases } from "./components";
 
-export default function ProfilePage() {
+const CasesSchema = z.array(StrictCaseSchema);
+
+export default async function ProfilePage() {
+	const { data: selfCases, error: selfCasesError } = await query({
+		path: "/case/me",
+		validator: CasesSchema,
+		init: {
+			method: "GET",
+			headers: await getSessionCookieHeader(),
+		},
+	});
+
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
@@ -11,6 +26,14 @@ export default function ProfilePage() {
 				</Text>
 			</div>
 			<Profile />
+			{selfCasesError || !selfCases ? (
+				<div className="mt-4">
+					<Text description>There was an error fetching the disabilities, regions or teams.</Text>
+					<Text description>Error: {JSON.stringify(selfCasesError)}</Text>
+				</div>
+			) : (
+				<SelfCases cases={selfCases} />
+			)}
 		</div>
 	);
 }

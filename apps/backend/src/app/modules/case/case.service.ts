@@ -173,7 +173,17 @@ export class CaseService extends CrudService<StrictCase> {
 			throw new AppError(AppErrorTypes.InvalidToken);
 		}
 
-		return this.getById(user.id);
+		const res = await this.prisma.case.findMany({
+			where: {
+				createdById: user.id,
+			},
+			select: CaseService.rawCaseFindFields,
+			orderBy: {
+				updatedAt: "desc",
+			},
+		});
+
+		return Promise.all(res.map(this.parseCase));
 	}
 
 	async updateById(id: string, data: UpdateCaseInput) {
