@@ -1,4 +1,4 @@
-import type { StrictCondition, StrictPolicy, Resource } from "@shared/common/types";
+import type { StrictCondition, StrictPolicy, Resource, Operator } from "@shared/common/types";
 
 export const OPERATOR = {
 	EQ: "eq",
@@ -12,7 +12,7 @@ export const OPERATOR = {
 	CONTAINS: "contains",
 	STARTS_WITH: "startsWith",
 	ENDS_WITH: "endsWith",
-} as const satisfies Record<string, StrictCondition["operator"]>;
+} as const satisfies Record<string, Operator>;
 
 export const RESOURCES = {
 	PEDDLER: "peddler",

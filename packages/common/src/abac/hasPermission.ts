@@ -1,11 +1,17 @@
 import { OPERATOR } from "./constants";
-import type { Action, Resource, StrictPolicy } from "@shared/common/types";
+import type {
+	Action,
+	Operator,
+	Resource,
+	ResourceObject,
+	StrictPolicy,
+} from "@shared/common/types";
 
 function evaluateCondition(
 	// biome-ignore lint/suspicious/noExplicitAny: any is required here
 	resourceObj: Record<string, any>,
 	field: string,
-	operator: (typeof OPERATOR)[keyof typeof OPERATOR],
+	operator: Operator,
 	value: string | number | boolean | string[] | number[],
 ): boolean {
 	const fieldValue = resourceObj[field];
@@ -57,7 +63,7 @@ function evaluateCondition(
 	}
 }
 
-function checkAction(policy: StrictPolicy, action: StrictPolicy["action"]): boolean {
+function checkAction(policy: StrictPolicy, action: Action): boolean {
 	// if the policy action is readWrite, then allow all actions
 	if (policy.action === "readWrite") {
 		return true;
@@ -70,8 +76,7 @@ export function hasPermission(
 	policy: StrictPolicy,
 	resource: Resource,
 	action: Action,
-	// biome-ignore lint/suspicious/noExplicitAny: any is required here
-	resourceObj?: Record<string, any>,
+	resourceObj?: ResourceObject,
 ): boolean {
 	// if no conditions are specified, then allow all given resource and action match
 	if (policy.conditions.length === 0) {

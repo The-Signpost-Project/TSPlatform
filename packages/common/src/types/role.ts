@@ -2,18 +2,7 @@ import type { Prettify } from "./utils";
 export interface StrictCondition {
 	id: string;
 	field: string;
-	operator:
-		| "eq"
-		| "ne"
-		| "lt"
-		| "lte"
-		| "gt"
-		| "gte"
-		| "in"
-		| "nin"
-		| "contains"
-		| "startsWith"
-		| "endsWith";
+	operator: Operator;
 	value: string | number | boolean | string[] | number[];
 	policyId: string;
 }
@@ -30,6 +19,22 @@ export type Resource =
 	| "allUsers";
 
 export type Action = "read" | "readWrite";
+
+export type Operator =
+	| "eq"
+	| "ne"
+	| "lt"
+	| "lte"
+	| "gt"
+	| "gte"
+	| "in"
+	| "nin"
+	| "contains"
+	| "startsWith"
+	| "endsWith";
+
+// biome-ignore lint/suspicious/noExplicitAny: shape of resource object is not known
+export type ResourceObject = Record<string, any>;
 
 export interface StrictPolicy {
 	id: string;
