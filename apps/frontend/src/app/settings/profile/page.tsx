@@ -25,15 +25,17 @@ export default async function ProfilePage() {
 					View and manage your public profile information.
 				</Text>
 			</div>
-			<Profile />
-			{selfCasesError || !selfCases ? (
-				<div className="mt-4">
-					<Text description>There was an error fetching the disabilities, regions or teams.</Text>
-					<Text description>Error: {JSON.stringify(selfCasesError)}</Text>
-				</div>
-			) : (
-				<SelfCases cases={selfCases} />
-			)}
+			<div>
+				<Profile />
+				{selfCasesError || !selfCases ? (
+					<div className="mt-4">
+						<Text description>There was an error fetching the disabilities, regions or teams.</Text>
+						<Text description>Error: {JSON.stringify(selfCasesError)}</Text>
+					</div>
+				) : (
+					<SelfCases cases={selfCases} />
+				)}
+			</div>
 		</div>
 	);
 }

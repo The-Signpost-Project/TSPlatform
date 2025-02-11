@@ -3,7 +3,7 @@ import { UpdateUserInputSchema } from "@shared/common/schemas";
 import { useContext } from "react";
 import { AuthContext } from "@lib/providers";
 import { toast } from "react-hot-toast";
-import { TextSettingsRow } from "../../components";
+import { TextSettingsRow } from "@/app/settings/components";
 import {
 	Text,
 	Table,
@@ -13,7 +13,7 @@ import {
 	AccordionItem,
 } from "@lib/components";
 import { AnimatePresence, motion } from "motion/react";
-import { PolicyInfoModal } from "./PolicyInfoModal";
+import { PolicyInfoModal } from "../PolicyInfoModal";
 
 export function Profile() {
 	const { updateUser, user, loading } = useContext(AuthContext);
@@ -44,7 +44,7 @@ export function Profile() {
 				onSubmit={({ username }) => changeUsernameCallback(user?.id, username)}
 				schema={UpdateUserInputSchema.required().shape.username}
 			/>
-			<AccordionRoot type="multiple" className="flex gap-2 p-2 w-full overflow-auto">
+			<AccordionRoot type="multiple" className="flex gap-2 p-2 w-full overflow-auto !mt-0">
 				<AccordionItem value="1" className="w-full">
 					<AccordionTrigger withArrow className="w-full flex mb-2">
 						<Text order="lg">Your Roles</Text>
