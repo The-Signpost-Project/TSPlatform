@@ -232,4 +232,70 @@ export class EmailService extends Templater {
 			}),
 		);
 	}
+
+	async sendNewPeddlerEmail(peddlerId: string) {
+		const peddler = await this.prisma.peddler.findUnique({
+			where: { id: peddlerId },
+			include: {
+				mainRegion: true,
+				disabilities: {
+					select: {
+						disability: {
+							select: {
+								name: true,
+							},
+						},
+					},
+				},
+			},
+		});
+		if (!peddler) {
+			throw new AppError(AppErrorTypes.NotFound);
+		}
+		const kv = [
+			{
+				key: "Codename",
+				value: peddler.codename,
+			},
+			{
+				key: "Region",
+				value: peddler.mainRegion.name,
+			},
+			{
+				key: "Surname/Name of individual",
+				value: peddler.lastName,
+			},
+			{
+				key: "First Name",
+				value: peddler.firstName,
+			},
+			{
+				key: "Race",
+				value: peddler.race,
+			},
+			{
+				key: "Sex",
+				value: peddler.sex,
+			},
+			{
+				key: "Date of Birth",
+				value: peddler.birthYear,
+			},
+			{
+				key: "Disabilities",
+				value:
+					peddler.disabilities.length > 0
+						? peddler.disabilities.map((d) => d.disability.name).join(", ")
+						: "None",
+			},
+		];
+		await Promise.all(
+			this.alertAddresses.map(async (email) => {
+				await this.sendEmail(email, "New Peddler Alert", "newPeddler.hbs", {
+					attributes: kv,
+					viewFullUrl: `${this.config.get<string>("FRONTEND_URL")}/peddlers/${peddlerId}`,
+				});
+			}),
+		);
+	}
 }

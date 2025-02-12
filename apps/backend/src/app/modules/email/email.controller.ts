@@ -29,4 +29,11 @@ export class EmailController {
 	) {
 		await this.emailService.sendUrgentCaseEmail(caseId);
 	}
+
+	@Post("new-peddler/:peddlerId")
+	async sendNewPeddlerEmail(
+		@Param("peddlerId", new ValidationPipe(NonEmptyStringSchema)) peddlerId: string,
+	) {
+		await this.emailService.sendNewPeddlerEmail(peddlerId);
+	}
 }
