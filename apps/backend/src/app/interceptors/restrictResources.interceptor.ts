@@ -7,13 +7,27 @@ import { LuciaService, PrismaService } from "@db/client";
 import { sessionCookieName } from "@shared/common/constants";
 import type { Action, Resource, StrictPolicy, StrictRole } from "@shared/common/types";
 
-export function RestrictResourcesInterceptor(resource: Resource, action: Action) {
+interface RestrictResourcesInterceptorOptions {
+	filterResources?: boolean;
+}
+
+export function RestrictResourcesInterceptor(
+	resource: Resource,
+	action: Action,
+	options: RestrictResourcesInterceptorOptions = {
+		filterResources: true,
+	},
+) {
 	@Injectable()
 	class RestrictResourcesInterceptorMixin implements NestInterceptor {
 		constructor(
 			private readonly luciaService: LuciaService,
 			private readonly prismaService: PrismaService,
-		) {}
+		) {
+			this.options = options;
+		}
+
+		private readonly options: RestrictResourcesInterceptorOptions;
 
 		private evaluateValue(input: string) {
 			// Trim input to remove leading and trailing inverted commas
@@ -117,6 +131,12 @@ export function RestrictResourcesInterceptor(resource: Resource, action: Action)
 
 			return next.handle().pipe(
 				map((data) => {
+					// if the filterResources option is not set or false, return the data as is
+					if (!this.options.filterResources) {
+						response.setHeader("X-Content-Partial", "false");
+						return data;
+					}
+
 					const { result, partial } = filterResourceByRoles(roles, resource, action, data);
 					if (partial) {
 						// partial content means that some of the resources were filtered out due to permissions restrictions
