@@ -17,11 +17,13 @@ export class EmailService extends Templater {
 		private readonly config: ConfigService,
 	) {
 		super();
+		this.alertAddresses = this.config.get<string>("EMAIL_ALERT_ADDRESSES")?.split(",") ?? [];
 	}
 
 	private emailFrom!: string;
 	private emailTemplates!: Record<string, TemplateDelegate>;
 	private oAuth2Client!: InstanceType<typeof google.auth.OAuth2>;
+	private readonly alertAddresses: string[];
 
 	private compileTemplatesFromDir(dir: string) {
 		const templates = readdirSync(dir);
@@ -189,5 +191,45 @@ export class EmailService extends Templater {
 			username: user.username,
 			url: `${this.config.get<string>("BACKEND_PUBLIC_URL")}/auth/verify/${token.token}`,
 		});
+	}
+
+	async sendUrgentCaseEmail(caseId: string) {
+		const caseData = await this.prisma.case.findUnique({
+			where: { id: caseId },
+			include: { region: true, peddler: true },
+		});
+		if (!caseData) {
+			throw new AppError(AppErrorTypes.NotFound);
+		}
+		const kv = [
+			{
+				key: "Date",
+				value: caseData?.createdAt.toDateString(),
+			},
+			{
+				key: "Region",
+				value: caseData?.region.name,
+			},
+			{
+				key: "Codename",
+				value: caseData?.peddler.codename,
+			},
+			{
+				key: "Notes and Details",
+				value: caseData?.notes,
+			},
+			{
+				key: "Importance",
+				value: caseData?.importance,
+			},
+		];
+		await Promise.all(
+			this.alertAddresses.map(async (email) => {
+				await this.sendEmail(email, "Urgent Case Alert", "urgentCase.hbs", {
+					attributes: kv,
+					viewFullUrl: `${this.config.get<string>("FRONTEND_URL")}/cases/${caseId}`,
+				});
+			}),
+		);
 	}
 }

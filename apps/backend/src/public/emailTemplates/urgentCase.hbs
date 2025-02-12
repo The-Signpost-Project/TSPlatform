@@ -1,0 +1,32 @@
+<head>
+  <title>Reset password email</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif;">
+  <div>
+    <h1 style="font-size: 20px; font-weight: bold;">Urgent TSP Case</h1>
+    
+    <p style="font-size: 16px;">There is a new urgent case requiring your attention.</p>
+    <table style="border: 1px solid black; border-collapse: collapse;">
+      <tbody>
+        {{#each attributes}}
+          <tr>
+            <td style="font-weight: bold; border: 1px solid black; padding: 5px;">{{this.key}}</td>
+            <td style="border: 1px solid black; padding: 5px;">{{this.value}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <p style="font-size: 16px;">
+      View all the details of this case here:
+      <span>
+        <a href="{{viewFullUrl}}" style="color: #a855f7; border: none; text-align: center; text-decoration: none; display: inline-block;">
+          {{viewFullUrl}}
+        </a>
+      </span>
+    </p>
+
+
+
+
+  </div>
+</body>
