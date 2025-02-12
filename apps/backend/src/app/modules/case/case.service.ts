@@ -81,7 +81,7 @@ export class CaseService extends CrudService<StrictCase> {
 
 	async create(data: CreateCaseInput) {
 		let photoPaths: string[] = [];
-		if (data.photos) {
+		if (data.photos && data.photos.length > 0) {
 			photoPaths = await Promise.all(
 				data.photos.map(
 					async (photo) =>

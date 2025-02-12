@@ -1,6 +1,5 @@
-import { Controller, Get, Res, Param, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Res, Param, UseInterceptors } from "@nestjs/common";
 import { ReportService } from "./report.service";
-import { LoggedInGuard } from "@guards";
 import type { Response } from "express";
 import { ValidationPipe } from "@pipes";
 import { NonEmptyStringSchema } from "@shared/common/schemas";
