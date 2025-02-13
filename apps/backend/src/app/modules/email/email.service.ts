@@ -117,6 +117,8 @@ export class EmailService extends Templater {
 		}
 	}
 
+	private static readonly passwordResetTokenExpiry = 1000 * 60 * 5; // 5 minutes
+
 	async sendForgotPasswordEmail(email: string) {
 		// in this case, it doesnt matter if password hash exists or not
 		// users who have not set a password yet can still reset their password
@@ -126,25 +128,20 @@ export class EmailService extends Templater {
 			throw new AppError(AppErrorTypes.UserNotFound);
 		}
 
-		// find any existing password reset token and delete it
+		// upsert a new password reset token
 
-		try {
-			await this.prisma.passwordResetToken.delete({
-				where: {
-					userId: user.id,
-				},
-			});
-		} catch {
-			// ignore if token does not exist
-		}
-
-		// create a new password reset token
-
-		const token = await this.prisma.passwordResetToken.create({
-			data: {
+		const token = await this.prisma.passwordResetToken.upsert({
+			where: {
+				userId: user.id,
+			},
+			update: {
+				token: randomBytes(32).toString("hex"),
+				expiresAt: new Date(Date.now() + EmailService.passwordResetTokenExpiry), // 5 minutes
+			},
+			create: {
 				userId: user.id,
 				token: randomBytes(32).toString("hex"),
-				expiresAt: new Date(Date.now() + 1000 * 60 * 5), // 5 minutes
+				expiresAt: new Date(Date.now() + EmailService.passwordResetTokenExpiry), // 5 minutes
 			},
 		});
 
@@ -154,6 +151,8 @@ export class EmailService extends Templater {
 			url: `${this.config.get<string>("FRONTEND_URL")}/auth/reset-password/${token.token}`,
 		});
 	}
+
+	private static readonly verificationTokenExpiry = 1000 * 60 * 60; // 1 hour
 
 	async sendVerificationEmail(id: string) {
 		const user = await this.prisma.user.findUnique({ where: { id } });
@@ -169,21 +168,20 @@ export class EmailService extends Templater {
 			throw new AppError(AppErrorTypes.AlreadyVerified);
 		}
 
-		try {
-			await this.prisma.verificationToken.delete({
-				where: {
-					userId: user.id,
-				},
-			});
-		} catch {
-			// ignore if token does not exist
-		}
+		// upsert a new verification token
 
-		const token = await this.prisma.verificationToken.create({
-			data: {
+		const token = await this.prisma.verificationToken.upsert({
+			where: {
+				userId: user.id,
+			},
+			update: {
+				token: randomBytes(32).toString("hex"),
+				expiresAt: new Date(Date.now() + EmailService.verificationTokenExpiry),
+			},
+			create: {
 				userId: user.id,
 				token: randomBytes(32).toString("hex"),
-				expiresAt: new Date(Date.now() + 1000 * 60 * 60), // 1 hour
+				expiresAt: new Date(Date.now() + EmailService.verificationTokenExpiry),
 			},
 		});
 
@@ -204,23 +202,23 @@ export class EmailService extends Templater {
 		const kv = [
 			{
 				key: "Date",
-				value: caseData?.createdAt.toDateString(),
+				value: caseData.createdAt.toDateString(),
 			},
 			{
 				key: "Region",
-				value: caseData?.region.name,
+				value: caseData.region.name,
 			},
 			{
 				key: "Codename",
-				value: caseData?.peddler.codename,
+				value: caseData.peddler.codename,
 			},
 			{
 				key: "Notes and Details",
-				value: caseData?.notes,
+				value: caseData.notes,
 			},
 			{
 				key: "Importance",
-				value: caseData?.importance,
+				value: caseData.importance,
 			},
 		];
 		await Promise.all(
@@ -267,7 +265,7 @@ export class EmailService extends Templater {
 			},
 			{
 				key: "First Name",
-				value: peddler.firstName,
+				value: peddler.firstName ?? "N/A",
 			},
 			{
 				key: "Race",

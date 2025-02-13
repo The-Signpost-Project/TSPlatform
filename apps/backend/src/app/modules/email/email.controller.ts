@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, UseGuards, Param } from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Param } from "@nestjs/common";
 import { EmailService } from "./email.service";
 import { ValidationPipe } from "@pipes";
 import { ForgotPasswordEmailSchema, VerifyEmailSchema } from "@shared/common/schemas";
