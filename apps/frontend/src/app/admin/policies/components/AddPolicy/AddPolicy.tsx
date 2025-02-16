@@ -46,7 +46,7 @@ export function AddPolicy() {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred creating the policy.");
 	}
 
 	return (

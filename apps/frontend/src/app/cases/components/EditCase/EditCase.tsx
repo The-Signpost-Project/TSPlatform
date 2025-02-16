@@ -89,7 +89,7 @@ export function EditCase({ initialCase, revalidate }: EditCaseProps) {
 			revalidate();
 			return;
 		}
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred updating the case.");
 	}
 
 	if (!userHasPermission("case", "readWrite", initialCase)) {

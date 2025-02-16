@@ -31,7 +31,7 @@ export function EditUserRole({ roles, id, name }: EditUserRoleProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred updating roles.");
 	}
 
 	return (

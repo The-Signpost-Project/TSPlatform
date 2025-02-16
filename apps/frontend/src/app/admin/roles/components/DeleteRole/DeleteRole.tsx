@@ -19,7 +19,7 @@ export function DeleteRole({ id, name }: DeleteRoleProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred deleting the role.");
 	}
 
 	return (

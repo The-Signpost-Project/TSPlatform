@@ -37,7 +37,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 						router.refresh();
 						return;
 					}
-					toast.error(result.error?.cause || "An error occurred");
+					toast.error(result.error?.cause ?? "Failed to remove user from team");
 				});
 			});
 			return;
@@ -53,7 +53,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 					router.refresh();
 					return;
 				}
-				toast.error(result.error?.cause || "An error occurred");
+				toast.error(result.error?.cause ?? "Failed to add user to team");
 			});
 		});
 	};

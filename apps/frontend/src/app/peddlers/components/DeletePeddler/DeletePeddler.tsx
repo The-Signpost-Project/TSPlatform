@@ -19,7 +19,7 @@ export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred deleting the peddler.");
 	}
 
 	if (!userHasPermission("policy", "readWrite", { id })) {

@@ -64,7 +64,7 @@ export function AddPeddler() {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred creating the peddler.");
 	}
 
 	return (

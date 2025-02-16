@@ -44,7 +44,7 @@ export function AddTeam() {
 			setModalOpen(false);
 			return;
 		}
-		toast.error(error?.cause || "An error occurred");
+		toast.error(error?.cause ?? "An error occurred creating the team.");
 	}
 
 	return (

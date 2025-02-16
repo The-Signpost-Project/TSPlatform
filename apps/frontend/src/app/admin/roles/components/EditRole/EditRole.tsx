@@ -49,7 +49,7 @@ export function EditRole({ policies, id, name }: EditRoleProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred updating the role.");
 	}
 
 	return (

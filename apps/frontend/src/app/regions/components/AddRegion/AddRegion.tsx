@@ -44,7 +44,7 @@ export function AddRegion() {
 			setModalOpen(false);
 			return;
 		}
-		toast.error(error?.cause || "An error occurred");
+		toast.error(error?.cause ?? "An error occurred creating the region.");
 	}
 
 	return (

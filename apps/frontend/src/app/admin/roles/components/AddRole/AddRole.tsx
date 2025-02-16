@@ -38,7 +38,7 @@ export function AddRole({ policies }: AddRoleProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred creating the role.");
 	}
 
 	return (

@@ -60,7 +60,7 @@ export function EditPolicy(props: EditPolicyProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred updating the policy.");
 	}
 
 	return (

@@ -20,7 +20,7 @@ export function DeleteRegion({ region }: DeleteRegionProps) {
 			setModalOpen(false);
 			return;
 		}
-		toast.error(error?.cause || "An error occurred");
+		toast.error(error?.cause ?? "An error occurred deleting the region.");
 	}
 
 	return (

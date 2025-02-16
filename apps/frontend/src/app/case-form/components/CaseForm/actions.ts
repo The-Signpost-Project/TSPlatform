@@ -87,7 +87,7 @@ export async function createCaseFromForm(
 		validator: StrictCaseSchema,
 		withFiles: true,
 	});
-  
+
 	if (status === 201 && data) {
 		return { success: true, data };
 	}

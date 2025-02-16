@@ -44,7 +44,7 @@ export function EditTeam({ team }: EditTeamProps) {
 			setModalOpen(false);
 			return;
 		}
-		toast.error(error?.cause || "An error occurred");
+		toast.error(error?.cause ?? "An error occurred updating the team.");
 	}
 
 	return (

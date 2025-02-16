@@ -95,7 +95,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred updating the peddler.");
 	}
 
 	if (!userHasPermission("policy", "readWrite", peddler)) {

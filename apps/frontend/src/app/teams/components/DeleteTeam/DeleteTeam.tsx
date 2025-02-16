@@ -20,7 +20,7 @@ export function DeleteTeam({ team }: DeleteTeamProps) {
 			setModalOpen(false);
 			return;
 		}
-		toast.error(error?.cause || "An error occurred");
+		toast.error(error?.cause ?? "An error occurred deleting the team.");
 	}
 
 	return (

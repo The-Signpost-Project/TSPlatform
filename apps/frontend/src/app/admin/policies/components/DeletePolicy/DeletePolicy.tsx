@@ -19,7 +19,7 @@ export function DeletePolicy({ id, name }: DeletePolicyProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred deleting the policy.");
 	}
 
 	return (

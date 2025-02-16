@@ -19,7 +19,7 @@ export function DeleteCase({ id, navigateBack }: DeleteCaseProps) {
 			return;
 		}
 
-		toast.error(error?.cause);
+		toast.error(error?.cause ?? "An error occurred deleting the case.");
 	}
 
 	if (!userHasPermission("policy", "readWrite", { id })) {
