@@ -89,16 +89,16 @@ export async function createCaseFromForm(
 	});
 
 	if (status === 201 && data) {
+		// send email to notify about urgent case
+		if (form.importance >= 4) {
+			await query({
+				path: `/email/urgent-case/${data?.id}`,
+				init: { method: "POST" },
+				validator: NullSchema,
+			});
+		}
 		return { success: true, data };
 	}
-
-	// send email to notify about urgent case
-	if (form.importance >= 4)
-		await query({
-			path: `/email/urgent-case/${data?.id}`,
-			init: { method: "POST" },
-			validator: NullSchema,
-		});
 
 	return { success: false, error: error?.cause ?? "An error occurred creating the case" };
 }
