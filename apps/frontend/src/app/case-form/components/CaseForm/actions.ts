@@ -1,6 +1,6 @@
 "use server";
 
-import { PeddlerSchema, StrictCaseSchema } from "@shared/common/schemas";
+import { NullSchema, PeddlerSchema, StrictCaseSchema } from "@shared/common/schemas";
 import type { CreateCaseInput, CreatePeddlerInput, StrictCase } from "@shared/common/types";
 import type { CaseFormValues } from "./types";
 import { query } from "@utils";
@@ -43,6 +43,13 @@ export async function createCaseFromForm(
 			};
 		}
 		peddlerId = data.id;
+
+		// send email to notify about new peddler
+		await query({
+			path: `/email/new-peddler/${peddlerId}`,
+			init: { method: "POST" },
+			validator: NullSchema,
+		});
 	}
 	if (!peddlerId) {
 		return {
@@ -80,9 +87,18 @@ export async function createCaseFromForm(
 		validator: StrictCaseSchema,
 		withFiles: true,
 	});
-
+  
 	if (status === 201 && data) {
 		return { success: true, data };
 	}
+
+	// send email to notify about urgent case
+	if (form.importance >= 4)
+		await query({
+			path: `/email/urgent-case/${data?.id}`,
+			init: { method: "POST" },
+			validator: NullSchema,
+		});
+
 	return { success: false, error: error?.cause ?? "An error occurred creating the case" };
 }
