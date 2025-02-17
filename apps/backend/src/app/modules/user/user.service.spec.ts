@@ -1,18 +1,19 @@
-import { expect, it, describe, beforeEach, mock } from "bun:test";
+import { expect, it, describe, beforeEach, mock, beforeAll, afterEach } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { PrismaService, LuciaService } from "@db/client";
 import { UserService } from "./user.service";
-import { AppError } from "@utils/appErrors";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { resetDatabase } from "@utils/test";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
+import { Prisma, User } from "@prisma/client";
 
 describe("UserService", () => {
 	let service: UserService;
 	let lucia: LuciaService;
 	let prisma: PrismaService;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
 			providers: [UserService, PrismaService, LuciaService],
@@ -21,13 +22,43 @@ describe("UserService", () => {
 		service = module.get<UserService>(UserService);
 		lucia = module.get<LuciaService>(LuciaService);
 		prisma = module.get<PrismaService>(PrismaService);
-		await resetDatabase();
+	});
+
+	afterEach(() => {
+		mock.restore();
 	});
 
 	it("should be defined", () => {
 		expect(service).toBeDefined();
 	});
+	describe("cleanUserData", () => {
+		it("should return the user data without the password", () => {
+			const user = {
+				id: faker.string.uuid(),
+				email: faker.internet.email(),
+				passwordHash: faker.internet.password(),
+				username: faker.internet.username(),
+				createdAt: faker.date.recent(),
+				verified: false,
+				allowEmailNotifications: false,
+				oauthAccounts: [],
+			} satisfies Prisma.UserGetPayload<{
+				select: (typeof UserService)["rawUserFindFields"];
+			}>;
 
+			const cleanedUser = service.cleanUserData(user);
+			expect(cleanedUser).toEqual({
+				id: user.id,
+				email: user.email,
+				username: user.username,
+				createdAt: user.createdAt,
+				verified: user.verified,
+				allowEmailNotifications: user.allowEmailNotifications,
+				oAuthProviders: [],
+				hasPassword: true,
+			});
+		});
+	});
 	describe("getBySessionId", () => {
 		it("should throw an error if no token is provided", async () => {
 			await expect(service.getBySessionId(undefined)).rejects.toThrowError(AppError);
@@ -80,12 +111,19 @@ describe("UserService", () => {
 		});
 
 		it("should throw an error if the user does not exist", async () => {
-			await expect(service.updateById(faker.string.uuid(), {})).rejects.toThrowError(AppError);
+			service.getById = mock(() => {
+				throw new AppError(AppErrorTypes.UserNotFound);
+			});
+
+			expect(service.updateById(faker.string.uuid(), {})).rejects.toThrow(
+				new AppError(AppErrorTypes.UserNotFound),
+			);
 		});
 
 		it("should update the user roles if they are provided", async () => {
 			const role = await prisma.role.create({ data: { name: faker.lorem.word() } });
-
+			// @ts-expect-error
+			service.getById = mock(() => []);
 			// @ts-expect-error
 			prisma.user.update = mock(() => ({}));
 			// @ts-expect-error
@@ -119,6 +157,18 @@ describe("UserService", () => {
 			// @ts-expect-error
 			prisma.user.delete = mock(() => {});
 			expect(service.deleteById(faker.string.uuid())).resolves.toBeUndefined();
+		});
+	});
+
+	describe("getAll", () => {
+		it("should return all users", async () => {
+			// @ts-expect-error
+			prisma.user.findMany = mock(() => []);
+			// @ts-expect-error
+			service.cleanUserData = mock(() => ({}));
+			const users = await service.getAll();
+			expect(users).toBeDefined();
+			expect(users).toHaveLength(0);
 		});
 	});
 });

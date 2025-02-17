@@ -33,11 +33,10 @@ const mockPeddlerService = {
 	),
 };
 mock.module("docx-templates", () => ({
-  createReport: () => Promise.resolve(Buffer.from("fake report")),
+	createReport: () => Promise.resolve(Buffer.from("fake report")),
 }));
 
-
-describe("AuthService", () => {
+describe("ReportService", () => {
 	let service: ReportService;
 
 	beforeAll(async () => {
@@ -105,39 +104,36 @@ describe("AuthService", () => {
 	});
 
 	describe("generateReport", () => {
-    
-    
 		it("should generate a report", async () => {
-			
-      // @ts-ignore
-      service.pullData = mock(() => ({
-        cases: [],
-        peddler: { id: faker.string.uuid(), codename: faker.company.name() },
-      }));
+			// @ts-ignore
+			service.pullData = mock(() => ({
+				cases: [],
+				peddler: { id: faker.string.uuid(), codename: faker.company.name() },
+			}));
 
 			const id = faker.string.uuid();
-      
+
 			expect(service.generateReport(id)).resolves.toBeInstanceOf(Buffer);
 		});
 
-    it("should throw an error if createReport fails", async () => {
-      // @ts-ignore
-      service.pullData = mock(() => ({
-        cases: [],
-        peddler: { id: faker.string.uuid(), codename: faker.company.name() },
-      }));
+		it("should throw an error if createReport fails", async () => {
+			// @ts-ignore
+			service.pullData = mock(() => ({
+				cases: [],
+				peddler: { id: faker.string.uuid(), codename: faker.company.name() },
+			}));
 
-      // @ts-ignore
-      mock.module("docx-templates", () => ({
-        createReport: () => Promise.reject(new Error("Failed to create report")),
-      }));
+			// @ts-ignore
+			mock.module("docx-templates", () => ({
+				createReport: () => Promise.reject(new Error("Failed to create report")),
+			}));
 
-      const id = faker.string.uuid();
-      await expect(service.generateReport(id)).rejects.toThrow(
-        new AppError(AppErrorTypes.GenericError("Failed to generate report: Error: Failed to create report")),
-      );
-
-      
-    });
+			const id = faker.string.uuid();
+			await expect(service.generateReport(id)).rejects.toThrow(
+				new AppError(
+					AppErrorTypes.GenericError("Failed to generate report: Error: Failed to create report"),
+				),
+			);
+		});
 	});
 });
