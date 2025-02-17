@@ -20,9 +20,9 @@ export class ReportService extends Templater {
 
 	private getCaseTemplate = () => readFileSync(join(this.publicDir, "report", "caseReport.docx"));
 
-	private async pullData(id: string): Promise<ReportData> {
+	async pullData(id: string): Promise<ReportData> {
 		const results = await Promise.allSettled([
-			this.caseService.getFiltered({ peddlerId: id }),
+			this.caseService.getFiltered({ peddlerId: id, sortBy: "interactionDate", order: "desc" }), // latest cases first
 			this.peddlerService.getById(id),
 		]);
 		if (results[0].status === "rejected") {
@@ -49,7 +49,7 @@ export class ReportService extends Templater {
 				template: this.getCaseTemplate(),
 				data: {
 					peddler,
-					cases: cases.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
+					cases,
 					timeGenerated: new Date().toLocaleString("en-GB", { timeZone: "Asia/Singapore" }),
 				},
 				cmdDelimiter: ["{# ", " #}"],

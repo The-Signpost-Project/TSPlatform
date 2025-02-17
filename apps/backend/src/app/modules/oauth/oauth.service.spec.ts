@@ -1,16 +1,17 @@
-import { expect, it, describe, beforeEach, mock, afterEach, spyOn } from "bun:test";
+import { expect, it, describe, beforeEach, mock, afterEach, spyOn, beforeAll } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { PrismaService, LuciaService } from "@db/client";
 import { OpenAuthService } from "./oauth.service";
 import { AppError } from "@utils/appErrors";
-import { resetDatabase } from "@utils/test";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
 import { OAuth2Tokens } from "arctic";
 import type { GoogleUser } from "./types";
 
-const getMockOAuthProvider = () =>
-	class {
+mock.module("arctic", () => ({
+	generateState: () => faker.word.noun(),
+
+	Google: class {
 		createAuthorizationURL() {
 			return new URL(`http://${faker.internet.domainName()}`);
 		}
@@ -19,11 +20,7 @@ const getMockOAuthProvider = () =>
 				access_token: faker.string.alphanumeric(),
 			});
 		}
-	};
-mock.module("arctic", () => ({
-	generateState: () => faker.word.noun(),
-
-	Google: getMockOAuthProvider(),
+	},
 }));
 
 describe("OpenAuthService", () => {
@@ -31,7 +28,7 @@ describe("OpenAuthService", () => {
 	let prismaService: PrismaService;
 	let luciaService: LuciaService;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
 			providers: [OpenAuthService, PrismaService, LuciaService],
@@ -41,8 +38,7 @@ describe("OpenAuthService", () => {
 		prismaService = module.get<PrismaService>(PrismaService);
 		luciaService = module.get<LuciaService>(LuciaService);
 
-		await resetDatabase();
-		service.onModuleInit();
+		await service.onModuleInit();
 	});
 
 	it("should be defined", () => {
@@ -51,9 +47,12 @@ describe("OpenAuthService", () => {
 
 	describe("getGoogleAuthUrl", () => {
 		it("should give a valid url and state", async () => {
+			// @ts-ignore
+			const createAuthorizationURL = spyOn(service.google, "createAuthorizationURL");
 			const res = await service.getGoogleAuthUrl();
 			expect(res).toHaveProperty("state");
 			expect(res).toHaveProperty("url");
+			expect(createAuthorizationURL).toHaveBeenCalled();
 		});
 	});
 
@@ -73,7 +72,7 @@ describe("OpenAuthService", () => {
 		});
 
 		afterEach(() => {
-			// @ts-ignore-next-line
+			// @ts-ignore
 			global.fetch.mockRestore();
 		});
 
