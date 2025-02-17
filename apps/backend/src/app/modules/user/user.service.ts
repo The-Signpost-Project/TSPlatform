@@ -41,15 +41,14 @@ export class UserService extends CrudService<SafeUser> {
 			select: (typeof UserService)["rawUserFindFields"];
 		}>,
 	): Omit<SafeUser, "roles"> {
+		const { passwordHash, oauthAccounts, ...rest } = data;
 		// find any oAuth providers that the user has connected
-		const oAuthProviders = data.oauthAccounts.map(
-			(account) => account.providerId,
-		) as OAuthProvider[];
+		const oAuthProviders = oauthAccounts.map((account) => account.providerId) as OAuthProvider[];
 
 		return {
-			...data,
+			...rest,
 			oAuthProviders: oAuthProviders,
-			hasPassword: !!data.passwordHash,
+			hasPassword: !!passwordHash,
 		};
 	}
 
@@ -141,7 +140,7 @@ export class UserService extends CrudService<SafeUser> {
 				})),
 			});
 		}
-		return this.getById(id);
+		return await this.getById(id);
 	}
 
 	async deleteById(id: string): Promise<void> {
