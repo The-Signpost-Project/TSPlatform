@@ -20,16 +20,16 @@ model User {
   // preference
   allowEmailNotifications Boolean @default(false)
 
-  sessions      Session[]
-  oauthAccounts OAuthAccount[]
-  roles         UserRole[]
-  createdCases  Case[]
-  teams         UserTeam[]
+  sessions             Session[]
+  oauthAccounts        OAuthAccount[]
+  roles                UserRole[]
+  createdCases         Case[]
+  teams                UserTeam[]
+  peddlerMergeRequests PeddlerMergeRequest[]
 
   // one time tokens
-  passwordResetToken   PasswordResetToken?
-  verificationToken    VerificationToken?
-  peddlerMergeRequests PeddlerMergeRequest[]
+  passwordResetToken PasswordResetToken?
+  verificationToken  VerificationToken?
 }
 
 model Session {
@@ -196,6 +196,7 @@ model CasePhoto {
   photoPath String
 }
 
+// Merge Old Peddler into New Peddler
 model PeddlerMergeRequest {
   id            String  @id @default(uuid(7))
   peddlerNew    Peddler @relation(name: "peddlerNew", fields: [peddlerNewId], references: [id], onDelete: Cascade)

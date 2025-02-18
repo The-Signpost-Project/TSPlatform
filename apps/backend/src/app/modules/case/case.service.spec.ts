@@ -7,7 +7,7 @@ import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
 import type { Prisma, User, Session } from "@prisma/client";
-import { getTestFile } from "@/utils/test/testFile";
+import { getTestFile } from "@utils/test/testFile";
 
 describe("CaseService", () => {
 	let service: CaseService;

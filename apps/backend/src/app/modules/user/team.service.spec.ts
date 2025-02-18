@@ -5,7 +5,7 @@ import type { CreateTeamInput, UpdateTeamInput } from "@shared/common/types";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
-import { getTestFile } from "@/utils/test/testFile";
+import { getTestFile } from "@utils/test/testFile";
 import { UserService } from "./user.service";
 import { TeamService } from "./team.service";
 

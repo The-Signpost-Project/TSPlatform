@@ -44,7 +44,7 @@ describe("DisabilityService", () => {
 
 		it("should throw an error for empty name", async () => {
 			const input = { name: "" } as CreateDisabilityInput;
-			await expect(service.create(input)).rejects.toThrow();
+			expect(service.create(input)).rejects.toThrow();
 		});
 	});
 
@@ -83,7 +83,7 @@ describe("DisabilityService", () => {
 			// @ts-ignore
 			prisma.disability.findUnique = mock(() => Promise.resolve(null));
 
-			await expect(service.getById(disabilityId)).rejects.toThrow(
+			expect(service.getById(disabilityId)).rejects.toThrow(
 				new AppError(AppErrorTypes.NotFound),
 			);
 			expect(prisma.disability.findUnique).toHaveBeenCalled();

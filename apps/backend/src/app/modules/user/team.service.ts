@@ -4,7 +4,7 @@ import type { Team, CreateTeamInput, UpdateTeamInput } from "@shared/common/type
 import { CrudService } from "@base";
 import { UserService } from "./user.service";
 import type { Prisma } from "@prisma/client";
-import { AppError, AppErrorTypes } from "@/utils/appErrors";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
 
 @Injectable()
 export class TeamService extends CrudService<Team> {

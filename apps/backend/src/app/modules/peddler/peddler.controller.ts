@@ -13,6 +13,7 @@ import {
 import { PeddlerService } from "./peddler.service";
 import { DisabilityService } from "./disability.service";
 import { RegionService } from "./region.service";
+import { MergeRequestService } from "./mergeRequest.service";
 import { ValidationPipe, FileValidationPipe } from "@pipes";
 import {
 	CreateDisabilityInputSchema,
@@ -22,6 +23,8 @@ import {
 	CreateRegionInputSchema,
 	UpdateRegionInputSchema,
 	NonEmptyStringSchema,
+	CreatePeddlerMergeRequestInputSchema,
+	UpdatePeddlerMergeRequestInputSchema,
 } from "@shared/common/schemas";
 import type {
 	CreateDisabilityInput,
@@ -30,6 +33,8 @@ import type {
 	UpdatePeddlerInput,
 	CreateRegionInput,
 	UpdateRegionInput,
+	CreatePeddlerMergeRequestInput,
+	UpdatePeddlerMergeRequestInput,
 } from "@shared/common/types";
 import { RestrictResourcesInterceptor } from "@interceptors";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -41,6 +46,7 @@ export class PeddlerController {
 		private readonly peddlerService: PeddlerService,
 		private readonly disabilityService: DisabilityService,
 		private readonly regionService: RegionService,
+    private readonly mergeRequestService: MergeRequestService
 	) {}
 
 	@Post()
@@ -150,5 +156,42 @@ export class PeddlerController {
 	@UseInterceptors(RestrictResourcesInterceptor("region", "readWrite"))
 	async deleteRegionById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
 		return await this.regionService.deleteById(id);
+	}
+
+	// Merge Request endpoints
+
+	@Post("merge-request")
+	@UseInterceptors(RestrictResourcesInterceptor("peddlerMergeRequest", "readWrite"))
+	async createMergeRequest(
+		@Body(new ValidationPipe(CreatePeddlerMergeRequestInputSchema)) data: CreatePeddlerMergeRequestInput,
+	) {
+		return await this.mergeRequestService.create(data);
+	}
+
+	@Get("merge-request/all")
+	@UseGuards(LoggedInGuard)
+	async getAllMergeRequests() {
+		return await this.mergeRequestService.getAll();
+	}
+
+	@Get("merge-request/:id")
+	@UseInterceptors(RestrictResourcesInterceptor("peddlerMergeRequest", "read"))
+	async getMergeRequestById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.mergeRequestService.getById(id);
+	}
+
+	@Patch("merge-request/:id")
+	@UseInterceptors(RestrictResourcesInterceptor("peddlerMergeRequest", "readWrite"))
+	async updateMergeRequestById(
+		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
+		@Body(new ValidationPipe(UpdatePeddlerMergeRequestInputSchema)) data: UpdatePeddlerMergeRequestInput,
+	) {
+		return await this.mergeRequestService.updateById(id, data);
+	}
+
+	@Delete("merge-request/:id")
+	@UseInterceptors(RestrictResourcesInterceptor("peddlerMergeRequest", "readWrite"))
+	async deleteMergeRequestById(@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string) {
+		return await this.mergeRequestService.deleteById(id);
 	}
 }

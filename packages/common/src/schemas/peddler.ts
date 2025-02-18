@@ -9,6 +9,8 @@ import type {
 	Region,
 	Disability,
 	StrictPeddler,
+  CreatePeddlerMergeRequestInput,
+  UpdatePeddlerMergeRequestInput,
 } from "@shared/common/types";
 
 export const PeddlerSchema = z.object({
@@ -71,3 +73,13 @@ export const CreateRegionInputSchema = z.object({
 export const UpdateRegionInputSchema = z.object({
 	name: z.string().min(1).optional(),
 }) satisfies z.ZodType<UpdateRegionInput>;
+
+export const CreatePeddlerMergeRequestInputSchema = z.object({
+  peddlerNewId: z.string(),
+  peddlerOldId: z.string(),
+  notes: z.string(),
+  requestedById: z.string(),
+}) satisfies z.ZodType<CreatePeddlerMergeRequestInput>;
+
+export const UpdatePeddlerMergeRequestInputSchema =
+  CreatePeddlerMergeRequestInputSchema.partial() satisfies z.ZodType<UpdatePeddlerMergeRequestInput>;

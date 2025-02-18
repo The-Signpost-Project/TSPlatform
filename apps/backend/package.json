@@ -31,7 +31,7 @@
 		"@types/nodemailer": "^6.4.17",
 		"@types/supertest": "^6.0.2",
 		"dotenv-cli": "^7.4.4",
-		"prisma": "^6.1.0",
+		"prisma": "^6.3.1",
 		"supertest": "^7.0.0",
 		"ts-jest": "^29.2.5",
 		"zod": "^3.24.2"
@@ -47,7 +47,7 @@
 		"@nestjs/platform-express": "^11.0.9",
 		"@nestjs/throttler": "^6.4.0",
 		"@prisma/adapter-libsql": "^6.2.1",
-		"@prisma/client": "^6.1.0",
+		"@prisma/client": "^6.3.1",
 		"@types/handlebars": "^4.1.0",
 		"@types/jest": "^29.5.14",
 		"arctic": "^3.2.1",
