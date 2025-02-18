@@ -48,8 +48,11 @@ jobs:
       - name: Setup database
         run: cd apps/backend && bun run prisma:migrate
 
-      - name: Run backend tests
-        run: cd apps/backend && bun run test
+      - name: Run unit tests
+        run: cd apps/backend && bun run test -t Service
+      
+      - name: Run integration tests
+        run: cd apps/backend && bun run test -t Controller
 
       # - name: Run frontend tests
       #   run: cd apps/frontend && bun run test
