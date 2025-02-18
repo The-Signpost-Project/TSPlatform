@@ -1,4 +1,4 @@
-import { expect, it, describe, beforeAll, mock, beforeEach, spyOn } from "bun:test";
+import { expect, it, describe, beforeAll, mock, beforeEach } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { LuciaService, PrismaService, S3Service } from "@db/client";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
@@ -81,7 +81,7 @@ describe("ReportService", () => {
 					}),
 			);
 			const id = faker.string.uuid();
-			await expect(service.pullData(id)).rejects.toThrow(
+			expect(service.pullData(id)).rejects.toThrow(
 				new AppError(AppErrorTypes.GenericError("Failed to fetch cases: Error: Case not found")),
 			);
 		});
@@ -95,7 +95,7 @@ describe("ReportService", () => {
 					}),
 			);
 			const id = faker.string.uuid();
-			await expect(service.pullData(id)).rejects.toThrow(
+			expect(service.pullData(id)).rejects.toThrow(
 				new AppError(
 					AppErrorTypes.GenericError("Failed to fetch peddler: Error: Peddler not found"),
 				),
@@ -129,7 +129,7 @@ describe("ReportService", () => {
 			}));
 
 			const id = faker.string.uuid();
-			await expect(service.generateReport(id)).rejects.toThrow(
+			expect(service.generateReport(id)).rejects.toThrow(
 				new AppError(
 					AppErrorTypes.GenericError("Failed to generate report: Error: Failed to create report"),
 				),

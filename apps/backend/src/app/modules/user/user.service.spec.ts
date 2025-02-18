@@ -1,12 +1,11 @@
-import { expect, it, describe, beforeEach, mock, beforeAll, afterEach } from "bun:test";
+import { expect, it, describe, mock, beforeAll, afterEach } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { PrismaService, LuciaService } from "@db/client";
 import { UserService } from "./user.service";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
-import { resetDatabase } from "@utils/test";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 describe("UserService", () => {
 	let service: UserService;
@@ -61,11 +60,11 @@ describe("UserService", () => {
 	});
 	describe("getBySessionId", () => {
 		it("should throw an error if no token is provided", async () => {
-			await expect(service.getBySessionId(undefined)).rejects.toThrowError(AppError);
+			expect(service.getBySessionId(undefined)).rejects.toThrowError(AppError);
 		});
 
 		it("should throw an error if the token is invalid", async () => {
-			await expect(service.getBySessionId("invalid-token")).rejects.toThrowError(AppError);
+			expect(service.getBySessionId("invalid-token")).rejects.toThrowError(AppError);
 		});
 
 		it("should return the user if the token is valid", async () => {
@@ -93,7 +92,7 @@ describe("UserService", () => {
 		it("should throw an error if the user does not exist", async () => {
 			// @ts-expect-error
 			prisma.user.findUnique = mock(() => null);
-			await expect(service.getById(faker.string.uuid())).rejects.toThrowError(AppError);
+			expect(service.getById(faker.string.uuid())).rejects.toThrowError(AppError);
 		});
 	});
 
@@ -148,7 +147,7 @@ describe("UserService", () => {
 		it("should throw an error if the user does not exist", async () => {
 			// @ts-expect-error
 			prisma.user.findUnique = mock(() => null);
-			await expect(service.deleteById(faker.string.uuid())).rejects.toThrowError(AppError);
+			expect(service.deleteById(faker.string.uuid())).rejects.toThrowError(AppError);
 		});
 
 		it("should delete the user if it exists", async () => {

@@ -94,7 +94,7 @@ describe("RoleService", () => {
 			const roleId = faker.string.uuid();
 			// @ts-expect-error
 			prisma.role.findUnique = mock(() => Promise.resolve(null));
-			await expect(service.getById(roleId)).rejects.toThrow(new AppError(AppErrorTypes.NotFound));
+			expect(service.getById(roleId)).rejects.toThrow(new AppError(AppErrorTypes.NotFound));
 			expect(prisma.role.findUnique).toHaveBeenCalled();
 		});
 	});

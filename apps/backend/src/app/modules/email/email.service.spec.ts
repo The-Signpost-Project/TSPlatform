@@ -72,7 +72,7 @@ describe("AuthService", () => {
 			// @ts-ignore
 			prisma.user.findUnique = mock(() => null);
 
-			await expect(service.sendForgotPasswordEmail(testEmail)).rejects.toThrowError(
+			expect(service.sendForgotPasswordEmail(testEmail)).rejects.toThrowError(
 				new AppError(AppErrorTypes.UserNotFound),
 			);
 		});

@@ -1,17 +1,10 @@
 import { expect, it, describe, beforeAll, mock, afterEach, spyOn } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { PrismaService, S3Service, LuciaService } from "@db/client";
-import type {
-	CaseFilters,
-	CreateCaseInput,
-	CreateTeamInput,
-	UpdateCaseInput,
-	UpdateTeamInput,
-} from "@shared/common/types";
+import type { CreateTeamInput, UpdateTeamInput } from "@shared/common/types";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
-import type { Prisma, User, Session } from "@prisma/client";
 import { getTestFile } from "@/utils/test/testFile";
 import { UserService } from "./user.service";
 import { TeamService } from "./team.service";
@@ -20,7 +13,6 @@ describe("TeamService", () => {
 	let service: TeamService;
 	let prisma: PrismaService;
 	let s3: S3Service;
-	let userService: UserService;
 
 	beforeAll(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -31,7 +23,6 @@ describe("TeamService", () => {
 		service = module.get<TeamService>(TeamService);
 		prisma = module.get<PrismaService>(PrismaService);
 		s3 = module.get<S3Service>(S3Service);
-		userService = module.get<UserService>(UserService);
 	});
 
 	afterEach(() => {
@@ -114,7 +105,7 @@ describe("TeamService", () => {
 			// @ts-ignore
 			prisma.team.findUnique = mock(() => Promise.resolve(null));
 
-			await expect(service.getById(teamId)).rejects.toThrow(new AppError(AppErrorTypes.NotFound));
+			expect(service.getById(teamId)).rejects.toThrow(new AppError(AppErrorTypes.NotFound));
 			expect(prisma.team.findUnique).toHaveBeenCalled();
 		});
 	});
@@ -245,13 +236,6 @@ describe("TeamService", () => {
 			const teamId = faker.string.uuid();
 			const userId = faker.string.uuid();
 
-			const testTeam = {
-				id: teamId,
-				name: faker.company.name(),
-				members: [],
-				photoPath: faker.string.uuid(),
-			};
-
 			// @ts-ignore
 			prisma.userTeam.create = mock(() => Promise.resolve({}));
 
@@ -263,13 +247,6 @@ describe("TeamService", () => {
 		it("should remove member from team", async () => {
 			const teamId = faker.string.uuid();
 			const userId = faker.string.uuid();
-
-			const testTeam = {
-				id: teamId,
-				name: faker.company.name(),
-				members: [],
-				photoPath: faker.string.uuid(),
-			};
 
 			// @ts-ignore
 			prisma.userTeam.delete = mock(() => Promise.resolve({}));
