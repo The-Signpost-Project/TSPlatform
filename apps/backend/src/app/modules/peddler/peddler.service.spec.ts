@@ -116,9 +116,7 @@ describe("PeddlerService", () => {
 			// @ts-ignore
 			prisma.peddler.findUnique = mock(() => Promise.resolve(null));
 
-			expect(service.getById(peddlerId)).rejects.toThrow(
-				new AppError(AppErrorTypes.NotFound),
-			);
+			expect(service.getById(peddlerId)).rejects.toThrow(new AppError(AppErrorTypes.NotFound));
 			expect(prisma.peddler.findUnique).toHaveBeenCalled();
 		});
 	});

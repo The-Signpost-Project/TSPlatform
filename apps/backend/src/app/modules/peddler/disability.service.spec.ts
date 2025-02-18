@@ -83,9 +83,7 @@ describe("DisabilityService", () => {
 			// @ts-ignore
 			prisma.disability.findUnique = mock(() => Promise.resolve(null));
 
-			expect(service.getById(disabilityId)).rejects.toThrow(
-				new AppError(AppErrorTypes.NotFound),
-			);
+			expect(service.getById(disabilityId)).rejects.toThrow(new AppError(AppErrorTypes.NotFound));
 			expect(prisma.disability.findUnique).toHaveBeenCalled();
 		});
 	});

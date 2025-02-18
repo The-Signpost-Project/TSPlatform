@@ -46,7 +46,7 @@ export class PeddlerController {
 		private readonly peddlerService: PeddlerService,
 		private readonly disabilityService: DisabilityService,
 		private readonly regionService: RegionService,
-    private readonly mergeRequestService: MergeRequestService
+		private readonly mergeRequestService: MergeRequestService,
 	) {}
 
 	@Post()
@@ -163,7 +163,8 @@ export class PeddlerController {
 	@Post("merge-request")
 	@UseInterceptors(RestrictResourcesInterceptor("peddlerMergeRequest", "readWrite"))
 	async createMergeRequest(
-		@Body(new ValidationPipe(CreatePeddlerMergeRequestInputSchema)) data: CreatePeddlerMergeRequestInput,
+		@Body(new ValidationPipe(CreatePeddlerMergeRequestInputSchema))
+		data: CreatePeddlerMergeRequestInput,
 	) {
 		return await this.mergeRequestService.create(data);
 	}
@@ -184,7 +185,8 @@ export class PeddlerController {
 	@UseInterceptors(RestrictResourcesInterceptor("peddlerMergeRequest", "readWrite"))
 	async updateMergeRequestById(
 		@Param("id", new ValidationPipe(NonEmptyStringSchema)) id: string,
-		@Body(new ValidationPipe(UpdatePeddlerMergeRequestInputSchema)) data: UpdatePeddlerMergeRequestInput,
+		@Body(new ValidationPipe(UpdatePeddlerMergeRequestInputSchema))
+		data: UpdatePeddlerMergeRequestInput,
 	) {
 		return await this.mergeRequestService.updateById(id, data);
 	}

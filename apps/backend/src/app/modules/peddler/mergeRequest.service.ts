@@ -18,24 +18,24 @@ export class MergeRequestService extends CrudService<PeddlerMergeRequest> {
 	async create(data: CreatePeddlerMergeRequestInput): Promise<PeddlerMergeRequest> {
 		const mergeRequest = await this.prisma.peddlerMergeRequest.create({
 			data,
-      include: {
-        peddlerNew: true,
-        peddlerOld: true,
-        requestedBy: true,
-      },
+			include: {
+				peddlerNew: true,
+				peddlerOld: true,
+				requestedBy: true,
+			},
 		});
 		return mergeRequest as PeddlerMergeRequest;
 	}
 
 	// Get all merge requests with necessary relations
 	async getAll(): Promise<PeddlerMergeRequest[]> {
-		return await this.prisma.peddlerMergeRequest.findMany({
+		return (await this.prisma.peddlerMergeRequest.findMany({
 			include: {
 				peddlerNew: true,
 				peddlerOld: true,
 				requestedBy: true,
 			},
-		}) as PeddlerMergeRequest[];
+		})) as PeddlerMergeRequest[];
 	}
 
 	async getById(id: string): Promise<PeddlerMergeRequest> {
@@ -57,11 +57,11 @@ export class MergeRequestService extends CrudService<PeddlerMergeRequest> {
 		const updated = await this.prisma.peddlerMergeRequest.update({
 			where: { id },
 			data,
-      include: {
-        peddlerNew: true,
-        peddlerOld: true,
-        requestedBy: true,
-      },
+			include: {
+				peddlerNew: true,
+				peddlerOld: true,
+				requestedBy: true,
+			},
 		});
 		return updated as PeddlerMergeRequest;
 	}

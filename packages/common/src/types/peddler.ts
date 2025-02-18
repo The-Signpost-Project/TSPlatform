@@ -56,21 +56,21 @@ export type CreateRegionInput = {
 export type UpdateRegionInput = Partial<CreateRegionInput>;
 
 export type PeddlerMergeRequest = {
-  id: string;
-  peddlerNewId: string;
-  peddlerOldId: string;
-  notes: string;
-  requestedById: string;
-  peddlerNew: Omit<StrictPeddler, 'disabilities' | 'mainRegion'>;
-  peddlerOld: Omit<StrictPeddler, 'disabilities' | 'mainRegion'>;
-  requestedBy: Omit<SafeUser, 'hasPassword' | 'roles' | 'oAuthProviders'>;
-}
+	id: string;
+	peddlerNewId: string;
+	peddlerOldId: string;
+	notes: string;
+	requestedById: string;
+	peddlerNew: Omit<StrictPeddler, "disabilities" | "mainRegion">;
+	peddlerOld: Omit<StrictPeddler, "disabilities" | "mainRegion">;
+	requestedBy: Omit<SafeUser, "hasPassword" | "roles" | "oAuthProviders">;
+};
 
 export type CreatePeddlerMergeRequestInput = {
-  peddlerNewId: string;
-  peddlerOldId: string;
-  notes: string;
-  requestedById: string;
-}
+	peddlerNewId: string;
+	peddlerOldId: string;
+	notes: string;
+	requestedById: string;
+};
 
 export type UpdatePeddlerMergeRequestInput = Partial<CreatePeddlerMergeRequestInput>;
