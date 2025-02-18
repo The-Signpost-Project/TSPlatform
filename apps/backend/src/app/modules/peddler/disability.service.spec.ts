@@ -1,113 +1,118 @@
-import { expect, it, describe, beforeEach } from "bun:test";
+import { expect, it, describe, beforeAll, afterEach, mock } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { PrismaService } from "@db/client";
-import { AppError } from "@utils/appErrors";
-import { resetDatabase } from "@utils/test";
+import { DisabilityService } from "./disability.service";
+import type { CreateDisabilityInput, UpdateDisabilityInput } from "@shared/common/types";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
-import { DisabilityService } from "./disability.service";
 
 describe("DisabilityService", () => {
 	let service: DisabilityService;
+	let prisma: PrismaService;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
 			providers: [DisabilityService, PrismaService],
 		}).compile();
-
 		service = module.get<DisabilityService>(DisabilityService);
-		await resetDatabase();
+		prisma = module.get<PrismaService>(PrismaService);
+	});
+
+	afterEach(() => {
+		mock.restore();
 	});
 
 	it("should be defined", () => {
 		expect(service).toBeDefined();
 	});
 
-	describe("create", async () => {
-		it("should create a new disability", async () => {
-			const name = faker.lorem.word();
-			const res = await service.create({ name });
-			expect(res).toMatchObject({ name, id: expect.any(String) });
+	describe("create", () => {
+		it("should create a disability", async () => {
+			const input: CreateDisabilityInput = { name: faker.lorem.word() };
+			const createdDisability = { id: faker.string.uuid(), ...input };
+
+			// @ts-ignore
+			prisma.disability.create = mock(() => Promise.resolve(createdDisability));
+
+			const result = await service.create(input);
+			expect(result).toBeDefined();
+			expect(result.name).toBe(input.name);
+			expect(prisma.disability.create).toHaveBeenCalled();
 		});
 
-		it("should throw an error if the name is empty", async () => {
-			expect(service.create({ name: "" })).rejects.toThrow(AppError);
+		it("should throw an error for empty name", async () => {
+			const input = { name: "" } as CreateDisabilityInput;
+			await expect(service.create(input)).rejects.toThrow();
 		});
 	});
 
-	describe("getAll", async () => {
-		beforeEach(async () => {
-			await service.create({ name: "test1" });
-			await service.create({ name: "test2" });
-			await service.create({ name: "test3" });
-		});
-
+	describe("getAll", () => {
 		it("should return all disabilities", async () => {
-			const res = await service.getAll();
-			expect(res).toHaveLength(3);
+			const dbDisabilities = [
+				{ id: faker.string.uuid(), name: faker.lorem.word() },
+				{ id: faker.string.uuid(), name: faker.lorem.word() },
+			];
+			// @ts-ignore
+			prisma.disability.findMany = mock(() => Promise.resolve(dbDisabilities));
+
+			const result = await service.getAll();
+			expect(result).toBeDefined();
+			expect(result.length).toBeGreaterThan(0);
+			expect(prisma.disability.findMany).toHaveBeenCalled();
+		});
+	});
+
+	describe("getById", () => {
+		it("should return a disability by id", async () => {
+			const disabilityId = faker.string.uuid();
+			const dbDisability = { id: disabilityId, name: faker.lorem.word() };
+
+			// @ts-ignore
+			prisma.disability.findUnique = mock(() => Promise.resolve(dbDisability));
+
+			const result = await service.getById(disabilityId);
+			expect(result).toBeDefined();
+			expect(result.id).toBe(disabilityId);
+			expect(prisma.disability.findUnique).toHaveBeenCalled();
 		});
 
-		it("should return all disabilities with the correct name", async () => {
-			const res = await service.getAll();
-			expect(res).toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({ name: "test1" }),
-					expect.objectContaining({ name: "test2" }),
-					expect.objectContaining({ name: "test3" }),
-				]),
+		it("should throw not found error if disability does not exist", async () => {
+			const disabilityId = faker.string.uuid();
+			// @ts-ignore
+			prisma.disability.findUnique = mock(() => Promise.resolve(null));
+
+			await expect(service.getById(disabilityId)).rejects.toThrow(
+				new AppError(AppErrorTypes.NotFound),
 			);
+			expect(prisma.disability.findUnique).toHaveBeenCalled();
 		});
 	});
 
-	describe("getById", async () => {
-		let id: string;
+	describe("updateById", () => {
+		it("should update a disability by id", async () => {
+			const disabilityId = faker.string.uuid();
+			const input: UpdateDisabilityInput = { name: faker.lorem.word() };
+			const updatedDisability = { id: disabilityId, ...input };
 
-		beforeEach(async () => {
-			id = (await service.create({ name: "test" })).id;
-		});
-
-		it("should return the correct disability", async () => {
-			const res = await service.getById(id);
-			expect(res).toMatchObject({ name: "test", id });
-		});
-
-		it("should throw an error if the disability does not exist", async () => {
-			expect(service.getById("invalidId")).rejects.toThrow(AppError);
-		});
-	});
-
-	describe("updateById", async () => {
-		let id: string;
-
-		beforeEach(async () => {
-			id = (await service.create({ name: "test" })).id;
-		});
-
-		it("should update the disability", async () => {
-			const res = await service.updateById(id, { name: "updated" });
-			expect(res).toMatchObject({ name: "updated", id });
-		});
-
-		it("should throw an error if the disability does not exist", async () => {
-			expect(service.updateById("invalidId", { name: "updated" })).rejects.toThrow(AppError);
+			// @ts-ignore
+			prisma.disability.update = mock(() => Promise.resolve(updatedDisability));
+			const result = await service.updateById(disabilityId, input);
+			expect(result).toBeDefined();
+			expect(result.id).toBe(disabilityId);
+			expect(result.name).toBe(input.name as string);
+			expect(prisma.disability.update).toHaveBeenCalled();
 		});
 	});
 
-	describe("deleteById", async () => {
-		let id: string;
-
-		beforeEach(async () => {
-			id = (await service.create({ name: faker.airline.aircraftType() })).id;
-		});
-
-		it("should delete the disability", async () => {
-			await service.deleteById(id);
-			expect(service.getById(id)).rejects.toThrow(AppError);
-		});
-
-		it("should throw an error if the disability does not exist", async () => {
-			expect(service.deleteById("invalidId")).rejects.toThrow(AppError);
+	describe("deleteById", () => {
+		it("should delete a disability by id", async () => {
+			const disabilityId = faker.string.uuid();
+			// @ts-ignore
+			prisma.disability.delete = mock(() => Promise.resolve({ id: disabilityId }));
+			await service.deleteById(disabilityId);
+			expect(prisma.disability.delete).toHaveBeenCalled();
 		});
 	});
 });

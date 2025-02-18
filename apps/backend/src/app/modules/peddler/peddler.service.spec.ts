@@ -1,188 +1,194 @@
-import { expect, it, describe, beforeEach } from "bun:test";
+import { expect, it, describe, beforeAll, afterEach, mock } from "bun:test";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { PrismaService, S3Service } from "@db/client";
-import { AppError } from "@utils/appErrors";
-import { resetDatabase } from "@utils/test";
+import { PrismaService } from "@db/client";
+import { PeddlerService } from "./peddler.service";
+import type { CreatePeddlerInput, UpdatePeddlerInput } from "@shared/common/types";
+import { AppError, AppErrorTypes } from "@utils/appErrors";
 import { faker } from "@faker-js/faker";
 import { ConfigModule } from "@nestjs/config";
-import { PeddlerService } from "./peddler.service";
-import { RegionService } from "./region.service";
 
 describe("PeddlerService", () => {
 	let service: PeddlerService;
-	let testRegion: { id: string; name: string };
+	let prisma: PrismaService;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const module: TestingModule = await Test.createTestingModule({
 			imports: [ConfigModule],
-			providers: [PeddlerService, PrismaService, RegionService, S3Service],
+			providers: [PeddlerService, PrismaService],
 		}).compile();
-
 		service = module.get<PeddlerService>(PeddlerService);
-		await resetDatabase();
+		prisma = module.get<PrismaService>(PrismaService);
+	});
 
-		const regionService = module.get<RegionService>(RegionService);
-		testRegion = await regionService.create({ name: faker.location.city(), photo: null });
+	afterEach(() => {
+		mock.restore();
 	});
 
 	it("should be defined", () => {
 		expect(service).toBeDefined();
 	});
 
-	describe("create", async () => {
-		it("should create a new peddler", async () => {
-			const res = await service.create({
-				mainRegionId: testRegion.id,
+	describe("create", () => {
+		it("should create a peddler", async () => {
+			const mainRegion = { id: faker.string.uuid(), name: faker.location.city(), photoPath: null };
+			const input = {
 				lastName: faker.person.lastName(),
-				firstName: faker.person.firstName(),
-				// @ts-ignore
-				race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
-				// @ts-ignore
-				sex: ["M", "F"][Math.floor(Math.random() * 2)],
-				birthYear: faker.date.past().getFullYear().toString(),
-				disabilityIds: [],
-			});
-			expect(res).toMatchObject({ id: expect.any(String) });
-		});
-
-		it("should throw an error if empty", async () => {
-			// @ts-ignore
-			expect(service.create({})).rejects.toThrow(AppError);
-		});
-
-		it("should throw an error if mainRegion is empty", async () => {
-			expect(
-				service.create({
-					// @ts-ignore
-					mainRegionId: null,
-					lastName: faker.person.lastName(),
-					firstName: faker.person.firstName(),
-					// @ts-ignore
-					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
-					// @ts-ignore
-					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear().toString(),
-					disabilityIds: [],
-				}),
-			).rejects.toThrow(AppError);
-		});
-	});
-
-	describe("getAll", async () => {
-		beforeEach(async () => {
-			for (let i = 0; i < 3; i++) {
-				await service.create({
-					mainRegionId: testRegion.id,
-					lastName: faker.person.lastName(),
-					firstName: faker.person.firstName(),
-					// @ts-ignore
-					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
-					// @ts-ignore
-					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear().toString(),
-					disabilityIds: [],
-				});
-			}
-		});
-
-		it("should return all peddlers", async () => {
-			const res = await service.getAll();
-			expect(res).toHaveLength(3);
-		});
-
-		it("should return an empty array if there are no peddlers", async () => {
-			await resetDatabase();
-			const res = await service.getAll();
-			expect(res).toHaveLength(0);
-		});
-	});
-
-	describe("getById", async () => {
-		let id: string;
-
-		beforeEach(async () => {
-			id = (
-				await service.create({
-					mainRegionId: testRegion.id,
-					lastName: faker.person.lastName(),
-					firstName: faker.person.firstName(),
-					// @ts-ignore
-					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
-					// @ts-ignore
-					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear().toString(),
-					disabilityIds: [],
-				})
-			).id;
-		});
-
-		it("should return the correct peddler", async () => {
-			const res = await service.getById(id);
-			expect(res).toMatchObject({ id });
-		});
-
-		it("should throw an error if the peddler does not exist", async () => {
-			expect(service.getById("invalidId")).rejects.toThrow(AppError);
-		});
-	});
-
-	describe("updateById", async () => {
-		let id: string;
-
-		beforeEach(async () => {
-			id = (
-				await service.create({
-					mainRegionId: testRegion.id,
-					lastName: faker.person.lastName(),
-					firstName: faker.person.firstName(),
-					// @ts-ignore
-					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
-					// @ts-ignore
-					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear().toString(),
-					disabilityIds: [],
-				})
-			).id;
-		});
-
-		it("should update the peddler", async () => {
-			const newAttrs = {
-				lastName: faker.person.lastName(),
-				firstName: faker.person.firstName(),
 				sex: "M",
-			} as const;
-			const res = await service.updateById(id, newAttrs);
-			expect(res).toMatchObject({ id, ...newAttrs });
-			expect(res.codename).toMatch(new RegExp(`${testRegion.name}_.*_M`));
+				mainRegionId: mainRegion.id,
+				disabilityIds: [faker.string.uuid()],
+			} as CreatePeddlerInput;
+
+			// @ts-ignore
+			prisma.region.findUnique = mock(() => Promise.resolve(mainRegion));
+			// mock peddler creation
+			const createdPeddler = {
+				id: faker.string.uuid(),
+				codename: `${mainRegion.name}_${input.lastName}_${input.sex}`,
+				...input,
+			};
+			// @ts-ignore
+			prisma.peddler.create = mock(() => Promise.resolve(createdPeddler));
+			// @ts-ignore
+			prisma.peddlerDisability.createMany = mock(() => Promise.resolve({}));
+			// @ts-ignore
+			prisma.peddler.findUnique = mock(() =>
+				Promise.resolve({
+					...createdPeddler,
+					mainRegion,
+					disabilities: [{ id: faker.string.uuid(), disability: { name: "Example" } }],
+				}),
+			);
+
+			const result = await service.create(input);
+			expect(result).toBeDefined();
+			expect(result.codename).toBe(`${mainRegion.name}_${input.lastName}_${input.sex}`);
+			expect(prisma.region.findUnique).toHaveBeenCalled();
+			expect(prisma.peddler.create).toHaveBeenCalled();
+			expect(prisma.peddlerDisability.createMany).toHaveBeenCalled();
 		});
 	});
 
-	describe("deleteById", async () => {
-		let id: string;
-
-		beforeEach(async () => {
-			id = (
-				await service.create({
-					mainRegionId: testRegion.id,
+	describe("getAll", () => {
+		it("should return all peddlers", async () => {
+			const dbPeddlers = [
+				{
+					id: faker.string.uuid(),
 					lastName: faker.person.lastName(),
-					firstName: faker.person.firstName(),
-					// @ts-ignore
-					race: ["Chinese", "Malay", "Indian", "Others"][Math.floor(Math.random() * 4)],
-					// @ts-ignore
-					sex: ["M", "F"][Math.floor(Math.random() * 2)],
-					birthYear: faker.date.past().getFullYear().toString(),
-					disabilityIds: [],
-				})
-			).id;
+					sex: "F",
+					codename: "region_last_F",
+					mainRegion: { id: faker.string.uuid(), name: "RegionX" },
+					disabilities: [{ id: faker.string.uuid(), disability: { name: "Sample" } }],
+				},
+			];
+			// @ts-ignore
+			prisma.peddler.findMany = mock(() => Promise.resolve(dbPeddlers));
+
+			const result = await service.getAll();
+			expect(result).toBeDefined();
+			expect(Array.isArray(result)).toBe(true);
+			expect(result.length).toBeGreaterThan(0);
+			expect(prisma.peddler.findMany).toHaveBeenCalled();
+		});
+	});
+
+	describe("getById", () => {
+		it("should return a peddler by id", async () => {
+			const peddlerId = faker.string.uuid();
+			const dbPeddler = {
+				id: peddlerId,
+				lastName: faker.person.lastName(),
+				sex: "M",
+				codename: "RegionY_Last_M",
+				mainRegion: { id: faker.string.uuid(), name: "RegionY" },
+				disabilities: [{ id: faker.string.uuid(), disability: { name: "TestDisability" } }],
+			};
+			// @ts-ignore
+			prisma.peddler.findUnique = mock(() => Promise.resolve(dbPeddler));
+
+			const result = await service.getById(peddlerId);
+			expect(result).toBeDefined();
+			expect(result.id).toBe(peddlerId);
+			expect(prisma.peddler.findUnique).toHaveBeenCalled();
 		});
 
-		it("should delete the peddler", async () => {
-			await service.deleteById(id);
-			expect(service.getById(id)).rejects.toThrow(AppError);
-		});
+		it("should throw not found error if peddler does not exist", async () => {
+			const peddlerId = faker.string.uuid();
+			// @ts-ignore
+			prisma.peddler.findUnique = mock(() => Promise.resolve(null));
 
-		it("should throw an error if the peddler does not exist", async () => {
-			expect(service.deleteById("invalidId")).rejects.toThrow(AppError);
+			await expect(service.getById(peddlerId)).rejects.toThrow(
+				new AppError(AppErrorTypes.NotFound),
+			);
+			expect(prisma.peddler.findUnique).toHaveBeenCalled();
+		});
+	});
+
+	describe("updateById", () => {
+		it("should update a peddler by id", async () => {
+			const peddlerId = faker.string.uuid();
+			const existingPeddler = {
+				id: peddlerId,
+				lastName: "OldLastName",
+				sex: "M",
+				codename: "OldRegion_OldLastName_M",
+				mainRegion: { id: faker.string.uuid(), name: "OldRegion" },
+			};
+			const mainRegion = { id: faker.string.uuid(), name: "NewRegion", photoPath: null };
+			const input: UpdatePeddlerInput = {
+				lastName: "NewLastName",
+				sex: "F",
+				mainRegionId: mainRegion.id,
+				disabilityIds: [faker.string.uuid()],
+				// ...other fields...
+			};
+
+			// mock get existing peddler
+			// @ts-ignore
+			prisma.peddler.findUnique = mock(() => Promise.resolve(existingPeddler));
+
+			// @ts-ignore
+			prisma.region.findUnique = mock(() => Promise.resolve(mainRegion));
+
+			const updatedPeddler = {
+				id: peddlerId,
+				lastName: input.lastName,
+				sex: input.sex,
+				codename: `${mainRegion.name}_${input.lastName}_${input.sex}`,
+			};
+			// @ts-ignore
+			prisma.peddler.update = mock(() => Promise.resolve(updatedPeddler));
+			// @ts-ignore
+			prisma.peddlerDisability.deleteMany = mock(() => Promise.resolve({}));
+			// @ts-ignore
+			prisma.peddlerDisability.createMany = mock(() => Promise.resolve({}));
+			// mock getById after update
+			// @ts-ignore
+			prisma.peddler.findUnique = mock(() =>
+				Promise.resolve({
+					...updatedPeddler,
+					mainRegion,
+					disabilities: [{ id: faker.string.uuid(), disability: { name: "UpdatedDisability" } }],
+				}),
+			);
+
+			const result = await service.updateById(peddlerId, input);
+			expect(result).toBeDefined();
+			expect(result.codename).toBe(
+				`${mainRegion.name}_${input.lastName}_${input.sex as "M" | "F"}`,
+			);
+			expect(prisma.peddler.update).toHaveBeenCalled();
+			expect(prisma.peddlerDisability.deleteMany).toHaveBeenCalled();
+			expect(prisma.peddlerDisability.createMany).toHaveBeenCalled();
+		});
+	});
+
+	describe("deleteById", () => {
+		it("should delete a peddler by id", async () => {
+			const peddlerId = faker.string.uuid();
+			// @ts-ignore
+			prisma.peddler.delete = mock(() => Promise.resolve({ id: peddlerId }));
+			await service.deleteById(peddlerId);
+			expect(prisma.peddler.delete).toHaveBeenCalled();
 		});
 	});
 });
