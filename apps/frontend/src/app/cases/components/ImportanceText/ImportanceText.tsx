@@ -3,7 +3,7 @@ import type { ImportanceTextProps } from "./types";
 export function ImportanceText({ importance }: ImportanceTextProps) {
 	switch (importance) {
 		case 1:
-			return <span className="text-green-300">No concern (1)</span>;
+			return <span className="text-green-400">No concern (1)</span>;
 		case 2:
 			return <span className="text-green-500">No concern (2)</span>;
 		case 3:

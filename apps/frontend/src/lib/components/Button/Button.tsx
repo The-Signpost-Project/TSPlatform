@@ -51,7 +51,7 @@ export function Button({
 			type={type}
 			className={!href ? mergedStyles : undefined}
 			disabled={isNotClickable}
-      whileTap={{ scale: 0.98 }}
+			whileTap={{ scale: 0.98 }}
 			{...rest}
 		>
 			{icon}

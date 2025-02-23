@@ -29,7 +29,7 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 				</span>
 			</Text>
 			<Button onClick={() => router.push(`/cases/${data.id}`)} className="w-full">
-				View Case
+				View Details
 			</Button>
 		</Card>
 	);
