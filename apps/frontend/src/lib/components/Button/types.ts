@@ -2,6 +2,8 @@ import type { ReactNode, HTMLAttributes } from "react";
 
 export type ButtonColor = "info" | "danger" | "warning" | "success";
 
+export type ButtonVariant = "solid" | "outlined" | "ghost";
+
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
 	children: ReactNode;
 	href?: string;
@@ -10,4 +12,6 @@ export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
 	color?: ButtonColor;
 	disabled?: boolean;
 	loading?: boolean;
+	variant?: ButtonVariant;
+	icon?: ReactNode;
 }

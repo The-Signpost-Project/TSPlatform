@@ -1,7 +1,12 @@
 import type { ButtonProps } from "./types";
 import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
-import { twButtonStyles, twDisabledButtonStyles, buttonRawColors } from "./constants";
+import {
+	twDisabledButtonStyles,
+	buttonRawColors,
+	twButtonBaseStyles,
+	getTwButtonStyles,
+} from "./constants";
 import { Loader } from "@lib/components";
 import { default as NextLink } from "next/link";
 
@@ -10,6 +15,8 @@ export function Button({
 	className,
 	color = "info",
 	type = "button",
+	variant = "solid",
+	icon,
 	disabled = false,
 	loading = false,
 	href,
@@ -17,7 +24,8 @@ export function Button({
 }: ButtonProps) {
 	const isNotClickable = disabled || loading;
 	const mergedStyles = twMerge(
-		twButtonStyles[color],
+		twButtonBaseStyles,
+		getTwButtonStyles(color, variant),
 		isNotClickable ? twDisabledButtonStyles : "",
 		className,
 	);
@@ -44,6 +52,7 @@ export function Button({
 			disabled={isNotClickable}
 			{...rest}
 		>
+			{icon}
 			{loading ? styledLoader : children}
 		</button>,
 	);

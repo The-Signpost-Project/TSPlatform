@@ -38,8 +38,9 @@ export function OAuthButton({ location, iconPath, name }: OAuthButtonProps) {
 			onClick={() => startTransition(initOAuth)}
 			className="flex gap-2 items-center p-2 text-xs flex-grow"
 			disabled={isPending}
+			variant="outlined"
+			icon={<Image src={iconPath} alt="icon" width={24} height={24} />}
 		>
-			<Image src={iconPath} alt="icon" width={24} height={24} />
 			{isPending ? "Loading..." : `Sign in with ${name}`}
 		</Button>
 	);
