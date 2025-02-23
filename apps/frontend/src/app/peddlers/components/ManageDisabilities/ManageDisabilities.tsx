@@ -80,7 +80,7 @@ export function ManageDisabilities() {
 
 	return (
 		<>
-			<Button onClick={() => setModalOpen(true)} type="button">
+			<Button onClick={() => setModalOpen(true)} type="button" variant="outlined">
 				Manage Disabilities
 			</Button>
 			<Modal

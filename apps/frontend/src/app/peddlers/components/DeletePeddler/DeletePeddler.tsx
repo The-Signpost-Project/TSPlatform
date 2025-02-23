@@ -35,6 +35,7 @@ export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps
 					setModalOpen(true);
 				}}
 				className="w-full"
+				variant="outlined"
 			>
 				Delete
 			</Button>
@@ -54,7 +55,9 @@ export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps
 					will be removed.
 				</Text>
 				<div className="flex justify-end gap-2 mt-4">
-					<Button onClick={() => setModalOpen(false)}>Cancel</Button>
+					<Button onClick={() => setModalOpen(false)} variant="ghost">
+						Cancel
+					</Button>
 					<Button color="danger" onClick={onSubmit}>
 						Delete
 					</Button>

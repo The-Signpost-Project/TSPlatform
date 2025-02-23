@@ -82,7 +82,9 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 						{caseData && (
 							<div className="flex flex-col gap-2">
 								<div>
-									<Text className="font-semibold mb-1" order='lg'>Details</Text>
+									<Text className="font-semibold mb-1" order="lg">
+										Details
+									</Text>
 									<div className="grid grid-cols-4 gap-2 items-start">
 										<KeyValue label="Codename">
 											<Text>{caseData.peddlerCodename}</Text>
@@ -104,16 +106,20 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 										</KeyValue>
 									</div>
 								</div>
-								
+
 								<div>
-									<Text className="font-semibold mb-1" order="lg">Notes</Text>
+									<Text className="font-semibold mb-1" order="lg">
+										Notes
+									</Text>
 									<Text className="break-words whitespace-pre-wrap" order="sm">
 										{caseData.notes ?? "No notes provided."}
 									</Text>
 								</div>
-                {caseData.photoPaths.length > 0 && (
+								{caseData.photoPaths.length > 0 && (
 									<div>
-										<Text className="font-semibold mb-1" order="lg">Photos</Text>
+										<Text className="font-semibold mb-1" order="lg">
+											Photos
+										</Text>
 										<div className="flex overflow-x-scroll gap-1">
 											{caseData.photoPaths.map((photo) => (
 												<div
@@ -129,7 +135,9 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 									</div>
 								)}
 								<div>
-									<Text className="font-semibold mb-1" order="lg">Metadata</Text>
+									<Text className="font-semibold mb-1" order="lg">
+										Metadata
+									</Text>
 									<div className="grid grid-cols-4 gap-2 items-start">
 										<KeyValue label="Created By">
 											<Text>{caseData.createdByUsername}</Text>

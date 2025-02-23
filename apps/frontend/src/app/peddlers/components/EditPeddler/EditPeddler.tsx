@@ -111,6 +111,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 					setModalOpen(true);
 				}}
 				className="w-full"
+				variant="outlined"
 			>
 				Edit
 			</Button>
@@ -235,7 +236,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 								className="w-full"
 							/>
 						</div>
-						<Button type="submit" color="info" className="w-full" disabled={isPending}>
+						<Button type="submit" color="success" className="w-full" disabled={isPending}>
 							Save Changes
 						</Button>
 					</form>

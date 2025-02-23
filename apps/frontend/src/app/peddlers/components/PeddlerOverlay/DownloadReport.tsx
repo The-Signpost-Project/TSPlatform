@@ -24,7 +24,7 @@ export function DownloadReport({ peddlerId }: DownloadReportProps) {
 	}, [peddlerId]);
 
 	return (
-		<Button onClick={downloadReportCb} className="w-full" disabled={isPending}>
+		<Button onClick={downloadReportCb} className="w-full" loading={isPending} variant="outlined">
 			Download Report
 		</Button>
 	);
