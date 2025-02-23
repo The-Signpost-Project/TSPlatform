@@ -9,11 +9,11 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 			title={data.peddlerCodename}
 			date={data.interactionDate.toLocaleDateString()}
 			description={data.id}
-			className={twMerge(isStale ? "animate-pulse" : "", "px-2")}
+			className={twMerge(isStale ? "animate-pulse" : "", "px-2 w-full")}
 			descriptionClassName="break-all text-xs sm:text-xs"
 			innerClassName="gap-2 px-2 flex flex-col justify-between h-full"
 		>
-			<Text className="grid grid-cols-2 gap-2">
+			<Text className="grid grid-cols-2 gap-x-2 gap-y-1">
 				<span className="font-medium justify-self-end">Updated At</span>
 				<span className="justify-self-start">{data.updatedAt.toLocaleDateString()}</span>
 
