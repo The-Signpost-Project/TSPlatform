@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 export function ImportanceText({ importance }: ImportanceTextProps) {
 	const renderSeverity = (color: string, label: string) => (
 		<span className="whitespace-nowrap">
-			<span className={twMerge("inline-block w-2.5 h-2.5 mr-1 rounded-full", color)}></span>
+			<span className={twMerge("inline-block w-2.5 h-2.5 mr-1 rounded-full", color)} />
 			{label}
 		</span>
 	);

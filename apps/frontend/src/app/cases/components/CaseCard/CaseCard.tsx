@@ -1,12 +1,9 @@
-"use client";
 import type { CaseCardProps } from "./types";
 import { Card, Text, Button } from "@lib/components";
 import { twMerge } from "tailwind-merge";
-import { useRouter } from "next/navigation";
 import { ImportanceText } from "../ImportanceText";
 
 export function CaseCard({ data, isStale }: CaseCardProps) {
-	const router = useRouter();
 	return (
 		<Card
 			title={data.peddlerCodename}
@@ -28,7 +25,7 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 					<ImportanceText importance={data.importance} />
 				</span>
 			</Text>
-			<Button onClick={() => router.push(`/cases/${data.id}`)} className="w-full">
+			<Button href={`/cases/${data.id}`} className="w-full">
 				View Details
 			</Button>
 		</Card>

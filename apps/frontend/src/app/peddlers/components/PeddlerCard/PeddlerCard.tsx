@@ -1,10 +1,7 @@
-"use client";
 import type { PeddlerCardProps } from "./types";
 import { Card, Text, Button } from "@lib/components";
-import { useRouter } from "next/navigation";
 
 export function PeddlerCard({ data }: PeddlerCardProps) {
-	const router = useRouter();
 	return (
 		<Card
 			title={data.codename}
@@ -23,7 +20,7 @@ export function PeddlerCard({ data }: PeddlerCardProps) {
 				<span className="font-semibold justify-self-start">Main Region: </span>
 				<span className="justify-self-start">{data.mainRegion.name}</span>
 			</Text>
-			<Button onClick={() => router.push(`/peddlers/${data.id}`)} className="w-full">
+			<Button href={`/peddlers/${data.id}`} className="w-full">
 				View Peddler details
 			</Button>
 		</Card>
