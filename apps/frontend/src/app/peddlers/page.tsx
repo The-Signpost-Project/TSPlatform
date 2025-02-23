@@ -35,7 +35,7 @@ export default async function RegionPage() {
 			<div className="flex justify-between gap-6 sm:items-center sm:flex-row flex-col">
 				<div className="flex flex-col gap-1">
 					<Title order={2}>Peddlers</Title>
-					<Text description>Manage the profiles and cases linked to tissue sellers.</Text>
+					<Text description>Manage the profiles and cases linked to tissue sellers (sorted by region).</Text>
 				</div>
 				<div className="flex gap-2 flex-wrap">
 					<AddPeddler />
