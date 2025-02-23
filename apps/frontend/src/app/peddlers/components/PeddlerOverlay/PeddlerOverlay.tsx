@@ -72,72 +72,69 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 						className="hover:dark:bg-gray-950"
 					/>
 					<div className="px-4 flex flex-col gap-4">
-						{error && !isPending ? (
+						{error && !isPending && (
 							<div className="flex flex-col gap-6">
 								<Title order={5}>Peddler {peddlerId}</Title>
 								<Text>{error.name}</Text>
 								<Text>Cause: {error.cause}</Text>
 							</div>
-						) : (
-							<>
-								{isPending && <Loader />}
-								{peddlerData && (
-									<div className="flex flex-col gap-6">
-										<Title order={5}>{peddlerData.codename}</Title>
-										<div className="grid grid-cols-[1fr_2fr] gap-2">
-											<Text className="font-semibold">Main Region:</Text>
-											<Link href={`/cases?regionName=${peddlerData.mainRegion.name}`}>
-												{peddlerData.mainRegion.name}
-											</Link>
-											<Text className="font-semibold">First Name:</Text>
-											<Text>{peddlerData.firstName ?? "???"}</Text>
-											<Text className="font-semibold">Last Name:</Text>
-											<Text>{peddlerData.lastName}</Text>
-											<Text className="font-semibold">Race:</Text>
-											<Text>{peddlerData.race}</Text>
-											<Text className="font-semibold">Sex:</Text>
-											<Text>{peddlerData.sex === "M" ? "Male" : "Female"}</Text>
-											<Text className="font-semibold">Birth Year:</Text>
-											<Text>{peddlerData.birthYear}</Text>
-											<Text className="font-semibold">Disabilities:</Text>
-											{peddlerData.disabilities.length === 0 ? (
-												<Text>No disabilities</Text>
-											) : (
-												<List.UnorderedList>
-													{peddlerData.disabilities.map((disability) => (
-														<List.ListItem
-															key={disability.id}
-															className="text-black dark:text-zinc-200"
-														>
-															{disability.name}
-														</List.ListItem>
-													))}
-												</List.UnorderedList>
-											)}
-										</div>
-										<div className="flex flex-col gap-2">
-											<Button
-												href={`/cases?peddlerCodename=${peddlerData.codename}`}
-												className="w-full"
-											>
-												View Cases
-											</Button>
-											<DownloadReport peddlerId={peddlerData.id} />
-											<div className="flex gap-2">
-												<EditPeddler peddler={peddlerData} revalidate={revalidate} />
-												<DeletePeddler
-													id={peddlerData.id}
-													codename={peddlerData.codename}
-													navigateBack={() => {
-														navigate();
-														router.refresh();
-													}}
-												/>
-											</div>
-										</div>
-									</div>
-								)}
-							</>
+						)}
+						{isPending && <Loader />}
+
+						{peddlerData && (
+							<div className="flex flex-col gap-6">
+								<Title order={5}>{peddlerData.codename}</Title>
+								<div className="grid grid-cols-[1fr_2fr] gap-2">
+									<Text className="font-semibold">Main Region:</Text>
+									<Link href={`/cases?regionName=${peddlerData.mainRegion.name}`}>
+										{peddlerData.mainRegion.name}
+									</Link>
+									<Text className="font-semibold">First Name:</Text>
+									<Text>{peddlerData.firstName ?? "???"}</Text>
+									<Text className="font-semibold">Last Name:</Text>
+									<Text>{peddlerData.lastName}</Text>
+									<Text className="font-semibold">Race:</Text>
+									<Text>{peddlerData.race}</Text>
+									<Text className="font-semibold">Sex:</Text>
+									<Text>{peddlerData.sex === "M" ? "Male" : "Female"}</Text>
+									<Text className="font-semibold">Birth Year:</Text>
+									<Text>{peddlerData.birthYear}</Text>
+									<Text className="font-semibold">Disabilities:</Text>
+									{peddlerData.disabilities.length === 0 ? (
+										<Text>No disabilities</Text>
+									) : (
+										<List.UnorderedList>
+											{peddlerData.disabilities.map((disability) => (
+												<List.ListItem
+													key={disability.id}
+													className="text-black dark:text-zinc-200"
+												>
+													{disability.name}
+												</List.ListItem>
+											))}
+										</List.UnorderedList>
+									)}
+								</div>
+							</div>
+						)}
+						{peddlerData && (
+							<div className="flex flex-col gap-2">
+								<Button href={`/cases?peddlerCodename=${peddlerData.codename}`} className="w-full">
+									View Cases
+								</Button>
+								<DownloadReport peddlerId={peddlerData.id} />
+								<div className="flex gap-2">
+									<EditPeddler peddler={peddlerData} revalidate={revalidate} />
+									<DeletePeddler
+										id={peddlerData.id}
+										codename={peddlerData.codename}
+										navigateBack={() => {
+											navigate();
+											router.refresh();
+										}}
+									/>
+								</div>
+							</div>
 						)}
 					</div>
 				</div>
