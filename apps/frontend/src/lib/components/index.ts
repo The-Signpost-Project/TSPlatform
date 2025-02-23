@@ -29,3 +29,4 @@ export * from "./DateInput";
 export * from "./TextArea";
 export * from "./Radio";
 export * from "./SubmitButton";
+export * from "./KeyValue";

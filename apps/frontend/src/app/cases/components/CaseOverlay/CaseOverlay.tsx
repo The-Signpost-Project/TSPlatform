@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import type { CaseOverlayProps } from "./types";
 import { useKeybinds } from "@lib/hooks";
-import { ModalCloseButton, Text, Title, Loader, Image } from "@lib/components";
+import { ModalCloseButton, Text, Title, Loader, Image, KeyValue } from "@lib/components";
 import { useEffect, useTransition, useState, useCallback } from "react";
 import type { StrictCase, ErrorResponse } from "@shared/common/types";
 import { fetchCase } from "./utils";
@@ -59,7 +59,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 			}}
 		>
 			<div
-				className="lg:w-1/2 md:w-2/3 sm:w-5/6 w-11/12 absolute right-0 top-0 h-full bg-white dark:bg-gray-900 shadow-lg "
+				className="lg:w-2/3 sm:w-5/6 w-11/12 absolute right-0 top-0 h-full bg-white dark:bg-gray-900 shadow-lg "
 				onClick={(e) => e.stopPropagation()}
 				onKeyDown={(e) => e.stopPropagation()}
 			>
@@ -70,83 +70,101 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 						className="hover:dark:bg-gray-950"
 					/>
 					<div className="px-4 flex flex-col gap-4">
-						<Title order={5}>Case {caseId}</Title>
-						{error && !isPending ? (
+						<Title order={4}>Case {caseId}</Title>
+						{isPending && <Loader />}
+						{error && !isPending && (
 							<div className="flex flex-col gap-6">
 								<Text>{error.name}</Text>
 								<Text>Cause: {error.cause}</Text>
 							</div>
-						) : (
-							<>
-								{isPending && <Loader />}
-								{caseData && (
-									<>
-										<div className="flex flex-col gap-6">
-											<div className="grid grid-cols-[1fr_2fr] gap-2">
-												<Text className="font-semibold">Region: </Text>
-												<Text>{caseData.regionName}</Text>
-												<Text className="font-semibold">Specific Location: </Text>
-												<Text>{caseData.location}</Text>
-												<Text className="font-semibold">Peddler Codename: </Text>
-												<Text>{caseData.peddlerCodename}</Text>
-												<Text className="font-semibold">Interaction Date: </Text>
-												<Text>{caseData.interactionDate.toLocaleDateString()}</Text>
-												<Text className="font-semibold">Importance: </Text>
-												<Text>
-													<ImportanceText importance={caseData.importance} />
-												</Text>
-												<Text className="font-semibold">Notes: </Text>
-												<Text className="break-words whitespace-pre-wrap">
-													{caseData.notes || "No notes available."}
-												</Text>
-											</div>
-											{caseData.photoPaths.length > 0 && (
-												<div>
-													<Text className="font-semibold">Photos:</Text>
-													<div className="flex overflow-x-scroll gap-1">
-														{caseData.photoPaths.map((photo) => (
-															<div
-																className="relative min-w-64 h-64 cursor-pointer"
-																key={photo}
-																onClick={() => window.open(photo)}
-																onKeyDown={() => window.open(photo)}
-															>
-																<Image src={photo} alt="Case photo" />
-															</div>
-														))}
-													</div>
+						)}
+						{/* 4 column grid layout */}
+						{caseData && (
+							<div className="flex flex-col gap-2">
+								<div>
+									<Text className="font-semibold mb-1" order='lg'>Details</Text>
+									<div className="grid grid-cols-4 gap-2 items-start">
+										<KeyValue label="Codename">
+											<Text>{caseData.peddlerCodename}</Text>
+										</KeyValue>
+										<KeyValue label="Importance">
+											<Text>
+												<ImportanceText importance={caseData.importance} />
+											</Text>
+										</KeyValue>
+										<KeyValue label="Region">
+											<Text>{caseData.regionName}</Text>
+										</KeyValue>
+										<KeyValue label="Specific Location">
+											<Text>{caseData.location}</Text>
+										</KeyValue>
+
+										<KeyValue label="Interaction Date">
+											<Text>{caseData.interactionDate.toLocaleDateString()}</Text>
+										</KeyValue>
+									</div>
+								</div>
+								
+								<div>
+									<Text className="font-semibold mb-1" order="lg">Notes</Text>
+									<Text className="break-words whitespace-pre-wrap" order="sm">
+										{caseData.notes ?? "No notes provided."}
+									</Text>
+								</div>
+                {caseData.photoPaths.length > 0 && (
+									<div>
+										<Text className="font-semibold mb-1" order="lg">Photos</Text>
+										<div className="flex overflow-x-scroll gap-1">
+											{caseData.photoPaths.map((photo) => (
+												<div
+													className="relative min-w-64 h-64 cursor-pointer"
+													key={photo}
+													onClick={() => window.open(photo)}
+													onKeyDown={() => window.open(photo)}
+												>
+													<Image src={photo} alt="Case photo" />
 												</div>
-											)}
-											<div className="grid grid-cols-[1fr_2fr] gap-2">
-												<Text className="font-semibold">Created By: </Text>
-												<Text>{caseData.createdByUsername}</Text>
-												<Text className="font-semibold">Created At: </Text>
-												<Text>{caseData.createdAt.toLocaleString()}</Text>
-												<Text className="font-semibold">Updated At: </Text>
-												<Text>{caseData.updatedAt.toLocaleString()}</Text>
-												<Text className="font-semibold">First Interaction: </Text>
-												<Text>{caseData.firstInteraction ? "Yes" : "No"}</Text>
-											</div>
+											))}
 										</div>
-										<div className="flex gap-2">
-											<EditCase
-												initialCase={caseData}
-												revalidate={() => {
-													const controller = new AbortController();
-													revalidate(controller.signal);
-												}}
-											/>
-											<DeleteCase
-												id={caseId}
-												navigateBack={() => {
-													navigate();
-													router.refresh();
-												}}
-											/>
-										</div>
-									</>
+									</div>
 								)}
-							</>
+								<div>
+									<Text className="font-semibold mb-1" order="lg">Metadata</Text>
+									<div className="grid grid-cols-4 gap-2 items-start">
+										<KeyValue label="Created By">
+											<Text>{caseData.createdByUsername}</Text>
+										</KeyValue>
+										<KeyValue label="Created At">
+											<Text>{caseData.createdAt.toLocaleString()}</Text>
+										</KeyValue>
+										<KeyValue label="Updated At">
+											<Text>{caseData.updatedAt.toLocaleString()}</Text>
+										</KeyValue>
+										<KeyValue label="First Interaction">
+											<Text>{caseData.firstInteraction ? "Yes" : "No"}</Text>
+										</KeyValue>
+									</div>
+								</div>
+							</div>
+						)}
+
+						{caseData && (
+							<div className="flex gap-2">
+								<EditCase
+									initialCase={caseData}
+									revalidate={() => {
+										const controller = new AbortController();
+										revalidate(controller.signal);
+									}}
+								/>
+								<DeleteCase
+									id={caseId}
+									navigateBack={() => {
+										navigate();
+										router.refresh();
+									}}
+								/>
+							</div>
 						)}
 					</div>
 				</div>

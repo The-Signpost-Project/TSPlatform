@@ -17,13 +17,13 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 			innerClassName="gap-2 px-2 flex flex-col justify-between h-full"
 		>
 			<Text className="grid grid-cols-2 gap-2">
-				<span className="font-semibold justify-start">Created At: </span>
-				<span className="justify-self-start">{data.createdAt.toLocaleDateString()}</span>
+				<span className="font-medium justify-self-end">Updated At</span>
+				<span className="justify-self-start">{data.updatedAt.toLocaleDateString()}</span>
 
-				<span className="font-semibold justify-self-start">Region: </span>
+				<span className="font-medium justify-self-end">Region</span>
 				<span className="justify-self-start">{data.regionName}</span>
 
-				<span className="font-semibold justify-self-start">Importance: </span>
+				<span className="font-medium justify-self-end">Importance</span>
 				<span className="justify-self-start">
 					<ImportanceText importance={data.importance} />
 				</span>
