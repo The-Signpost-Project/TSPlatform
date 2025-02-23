@@ -9,6 +9,7 @@ import {
 } from "./constants";
 import { Loader } from "@lib/components";
 import { default as NextLink } from "next/link";
+import { motion } from "motion/react";
 
 export function Button({
 	children,
@@ -46,14 +47,15 @@ export function Button({
 		);
 	};
 	return wrapWithLink(
-		<button
+		<motion.button
 			type={type}
 			className={!href ? mergedStyles : undefined}
 			disabled={isNotClickable}
+      whileTap={{ scale: 0.98 }}
 			{...rest}
 		>
 			{icon}
 			{loading ? styledLoader : children}
-		</button>,
+		</motion.button>,
 	);
 }

@@ -53,11 +53,11 @@ export function getTwButtonStyles(color: ButtonColor, variant: ButtonVariant) {
 
 		case "warning": {
 			return computeVariantStyles(variant, {
-				textColor: "text-yellow-700 dark:text-yellow-500",
+				textColor: "text-yellow-700 dark:text-yellow-600",
 				textHoverColor: "hover:text-yellow-800 dark:hover:text-yellow-400",
-				borderColor: "border-yellow-700 dark:border-yellow-500",
+				borderColor: "border-yellow-700 dark:border-yellow-600",
 				bgColor:
-					"bg-yellow-700 dark:bg-yellow-500 hover:bg-yellow-800/70 dark:hover:bg-yellow-500/70",
+					"bg-yellow-700 dark:bg-yellow-600 hover:bg-yellow-800/70 dark:hover:bg-yellow-600/70",
 			});
 		}
 

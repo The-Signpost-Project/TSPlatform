@@ -16,7 +16,7 @@ export function AddButton({ subject, onClick }: AddButtonProps) {
 					strokeWidth="2.5"
 					stroke="currentColor"
 					className="w-4 h-4 text-orange-500 dark:text-orange-400"
-          aria-hidden='true'
+					aria-hidden="true"
 				>
 					<path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 				</svg>

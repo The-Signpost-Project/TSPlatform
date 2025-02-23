@@ -1,10 +1,11 @@
-import type { ReactNode, HTMLAttributes } from "react";
+import type { ReactNode } from "react";
+import type { HTMLMotionProps } from "motion/react";
 
 export type ButtonColor = "info" | "danger" | "warning" | "success";
 
 export type ButtonVariant = "solid" | "outlined" | "ghost";
 
-export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends HTMLMotionProps<"button"> {
 	children: ReactNode;
 	href?: string;
 	className?: string;
