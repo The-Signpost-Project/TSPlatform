@@ -61,14 +61,11 @@ export function Modal({
 	useEffect(() => {
 		if (isOpen) {
 			document.body.style.overflow = "hidden";
-			document.body.style.position = "absolute";
 		} else {
 			document.body.style.overflow = "";
-			document.body.style.position = "";
 		}
 		return () => {
 			document.body.style.overflow = "";
-			document.body.style.position = "";
 		};
 	}, [isOpen]);
 

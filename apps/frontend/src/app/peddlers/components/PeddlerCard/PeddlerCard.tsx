@@ -11,7 +11,7 @@ export function PeddlerCard({ data }: PeddlerCardProps) {
 			innerClassName="gap-2 px-2 flex flex-col justify-between h-full"
 		>
 			<Text className="grid grid-cols-2 gap-x-2 gap-y-1">
-      <span className="font-medium justify-self-end">First Name</span>
+				<span className="font-medium justify-self-end">First Name</span>
 				<span className="justify-self-start">{data.firstName ?? "???"}</span>
 
 				<span className="font-medium justify-self-end">Last Name</span>
