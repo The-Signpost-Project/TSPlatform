@@ -85,7 +85,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 									<Text className="font-semibold mb-1" order="lg">
 										Details
 									</Text>
-									<div className="grid grid-cols-4 gap-2 items-start">
+									<div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2 items-start">
 										<KeyValue label="Codename">
 											<Text>{caseData.peddlerCodename}</Text>
 										</KeyValue>
@@ -138,7 +138,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 									<Text className="font-semibold mb-1" order="lg">
 										Metadata
 									</Text>
-									<div className="grid grid-cols-4 gap-2 items-start">
+									<div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2 items-start">
 										<KeyValue label="Created By">
 											<Text>{caseData.createdByUsername}</Text>
 										</KeyValue>

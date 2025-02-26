@@ -55,6 +55,7 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 						className="p-0 border-0 h-6 w-6"
 						color="warning"
 						disabled={isPending}
+            variant="ghost"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -73,6 +74,7 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 						onClick={() => setIsEditing(true)}
 						className="p-0 border-0 h-6 w-6"
 						color="warning"
+            variant="ghost"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +94,7 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 					</Button>
 				)}
 
-				<Button onClick={() => onDelete(id)} className="p-0 border-0 h-6 w-6" color="danger">
+				<Button onClick={() => onDelete(id)} className="p-0 border-0 h-6 w-6" color="danger" variant="ghost">
 					<svg
 						aria-hidden="true"
 						className="size-4 translate-x-[30%]"

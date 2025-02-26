@@ -111,7 +111,6 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 					setModalOpen(true);
 				}}
 				className="w-full"
-				variant="outlined"
 			>
 				Edit
 			</Button>
