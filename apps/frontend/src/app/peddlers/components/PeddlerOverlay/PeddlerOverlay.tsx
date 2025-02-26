@@ -117,12 +117,12 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 										{peddlerData.disabilities.length === 0 ? (
 											<Text>No disabilities</Text>
 										) : (
-											<div className="flex flex-wrap gap-1"> 
+											<div className="flex flex-wrap gap-1">
 												{peddlerData.disabilities.map((disability) => (
 													<Text
 														key={disability.id}
 														className="bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded"
-                            order="xs"
+														order="xs"
 													>
 														{disability.name}
 													</Text>
