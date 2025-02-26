@@ -70,7 +70,7 @@ export function SignUpForm() {
 				variant={formState.errors.repeatPassword ? "error" : undefined}
 				helperText={formState.errors.repeatPassword?.message}
 			/>
-			<Button type="submit" disabled={isPending}>
+			<Button type="submit" loading={isPending}>
 				Continue
 			</Button>
 		</form>

@@ -86,7 +86,7 @@ export function AddRegion() {
 						/>
 					</div>
 
-					<Button type="submit" color="success" disabled={isPending}>
+					<Button type="submit" color="success" loading={isPending}>
 						Create Region
 					</Button>
 				</form>

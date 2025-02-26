@@ -92,7 +92,7 @@ export function EditTeam({ team }: EditTeamProps) {
 						/>
 					</div>
 
-					<Button type="submit" color="success" disabled={isPending}>
+					<Button type="submit" color="success" loading={isPending}>
 						Update Team
 					</Button>
 				</form>

@@ -91,7 +91,7 @@ export function EditRegion({ region }: EditRegionProps) {
 						/>
 					</div>
 
-					<Button type="submit" color="success" disabled={isPending}>
+					<Button type="submit" color="success" loading={isPending}>
 						Update Region
 					</Button>
 				</form>

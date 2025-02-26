@@ -95,7 +95,12 @@ export function AddRole({ policies }: AddRoleProps) {
 						/>
 					)}
 
-					<Button type="submit" color="success" disabled={isPending || policies.length === 0}>
+					<Button
+						type="submit"
+						color="success"
+						disabled={policies.length === 0}
+						loading={isPending}
+					>
 						Create Role
 					</Button>
 				</form>

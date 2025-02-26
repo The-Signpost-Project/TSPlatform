@@ -255,7 +255,7 @@ export function EditPolicy(props: EditPolicyProps) {
 						</>
 					)}
 
-					<Button type="submit" color="success" disabled={isPending}>
+					<Button type="submit" color="success" loading={isPending}>
 						Update Policy
 					</Button>
 				</form>

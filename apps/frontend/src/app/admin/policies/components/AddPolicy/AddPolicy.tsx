@@ -226,7 +226,7 @@ export function AddPolicy() {
 						</>
 					)}
 
-					<Button type="submit" color="success" disabled={isPending}>
+					<Button type="submit" color="success" loading={isPending}>
 						Create Policy
 					</Button>
 				</form>

@@ -235,8 +235,8 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 								className="w-full"
 							/>
 						</div>
-						<Button type="submit" color="success" className="w-full" disabled={isPending}>
-							Save Changes
+						<Button type="submit" color="success" className="w-full" loading={isPending}>
+							Submit
 						</Button>
 					</form>
 				)}

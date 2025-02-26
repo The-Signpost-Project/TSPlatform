@@ -2,16 +2,7 @@
 import { useRouter } from "next/navigation";
 import type { PeddlerOverlayProps } from "./types";
 import { useKeybinds } from "@lib/hooks";
-import {
-	ModalCloseButton,
-	Text,
-	Title,
-	Loader,
-	List,
-	Link,
-	Button,
-	KeyValue,
-} from "@lib/components";
+import { ModalCloseButton, Text, Title, Loader, Button, KeyValue } from "@lib/components";
 import { useEffect, useTransition, useState, useCallback } from "react";
 import type { StrictPeddler } from "@shared/common/types";
 import { fetchCase } from "./utils";

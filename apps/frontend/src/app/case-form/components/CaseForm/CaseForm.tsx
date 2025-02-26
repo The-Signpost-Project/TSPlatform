@@ -359,7 +359,7 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 					/>
 				</motion.div>
 			)}
-			<Button type="submit" disabled={isPending} className="sm:w-1/5">
+			<Button type="submit" loading={isPending} color="success">
 				Submit
 			</Button>
 		</form>

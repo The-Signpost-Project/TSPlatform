@@ -58,7 +58,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 			/>
 			<TextInput type="hidden" {...register("token")} />
 
-			<Button type="submit" disabled={isPending}>
+			<Button type="submit" loading={isPending} color="success">
 				Submit
 			</Button>
 		</form>

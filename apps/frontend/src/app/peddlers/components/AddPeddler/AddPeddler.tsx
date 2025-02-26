@@ -252,7 +252,7 @@ export function AddPeddler() {
 							className="w-full"
 						/>
 					</div>
-					<Button type="submit" disabled={isPending} className="w-full">
+					<Button type="submit" loading={isPending} color="success" className="w-full">
 						Submit
 					</Button>
 				</form>

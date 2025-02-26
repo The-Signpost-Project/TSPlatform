@@ -76,7 +76,7 @@ export function EditUserRole({ roles, id, name }: EditUserRoleProps) {
 						/>
 					)}
 
-					<Button type="submit" color="success" disabled={isPending || roles.length === 0}>
+					<Button type="submit" color="success" disabled={roles.length === 0} loading={isPending}>
 						Update Roles
 					</Button>
 				</form>

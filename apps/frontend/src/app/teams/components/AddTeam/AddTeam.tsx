@@ -87,7 +87,7 @@ export function AddTeam() {
 						/>
 					</div>
 
-					<Button type="submit" color="success" disabled={isPending}>
+					<Button type="submit" color="success" loading={isPending}>
 						Create Team
 					</Button>
 				</form>

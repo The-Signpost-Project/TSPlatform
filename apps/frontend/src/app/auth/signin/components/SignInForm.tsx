@@ -59,7 +59,7 @@ export function SignInForm() {
 				variant={formState.errors.password ? "error" : undefined}
 				helperText={formState.errors.password?.message}
 			/>
-			<Button type="submit" disabled={isPending}>
+			<Button type="submit" loading={isPending}>
 				Sign In
 			</Button>
 		</form>

@@ -50,7 +50,7 @@ export function ForgotPasswordForm() {
 				{...register("email")}
 			/>
 
-			<Button type="submit" disabled={isPending}>
+			<Button type="submit" loading={isPending} color="success">
 				Submit
 			</Button>
 		</form>

@@ -112,7 +112,12 @@ export function EditRole({ policies, id, name }: EditRoleProps) {
 						/>
 					)}
 
-					<Button type="submit" color="success" disabled={isPending || policies.length === 0}>
+					<Button
+						type="submit"
+						color="success"
+						disabled={policies.length === 0}
+						loading={isPending}
+					>
 						Update Role
 					</Button>
 				</form>
