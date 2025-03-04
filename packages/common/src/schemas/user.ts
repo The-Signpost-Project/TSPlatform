@@ -18,7 +18,7 @@ export const UpdateUserInputSchema = z.object({
 }) satisfies z.ZodType<UpdateUserInput>;
 
 export const UpdateUserRolesInputSchema = z.object({
-	roles: z.array(z.object({ roleId: z.string() })),
+	roles: z.array(z.object({ roleId: z.string() })).optional(),
 }) satisfies z.ZodType<UpdateUserRolesInput>;
 
 export const DeleteUserInputSchema = z.object({

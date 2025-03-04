@@ -2,7 +2,7 @@
 import { Modal, TextInput, Title, ModalCloseButton, Text, Button, FileDrop } from "@lib/components";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { CreateRegionInputSchema } from "@shared/common/schemas";
+import { UpdateRegionInputSchema } from "@shared/common/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UpdateRegionInput } from "@shared/common/types";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ import { diffChanges } from "@utils";
 export function EditRegion({ region }: EditRegionProps) {
 	const [modalOpen, setModalOpen] = useState(false);
 	const { register, handleSubmit, formState } = useForm<Omit<UpdateRegionInput, "photo">>({
-		resolver: zodResolver(CreateRegionInputSchema),
+		resolver: zodResolver(UpdateRegionInputSchema),
 		defaultValues: {
 			name: region.name,
 		},

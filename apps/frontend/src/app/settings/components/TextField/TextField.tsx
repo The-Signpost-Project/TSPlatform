@@ -22,7 +22,7 @@ export function TextField<T extends string>({
 	});
 	const [isPending, setIsPending] = useState(false);
 
-	const { register, handleSubmit, formState } = useForm<Record<typeof fieldKey, string>>({
+	const { register, handleSubmit, formState } = useForm<Record<string, string>>({
 		resolver: zodResolver(
 			z.object({
 				[fieldKey]: zodSchema,

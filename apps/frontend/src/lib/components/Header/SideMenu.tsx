@@ -145,7 +145,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 				<Image
 					src="/common/burger.svg"
 					alt="menu"
-					className={twMerge("h6 w-6", theme === "light" ? undefined : "invert")}
+					className={twMerge("h-6 w-6", theme === "light" ? undefined : "invert")}
 					height={24}
 					width={24}
 				/>

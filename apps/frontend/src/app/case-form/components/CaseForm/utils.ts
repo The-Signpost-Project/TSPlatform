@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { CreatePeddlerInputSchema } from "@shared/common/schemas";
 import type { CreateCaseInput } from "@shared/common/types";
+import type { CaseFormValues } from "./types";
 
 // for general case details
 const CombinedCaseFormSection1Schema = z.object({
@@ -30,4 +31,4 @@ const CombinedCaseFormSection2BSchema = z.object({
 export const CombinedCaseFormSchema = z.intersection(
 	CombinedCaseFormSection1Schema,
 	z.union([CombinedCaseFormSection2ASchema, CombinedCaseFormSection2BSchema]),
-);
+) as z.ZodType<CaseFormValues>;
