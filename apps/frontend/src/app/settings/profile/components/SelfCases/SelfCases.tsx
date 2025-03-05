@@ -25,7 +25,7 @@ export function SelfCases({ cases }: SelfCasesProps) {
 							animate={{ opacity: 1, height: "auto" }}
 							exit={{ opacity: 0, height: 0 }}
 							transition={{ duration: 0.1 }}
-							className="overflow-hidden grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+							className="overflow-hidden grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
 						>
 							{cases.map((data) => (
 								<Card
@@ -37,16 +37,16 @@ export function SelfCases({ cases }: SelfCasesProps) {
 									descriptionClassName="break-all text-xs sm:text-xs"
 									innerClassName="gap-2 px-2 flex flex-col justify-between h-full"
 								>
-									<Text className="grid grid-cols-2 gap-2">
-										<span className="font-semibold justify-start">Created At: </span>
+									<Text className="grid grid-cols-2 gap-x-2 gap-y-1">
+										<span className="font-medium justify-self-end">Updated At</span>
 										<span className="justify-self-start">
-											{data.createdAt.toLocaleDateString()}
+											{data.updatedAt.toLocaleDateString()}
 										</span>
 
-										<span className="font-semibold justify-self-start">Region: </span>
+										<span className="font-medium justify-self-end">Region</span>
 										<span className="justify-self-start">{data.regionName}</span>
 
-										<span className="font-semibold justify-self-start">Importance: </span>
+										<span className="font-medium justify-self-end">Importance</span>
 										<span className="justify-self-start">
 											<ImportanceText importance={data.importance} />
 										</span>

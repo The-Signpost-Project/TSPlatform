@@ -35,7 +35,7 @@ export function Profile() {
 	}
 
 	return (
-		<div className="space-y-4">
+		<div>
 			<TextSettingsRow
 				fieldKey="username"
 				label="Display Name"

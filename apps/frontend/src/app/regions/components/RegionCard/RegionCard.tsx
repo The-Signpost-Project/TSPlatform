@@ -9,15 +9,15 @@ export function RegionCard({ region, className }: RegionCardProps) {
 			title={region.name}
 			imgSrc={region.photoPath ?? "/common/empty-image.png"}
 			className={className}
-			innerClassName="flex flex-col gap-2"
+			innerClassName="flex flex-col gap-2 px-4"
 		>
-			<Button href={`/cases?regionName=${region.name}`} className="w-full">
-				View Cases
-			</Button>
 			<div className="flex gap-2 w-full">
 				<EditRegion region={region} />
 				<DeleteRegion region={region} />
 			</div>
+			<Button href={`/cases?regionName=${region.name}`} className="w-full" variant="ghost">
+				View Cases
+			</Button>
 		</Card>
 	);
 }

@@ -78,6 +78,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 							onClick={() => setIsEditing(false)}
 							className="h-10 flex items-center justify-center"
 							color="success"
+							variant="outlined"
 						>
 							Done
 						</Button>
@@ -92,7 +93,9 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 					<Title order={6} className="text-base">
 						Team {team.name} members
 					</Title>
-					<Button onClick={() => setIsEditing(true)}>Manage</Button>
+					<Button onClick={() => setIsEditing(true)} variant="outlined">
+						Manage
+					</Button>
 				</div>
 			)}
 			{isEditing ? (

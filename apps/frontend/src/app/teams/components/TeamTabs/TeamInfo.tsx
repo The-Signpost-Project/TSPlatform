@@ -23,7 +23,7 @@ export function TeamInfo({ team }: TeamInfoProps) {
 					<EditTeam team={team} />
 					<DeleteTeam team={team} />
 				</div>
-				<Button href={`/cases?teamName=${team.name}`} className="w-full">
+				<Button href={`/cases?teamName=${team.name}`} className="w-full" variant="ghost">
 					View Cases
 				</Button>
 			</div>
