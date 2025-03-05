@@ -55,7 +55,7 @@ export function TextField<T extends string>({
 					helperText={formState.errors[fieldKey]?.message as string}
 					className="w-full sm:w-72 md:w-96"
 				/>
-				<Button loading={isPending} type="submit" className="grow-0">
+				<Button loading={isPending} type="submit" className="grow-0" color="success">
 					Save
 				</Button>
 			</div>

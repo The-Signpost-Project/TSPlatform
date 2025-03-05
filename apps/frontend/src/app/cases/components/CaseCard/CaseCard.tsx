@@ -25,7 +25,7 @@ export function CaseCard({ data, isStale }: CaseCardProps) {
 					<ImportanceText importance={data.importance} />
 				</span>
 			</Text>
-			<Button href={`/cases/${data.id}`} className="w-full">
+			<Button href={`/cases/${data.id}`} className="w-full" variant="outlined">
 				View Details
 			</Button>
 		</Card>

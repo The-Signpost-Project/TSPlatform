@@ -34,7 +34,8 @@ export function DeletePeddler({ id, codename, navigateBack }: DeletePeddlerProps
 					e.stopPropagation();
 					setModalOpen(true);
 				}}
-				className="w-full"
+				className="grow"
+				variant="outlined"
 			>
 				Delete
 			</Button>

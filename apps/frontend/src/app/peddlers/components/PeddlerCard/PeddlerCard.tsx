@@ -20,7 +20,7 @@ export function PeddlerCard({ data }: PeddlerCardProps) {
 				<span className="font-medium justify-self-end">Main Region</span>
 				<span className="justify-self-start">{data.mainRegion.name}</span>
 			</Text>
-			<Button href={`/peddlers/${data.id}`} className="w-full">
+			<Button href={`/peddlers/${data.id}`} className="w-full" variant="outlined">
 				View Peddler details
 			</Button>
 		</Card>

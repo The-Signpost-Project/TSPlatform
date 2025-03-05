@@ -25,7 +25,12 @@ export function DeleteTeam({ team }: DeleteTeamProps) {
 
 	return (
 		<>
-			<Button onClick={() => setModalOpen(true)} color="danger" className="w-full">
+			<Button
+				onClick={() => setModalOpen(true)}
+				color="danger"
+				className="w-full"
+				variant="outlined"
+			>
 				Delete
 			</Button>
 			<Modal

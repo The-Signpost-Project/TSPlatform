@@ -35,6 +35,7 @@ export function DeleteCase({ id, navigateBack }: DeleteCaseProps) {
 					setModalOpen(true);
 				}}
 				className="w-full"
+				variant="outlined"
 			>
 				Delete
 			</Button>

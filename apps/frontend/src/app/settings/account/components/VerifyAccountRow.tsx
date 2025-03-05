@@ -10,7 +10,12 @@ export function VerifyAccountRow({ onClick, isVerified }: VerifyAccountRowProps)
 		<div className="flex gap-2 p-2 items-center justify-between">
 			<Text order="lg">Verify Email</Text>
 			{!isVerified ? (
-				<Button onClick={() => startTransition(onClick)} color="info" disabled={isPending}>
+				<Button
+					onClick={() => startTransition(onClick)}
+					color="info"
+					disabled={isPending}
+					variant="outlined"
+				>
 					Verify
 				</Button>
 			) : (

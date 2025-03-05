@@ -110,7 +110,8 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 					e.stopPropagation();
 					setModalOpen(true);
 				}}
-				className="w-full"
+				className="grow"
+				variant="outlined"
 			>
 				Edit
 			</Button>

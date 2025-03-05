@@ -105,6 +105,7 @@ export function EditCase({ initialCase, revalidate }: EditCaseProps) {
 					setModalOpen(true);
 				}}
 				className="w-full"
+				variant="outlined"
 			>
 				Edit
 			</Button>

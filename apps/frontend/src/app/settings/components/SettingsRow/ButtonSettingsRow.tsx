@@ -14,7 +14,12 @@ export function ButtonSettingsRow({
 	return (
 		<div className="flex gap-2 p-2 items-center justify-between">
 			<Text order="lg">{label}</Text>
-			<Button onClick={() => startTransition(onClick)} color={buttonColor} disabled={isPending}>
+			<Button
+				onClick={() => startTransition(onClick)}
+				color={buttonColor}
+				disabled={isPending}
+				variant="outlined"
+			>
 				{buttonLabel}
 			</Button>
 		</div>

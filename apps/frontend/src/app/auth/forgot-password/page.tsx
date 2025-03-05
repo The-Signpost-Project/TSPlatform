@@ -6,8 +6,8 @@ export default function ForgotPassword() {
 		<>
 			<Title order={3}>Forgot Password</Title>
 			<Text>
-				Please enter the email you registered with to reset your password. If you signed up via
-				OAuth, refer to their guidelines instead.
+				Please enter the email associated with your account to reset your password. If you signed up
+				via Google OAuth, you will need to reset your password through them instead.
 			</Text>
 
 			<ForgotPasswordForm />

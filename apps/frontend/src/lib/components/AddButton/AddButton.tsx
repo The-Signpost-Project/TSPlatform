@@ -7,7 +7,6 @@ export function AddButton({ subject, onClick }: AddButtonProps) {
 			onClick={onClick}
 			type="button"
 			className="flex items-center text-nowrap gap-2"
-			variant="outlined"
 			icon={
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +14,7 @@ export function AddButton({ subject, onClick }: AddButtonProps) {
 					viewBox="0 0 24 24"
 					strokeWidth="2.5"
 					stroke="currentColor"
-					className="w-4 h-4 text-orange-500 dark:text-orange-400"
+					className="w-4 h-4 text-white"
 					aria-hidden="true"
 				>
 					<path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

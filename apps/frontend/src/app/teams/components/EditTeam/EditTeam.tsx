@@ -49,7 +49,12 @@ export function EditTeam({ team }: EditTeamProps) {
 
 	return (
 		<>
-			<Button onClick={() => setModalOpen(true)} color="warning" className="w-full">
+			<Button
+				onClick={() => setModalOpen(true)}
+				color="warning"
+				className="w-full"
+				variant="outlined"
+			>
 				Edit
 			</Button>
 			<Modal
