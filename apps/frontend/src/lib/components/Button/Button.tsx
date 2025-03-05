@@ -34,7 +34,7 @@ export function Button({
 
 	const styledLoader = (
 		<div className="flex h-4 items-center justify-center w-full">
-			<Loader color={buttonRawColors[color]} className="w-5" />
+			<Loader color={variant === "solid" ? "white" : buttonRawColors[color]} className="w-5" />
 		</div>
 	);
 

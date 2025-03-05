@@ -12,13 +12,9 @@ export function TextArea({
 }: TextAreaProps) {
 	const inputClasses = twMerge(
 		"block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500",
-		variant === undefined ? "focus:ring-indigo-500 focus:border-indigo-500" : "",
-		variant === "success"
-			? "border-green-300 focus:ring-green-500 focus:border-green-500 dark:border-green-400"
-			: "",
-		variant === "error"
-			? "border-red-300 focus:ring-red-500 focus:border-red-500 dark:border-red-400"
-			: "",
+		variant === undefined ? "focus:border-orange-300" : "",
+		variant === "success" ? "border-green-300 focus:border-green-500 dark:border-green-400" : "",
+		variant === "error" ? "border-red-300 focus:border-red-500 dark:border-red-400" : "",
 	);
 
 	const helperTextClasses = twMerge(
