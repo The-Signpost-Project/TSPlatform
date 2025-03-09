@@ -8,7 +8,11 @@ export async function createPeddler(newPeddler: CreatePeddlerInput) {
 		path: "/peddler",
 		init: {
 			method: "POST",
-			body: JSON.stringify(newPeddler),
+			body: JSON.stringify({
+				...newPeddler,
+				firstName: newPeddler.firstName === "" ? null : newPeddler.firstName,
+				remarks: newPeddler.remarks === "" ? null : newPeddler.remarks,
+			} satisfies CreatePeddlerInput),
 			headers: await getSessionCookieHeader(),
 		},
 		validator: PeddlerSchema,

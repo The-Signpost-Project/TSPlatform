@@ -17,11 +17,12 @@ export async function createCaseFromForm(
 	if (form.firstInteraction) {
 		const newPeddler = {
 			mainRegionId: form.regionId,
-			firstName: form.firstName,
+			firstName: form.firstName === "" ? null : form.firstName,
 			lastName: form.lastName,
 			race: form.race,
 			sex: form.sex,
 			birthYear: form.birthYear,
+			remarks: form.remarks === "" ? null : form.remarks,
 			disabilityIds: form.disabilityIds,
 		} satisfies CreatePeddlerInput;
 

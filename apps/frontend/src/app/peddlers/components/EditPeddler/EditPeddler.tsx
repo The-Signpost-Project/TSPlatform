@@ -10,6 +10,7 @@ import {
 	TextInput,
 	RadioItem,
 	RadioRoot,
+	TextArea,
 } from "@lib/components";
 import { useContext, useState, useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -79,7 +80,11 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 				mainRegionId: peddler.mainRegion.id,
 				disabilityIds: peddler.disabilities.map((d) => d.id),
 			} satisfies UpdatePeddlerInput,
-			data,
+			{
+				...data,
+				firstName: data.firstName === "" ? null : data.firstName,
+				remarks: data.remarks === "" ? null : data.remarks,
+			} satisfies UpdatePeddlerInput,
 		);
 
 		const {
@@ -207,6 +212,26 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 						/>
 						<div className="flex flex-col gap-2">
 							<Text description order="sm">
+								Remarks
+							</Text>
+							<Text description order="xs">
+								Additional information about the individual. Leave blank if not applicable.
+							</Text>
+							<TextArea
+								placeholder="eg. Not seen since 2019"
+								disabled={isPending}
+								{...register("remarks")}
+								variant={
+									"remarks" in formState.errors && formState.errors.remarks ? "error" : undefined
+								}
+								helperText={
+									"remarks" in formState.errors ? (formState.errors.remarks?.message as string) : ""
+								}
+								className="md:w-4/5"
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<Text description order="sm">
 								Disabilities
 							</Text>
 
@@ -220,7 +245,7 @@ export function EditPeddler({ peddler, revalidate }: EditPeddlerProps) {
 											.map((d) => d.id),
 									);
 								}}
-								initialSelectedItems={[]}
+								initialSelectedItems={peddler.disabilities.map((d) => d.name)}
 								placeholder="eg. Wheelchair-bound"
 								disabled={isPending}
 								variant={

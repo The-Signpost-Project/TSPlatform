@@ -93,7 +93,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 										<Text>{peddlerData.lastName}</Text>
 									</KeyValue>
 									<KeyValue label="First Name">
-										<Text>{peddlerData.firstName ?? "???"}</Text>
+										<Text>{peddlerData.firstName ?? "N/A"}</Text>
 									</KeyValue>
 									<KeyValue label="Race">
 										<Text>{peddlerData.race}</Text>
@@ -103,6 +103,9 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 									</KeyValue>
 									<KeyValue label="Birth Year">
 										<Text>{peddlerData.birthYear}</Text>
+									</KeyValue>
+									<KeyValue label="Remarks">
+										<Text>{peddlerData.remarks ?? "N/A"}</Text>
 									</KeyValue>
 									<KeyValue label="Disabilities">
 										{peddlerData.disabilities.length === 0 ? (

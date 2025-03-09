@@ -18,7 +18,7 @@ export type CaseFormValues = {
 			firstInteraction: true;
 	  } & Pick<
 			CreatePeddlerInput,
-			"lastName" | "firstName" | "race" | "sex" | "birthYear" | "disabilityIds"
+			"lastName" | "firstName" | "race" | "sex" | "birthYear" | "disabilityIds" | "remarks"
 	  >)
 	| {
 			firstInteraction: false;

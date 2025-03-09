@@ -36,6 +36,7 @@ describe("PeddlerService", () => {
 				sex: "M",
 				mainRegionId: mainRegion.id,
 				disabilityIds: [faker.string.uuid()],
+				remarks: faker.lorem.sentence(),
 			} as CreatePeddlerInput;
 
 			// @ts-ignore
@@ -100,6 +101,7 @@ describe("PeddlerService", () => {
 				sex: "M",
 				codename: "RegionY_Last_M",
 				mainRegion: { id: faker.string.uuid(), name: "RegionY" },
+				remarks: faker.lorem.sentence(),
 				disabilities: [{ id: faker.string.uuid(), disability: { name: "TestDisability" } }],
 			};
 			// @ts-ignore
@@ -137,6 +139,7 @@ describe("PeddlerService", () => {
 				sex: "F",
 				mainRegionId: mainRegion.id,
 				disabilityIds: [faker.string.uuid()],
+				remarks: faker.lorem.sentence(),
 				// ...other fields...
 			};
 

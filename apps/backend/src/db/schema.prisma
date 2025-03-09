@@ -135,6 +135,7 @@ model Peddler {
   race         String
   sex          String
   birthYear    String
+  remarks      String?
 
   createdAt DateTime @default(now())
 

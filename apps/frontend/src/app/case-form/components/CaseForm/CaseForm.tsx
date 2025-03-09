@@ -296,6 +296,26 @@ export function CaseForm({ allRegions, allDisabilities, allPeddlers }: CaseFormP
 					</div>
 					<div className="flex flex-col gap-2">
 						<Text description order="sm">
+							Remarks
+						</Text>
+						<Text description order="xs">
+							Additional information about the individual. Leave blank if not applicable.
+						</Text>
+						<TextArea
+							placeholder="eg. Not seen since 2019"
+							disabled={isPending}
+							{...register("remarks")}
+							variant={
+								"remarks" in formState.errors && formState.errors.remarks ? "error" : undefined
+							}
+							helperText={
+								"remarks" in formState.errors ? (formState.errors.remarks?.message as string) : ""
+							}
+							className="md:w-4/5"
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<Text description order="sm">
 							Disabilities
 						</Text>
 						<Text description order="xs">

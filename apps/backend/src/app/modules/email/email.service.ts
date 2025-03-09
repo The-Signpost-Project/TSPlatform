@@ -280,6 +280,10 @@ export class EmailService extends Templater {
 				value: peddler.birthYear,
 			},
 			{
+				key: "Remarks",
+				value: peddler.remarks ?? "N/A",
+			},
+			{
 				key: "Disabilities",
 				value:
 					peddler.disabilities.length > 0

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { CreatePeddlerInputSchema } from "@shared/common/schemas";
-import type { CreateCaseInput } from "@shared/common/types";
+import type { CreateCaseInput, CreatePeddlerInput } from "@shared/common/types";
 import type { CaseFormValues } from "./types";
 
 // for general case details
@@ -21,7 +21,8 @@ const CombinedCaseFormSection2ASchema = CreatePeddlerInputSchema.pick({
 	sex: true,
 	birthYear: true,
 	disabilityIds: true,
-});
+	remarks: true,
+}) satisfies z.ZodType<Omit<CreatePeddlerInput, "mainRegionId">>;
 
 // for existing peddler details
 const CombinedCaseFormSection2BSchema = z.object({

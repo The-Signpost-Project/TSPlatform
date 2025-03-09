@@ -12,6 +12,7 @@ export interface StrictPeddler {
 	race: "Chinese" | "Malay" | "Indian" | "Others";
 	sex: "M" | "F";
 	birthYear: string;
+	remarks: string | null;
 	createdAt: Date;
 	disabilities: {
 		id: string;
@@ -26,6 +27,7 @@ export interface CreatePeddlerInput {
 	race: "Chinese" | "Malay" | "Indian" | "Others";
 	sex: "M" | "F";
 	birthYear: string; // can be estimated
+	remarks: string | null;
 	disabilityIds: string[];
 }
 

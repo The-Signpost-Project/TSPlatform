@@ -25,6 +25,7 @@ export const PeddlerSchema = z.object({
 	race: z.enum(["Chinese", "Malay", "Indian", "Others"]),
 	sex: z.enum(["M", "F"]),
 	birthYear: z.string().min(1),
+	remarks: z.string().nullable(),
 	createdAt: z.coerce.date(),
 	disabilities: z.array(
 		z.object({
@@ -41,6 +42,7 @@ export const CreatePeddlerInputSchema = z.object({
 	race: z.enum(["Chinese", "Malay", "Indian", "Others"]),
 	sex: z.enum(["M", "F"]),
 	birthYear: z.string().min(1),
+	remarks: z.string().nullable(),
 	disabilityIds: z.array(z.string()),
 }) satisfies z.ZodType<CreatePeddlerInput>;
 
