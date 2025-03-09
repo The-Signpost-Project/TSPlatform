@@ -1,0 +1,14 @@
+{
+	"name": "@scripts/patch",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"scripts": {
+		"format": "bunx biome format --write .",
+		"lint": "bunx biome lint --write ./src",
+		"import-peddlers": "bun run ./src/importPeddlers.ts"
+	},
+	"dependencies": {
+		"find-up": "^7.0.0"
+	}
+}
