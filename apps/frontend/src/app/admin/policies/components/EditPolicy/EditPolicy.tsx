@@ -71,6 +71,7 @@ export function EditPolicy(props: EditPolicyProps) {
 					e.stopPropagation();
 					setModalOpen(true);
 				}}
+				variant="outlined"
 			>
 				Edit
 			</Button>

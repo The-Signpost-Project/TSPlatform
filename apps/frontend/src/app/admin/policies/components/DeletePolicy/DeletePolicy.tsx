@@ -30,6 +30,7 @@ export function DeletePolicy({ id, name }: DeletePolicyProps) {
 					e.stopPropagation();
 					setModalOpen(true);
 				}}
+				variant="outlined"
 			>
 				Delete
 			</Button>

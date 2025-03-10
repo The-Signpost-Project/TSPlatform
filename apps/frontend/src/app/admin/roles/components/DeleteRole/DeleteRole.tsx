@@ -30,6 +30,7 @@ export function DeleteRole({ id, name }: DeleteRoleProps) {
 					e.stopPropagation();
 					setModalOpen(true);
 				}}
+				variant="outlined"
 			>
 				Delete
 			</Button>

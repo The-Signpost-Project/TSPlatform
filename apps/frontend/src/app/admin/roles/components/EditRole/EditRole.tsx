@@ -54,7 +54,7 @@ export function EditRole({ policies, id, name }: EditRoleProps) {
 
 	return (
 		<>
-			<Button color="warning" onClick={() => setModalOpen(true)}>
+			<Button color="warning" onClick={() => setModalOpen(true)} variant="outlined">
 				Edit
 			</Button>
 			<Modal
