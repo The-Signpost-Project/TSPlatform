@@ -1,6 +1,6 @@
 import { S3Client, randomUUIDv7 } from "bun";
 import { ConfigService } from "@nestjs/config";
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { join } from "node:path";
 import { AppError, AppErrorTypes } from "@utils/appErrors";
 
@@ -10,7 +10,7 @@ interface UploadOptions {
 }
 
 @Injectable()
-export class S3Service extends S3Client {
+export class S3Service extends S3Client implements OnModuleInit {
 	constructor(configService: ConfigService) {
 		const accessKey = configService.get<string>("S3_ACCESS_KEY");
 		const secretKey = configService.get<string>("S3_SECRET_KEY");
@@ -23,6 +23,16 @@ export class S3Service extends S3Client {
 			bucket,
 			endpoint,
 		});
+	}
+
+	async onModuleInit() {
+		// ping the S3 service to check if the credentials are correct
+		try {
+			await this.write("ping.txt", Buffer.from("ping"));
+		} catch (error) {
+			// @ts-ignore
+			console.error("Could not connect to the S3 server:", error, error.code);
+		}
 	}
 
 	async upload(file: Express.Multer.File, options: UploadOptions = {}) {

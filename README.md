@@ -2,7 +2,8 @@
 
 ## Setup
 
-Make sure to edit `.env.example` in `apps/*`!
+Edit `.env.example` in `apps/*` by filling values in. Then, copy them to `.env.(development|test|production)` as needed.
+
 
 ### Production
 0. Requires docker daemon to be [running](https://docs.docker.com/engine/daemon/start/).
