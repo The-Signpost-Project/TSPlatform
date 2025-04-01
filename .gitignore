@@ -52,3 +52,5 @@ yarn-error.log*
 # minio
 .minio-data
 
+*.csv
+*.sql
