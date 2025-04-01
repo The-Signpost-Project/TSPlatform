@@ -5,7 +5,7 @@ import * as path from "node:path";
 // Helper to generate INSERT SQL statement
 const generateInsertSQL = (table: string, data: Record<string, any>) => {
 	const keys = Object.keys(data);
-	const values = keys.map(key => {
+	const values = keys.map((key) => {
 		const v = data[key];
 		return typeof v === "string" ? `'${v.replace(/'/g, "''")}'` : v;
 	});
@@ -15,13 +15,16 @@ const generateInsertSQL = (table: string, data: Record<string, any>) => {
 // Top-level await used instead of an async IIFE
 const csvPath = path.join(__dirname, "..", "peddlers.csv");
 const csvData = await fs.readFile(csvPath, "utf8");
-const lines = csvData.split("\n").map(line => line.trim()).filter(line => line.length > 0);
+const lines = csvData
+	.split("\n")
+	.map((line) => line.trim())
+	.filter((line) => line.length > 0);
 const [_header, ...rows] = lines;
 const DEFAULT_REGION_ID = "0195d272-591b-7781-b02b-831bc865fad1";
 
 const sqlStatements: string[] = [];
 for (const row of rows) {
-	const cols = row.split(",").map(col => col.trim());
+	const cols = row.split(",").map((col) => col.trim());
 	let [id, codename, firstName, lastName, race, sex, birthYear, remarks, createdAt] = cols;
 	if (!id) id = randomUUIDv7(); // generate id if missing
 	firstName = firstName || "";
@@ -40,8 +43,8 @@ for (const row of rows) {
 			sex,
 			birthYear,
 			remarks,
-			createdAt: validDate.toISOString()
-		})
+			createdAt: validDate.toISOString(),
+		}),
 	);
 }
 

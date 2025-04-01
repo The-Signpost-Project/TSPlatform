@@ -208,7 +208,7 @@ export function CaseFilters({ allRegions, allPeddlers, allTeams }: CaseFiltersPr
 			</div>
 			<CaseGrid cases={filteredCases} isStale={isStale} />
 			<Pagination
-				disableNext={filteredCases.length <= casesPerPage}
+				disableNext={false}
 				disablePrevious={deferredFilters.offset === 0}
 				onClickNext={() =>
 					setFilters((prev) => ({

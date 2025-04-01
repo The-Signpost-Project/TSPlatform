@@ -7,8 +7,8 @@
 		"format": "bunx biome format --write .",
 		"lint": "bunx biome lint --write ./src",
 		"import-peddlers": "bun run ./src/importPeddlers.ts",
-    "import-cases": "bun run ./src/importCases.ts",
-    "import-disabilities": "bun run ./src/importDisabilities.ts"
+		"import-cases": "bun run ./src/importCases.ts",
+		"import-disabilities": "bun run ./src/importDisabilities.ts"
 	},
 	"dependencies": {
 		"find-up": "^7.0.0"
