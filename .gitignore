@@ -53,4 +53,9 @@ yarn-error.log*
 .minio-data
 
 *.csv
+
+# Ignore all .sql files
 *.sql
+
+# Except migration.sql
+!migration.sql

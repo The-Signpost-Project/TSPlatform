@@ -192,7 +192,7 @@ model Case {
 
 model CasePhoto {
   id        String @id @default(uuid(7))
-  case      Case   @relation(fields: [caseId], references: [id])
+  case      Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
   caseId    String
   photoPath String
 }
