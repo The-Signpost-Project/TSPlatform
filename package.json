@@ -9,7 +9,7 @@
 	"engines": {
 		"node": ">=18"
 	},
-	"packageManager": "bun@1.2.4",
+	"packageManager": "bun@1.2.16",
 	"private": true,
 	"scripts": {
 		"build": "bunx turbo build",
