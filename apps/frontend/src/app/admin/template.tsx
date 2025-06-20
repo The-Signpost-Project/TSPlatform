@@ -2,11 +2,7 @@
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
 
-export default function Template({
-	children,
-}: {
-	children: ReactNode;
-}) {
+export default function Template({ children }: { children: ReactNode }) {
 	return (
 		<motion.div
 			initial={{ y: 1, opacity: 0.8 }}

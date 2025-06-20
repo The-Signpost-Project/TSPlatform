@@ -1,18 +1,25 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
-	"organizeImports": {
-		"enabled": true
-	},
+	"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true,
 			"style": {
-				"useImportType": "error"
-			},
-			"nursery": {
+				"useImportType": "error",
+				"noParameterAssign": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error",
 				"noCommonJs": "error"
 			},
+			"nursery": {},
 			"suspicious": {
 				"noConsole": {
 					"level": "warn",
@@ -36,11 +43,12 @@
 		"indentWidth": 2,
 		"lineWidth": 100,
 		"lineEnding": "lf",
-		"ignore": [
-			"**/node_modules/**",
-			"**/dist/**",
-			"**/.turbo/**",
-			"**/.next/**"
+		"includes": [
+			"**",
+			"!**/node_modules/**",
+			"!**/dist/**",
+			"!**/.turbo/**",
+			"!**/.next/**"
 		]
 	},
 	"javascript": {

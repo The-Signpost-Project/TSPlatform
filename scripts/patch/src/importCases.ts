@@ -34,7 +34,7 @@ for (let i = 1; i < lines.length; i++) {
 	const regionId = row.regionId;
 	const location = row.location.replace(/'/g, "''");
 	const notes = row.notes.replace(/'/g, "''");
-	const importance = parseInt(row.importance, 10);
+	const importance = Number.parseInt(row.importance, 10);
 	console.log("importance", row.importance);
 	const firstInteraction = row.firstInteraction.toLowerCase() === "true";
 	const peddlerId = row.peddlerId;

@@ -6,6 +6,10 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"type": "module",
+	"exports": {
+		"./base": "./base.json"
+	},
 	"scripts": {
 		"format": "bunx biome format --write .",
 		"lint": "bunx biome lint --write ."

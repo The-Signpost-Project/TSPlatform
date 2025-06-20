@@ -6,13 +6,13 @@ const csvFilePath = path.join(__dirname, "..", "peddlerDisability.csv");
 const dumpFilePath = path.join(__dirname, "peddlerDisabilities_dump.sql");
 const csvContent = fs.readFileSync(csvFilePath, "utf8");
 
-const lines = csvContent.split("\n").filter(line => line.trim() !== "");
-const header = lines[0].split(",").map(col => col.trim());
+const lines = csvContent.split("\n").filter((line) => line.trim() !== "");
+const header = lines[0].split(",").map((col) => col.trim());
 const queries: string[] = [];
 
 for (let i = 1; i < lines.length; i++) {
 	// Basic splitting; assumes no commas in fields
-	const fields = lines[i].split(",").map(f => f.trim());
+	const fields = lines[i].split(",").map((f) => f.trim());
 	if (fields.length < header.length) continue; // Skip incomplete rows
 	const row: { [key: string]: string } = {};
 	header.forEach((col, idx) => (row[col] = fields[idx]));
