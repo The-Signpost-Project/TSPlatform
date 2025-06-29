@@ -4,6 +4,7 @@ services:
     build: 
       context: .
       dockerfile: ./external/docker/backend.Dockerfile
+    restart: on-failure:5
     ports:
       - 8080:8080
     networks:
@@ -14,6 +15,7 @@ services:
     build: 
       context: .
       dockerfile: ./external/docker/frontend.Dockerfile
+    restart: on-failure:5
     ports:
       - 3000:3000
     networks:
@@ -24,6 +26,7 @@ services:
     build: 
       context: ./external/nginx
       dockerfile: ./Dockerfile
+    restart: on-failure:5
     ports:
       - 80:80
       - 443:443
