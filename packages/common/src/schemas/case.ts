@@ -59,8 +59,8 @@ export const CaseFiltersSchema = z
 			(v.limit !== undefined && v.offset !== undefined),
 		{
 			path: ["limit", "offset"],
-            error: "Both limit and offset must be provided"
-        },
+			error: "Both limit and offset must be provided",
+		},
 	)
 	.refine(
 		(v) =>
@@ -68,6 +68,6 @@ export const CaseFiltersSchema = z
 			(v.sortBy !== undefined && v.order !== undefined),
 		{
 			path: ["sortBy", "order"],
-            error: "Both sortBy and order must be provided"
-        },
+			error: "Both sortBy and order must be provided",
+		},
 	) satisfies z.ZodType<Omit<CaseFilters, "importance">>;

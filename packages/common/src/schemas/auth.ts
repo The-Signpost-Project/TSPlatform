@@ -19,20 +19,20 @@ const passwordSchema = z
 	.min(8)
 	.max(100)
 	.refine((pw) => uppercaseRegex.test(pw), {
-        error: "Password must contain at least one uppercase letter"
-    })
+		error: "Password must contain at least one uppercase letter",
+	})
 	.refine((pw) => lowercaseRegex.test(pw), {
-        error: "Password must contain at least one lowercase letter"
-    })
+		error: "Password must contain at least one lowercase letter",
+	})
 	.refine((pw) => numberRegex.test(pw), {
-        error: "Password must contain at least one number"
-    })
+		error: "Password must contain at least one number",
+	})
 	.refine((pw) => specialCharRegex.test(pw), {
-        error: "Password must contain at least one special character"
-    })
+		error: "Password must contain at least one special character",
+	})
 	.refine((pw) => !whitespaceRegex.test(pw), {
-        error: "Password must not contain any whitespace"
-    });
+		error: "Password must not contain any whitespace",
+	});
 
 export const SignUpInputSchema = z
 	.object({
