@@ -10,7 +10,7 @@ export const StrictCaseSchema = z.object({
 	interactionDate: z.coerce.date(),
 	location: z.string(),
 	notes: z.string(),
-	importance: z.number().int().min(1).max(5) as z.ZodType<1 | 2 | 3 | 4 | 5>,
+	importance: z.int().min(1).max(5) as z.ZodType<1 | 2 | 3 | 4 | 5>,
 	firstInteraction: z.boolean(),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date(),
@@ -58,16 +58,16 @@ export const CaseFiltersSchema = z
 			(v.limit === undefined && v.offset === undefined) ||
 			(v.limit !== undefined && v.offset !== undefined),
 		{
-			message: "Both limit and offset must be provided",
 			path: ["limit", "offset"],
-		},
+            error: "Both limit and offset must be provided"
+        },
 	)
 	.refine(
 		(v) =>
 			(v.sortBy === undefined && v.order === undefined) ||
 			(v.sortBy !== undefined && v.order !== undefined),
 		{
-			message: "Both sortBy and order must be provided",
 			path: ["sortBy", "order"],
-		},
+            error: "Both sortBy and order must be provided"
+        },
 	) satisfies z.ZodType<Omit<CaseFilters, "importance">>;

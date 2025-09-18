@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"@types/express": "^5.0.0",
 		"@types/multer": "^1.4.12",
-		"zod": "^3.23.8"
+		"zod": "^4.1.9"
 	},
 	"scripts": {
 		"format": "bunx biome format --write .",

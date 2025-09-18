@@ -6,5 +6,5 @@ export const OpenAuthCallbackSchema = z.object({
 }) as z.ZodType<{ code: string; state: string }>;
 
 export const OpenAuthUrlSchema = z.object({
-	url: z.string().url(),
+	url: z.url(),
 }) as z.ZodType<{ url: string }>;

@@ -12,7 +12,7 @@ import { z } from "zod";
 
 export const UpdateUserInputSchema = z.object({
 	username: z.string().optional(),
-	email: z.string().email().optional(),
+	email: z.email().optional(),
 	verified: z.boolean().optional(),
 	allowEmailNotifications: z.boolean().optional(),
 }) satisfies z.ZodType<UpdateUserInput>;
@@ -28,7 +28,7 @@ export const DeleteUserInputSchema = z.object({
 export const SafeUserSchema = z.object({
 	id: z.string(),
 	username: z.string(),
-	email: z.string().email().nullable(),
+	email: z.email().nullable(),
 	verified: z.boolean(),
 	oAuthProviders: z.enum(["google"]).array(),
 	hasPassword: z.boolean(),

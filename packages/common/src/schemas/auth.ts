@@ -19,32 +19,32 @@ const passwordSchema = z
 	.min(8)
 	.max(100)
 	.refine((pw) => uppercaseRegex.test(pw), {
-		message: "Password must contain at least one uppercase letter",
-	})
+        error: "Password must contain at least one uppercase letter"
+    })
 	.refine((pw) => lowercaseRegex.test(pw), {
-		message: "Password must contain at least one lowercase letter",
-	})
+        error: "Password must contain at least one lowercase letter"
+    })
 	.refine((pw) => numberRegex.test(pw), {
-		message: "Password must contain at least one number",
-	})
+        error: "Password must contain at least one number"
+    })
 	.refine((pw) => specialCharRegex.test(pw), {
-		message: "Password must contain at least one special character",
-	})
+        error: "Password must contain at least one special character"
+    })
 	.refine((pw) => !whitespaceRegex.test(pw), {
-		message: "Password must not contain any whitespace",
-	});
+        error: "Password must not contain any whitespace"
+    });
 
 export const SignUpInputSchema = z
 	.object({
 		username: z.string().min(3).max(100),
-		email: z.string().email(),
+		email: z.email(),
 		password: passwordSchema,
 		repeatPassword: z.string(),
 	})
 	.superRefine((data, ctx) => {
 		if (data.password !== data.repeatPassword) {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: "custom",
 				message: "Passwords do not match",
 				path: ["repeatPassword"], // Attach the error to the repeatPassword field
 			});
@@ -52,14 +52,14 @@ export const SignUpInputSchema = z
 	}) satisfies z.ZodType<SignUpInput>;
 
 export const SignInInputSchema = z.object({
-	email: z.string().email(),
+	email: z.email(),
 	password: z.string(),
 }) satisfies z.ZodType<SignInInput>;
 
 export const TokenIdSchema = z.string().length(64);
 
 export const ForgotPasswordEmailSchema = z.object({
-	email: z.string().email(),
+	email: z.email(),
 }) satisfies z.ZodType<ForgotPasswordEmail>;
 
 export const ForgotPasswordResetSchema = z.object({
@@ -80,7 +80,7 @@ export const ChangePasswordInputSchema = z
 	.superRefine((data, ctx) => {
 		if (data.newPassword !== data.repeatPassword) {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: "custom",
 				message: "Passwords do not match",
 				path: ["repeatPassword"], // Attach the error to the repeatPassword field
 			});

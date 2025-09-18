@@ -9,7 +9,7 @@ const CombinedCaseFormSection1Schema = z.object({
 	regionId: z.string().nonempty(),
 	location: z.string().nonempty(),
 	notes: z.string().nonempty(),
-	importance: z.number().int().min(1).max(5) as z.ZodType<1 | 2 | 3 | 4 | 5>,
+	importance: z.int().min(1).max(5) as z.ZodType<1 | 2 | 3 | 4 | 5>,
 	firstInteraction: z.boolean(),
 }) satisfies z.ZodType<Omit<CreateCaseInput, "photos" | "createdById" | "peddlerId">>;
 
