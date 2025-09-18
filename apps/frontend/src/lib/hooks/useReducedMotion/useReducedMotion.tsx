@@ -12,7 +12,7 @@ export function useReducedMotion() {
 	});
 
 	// class to disable animations and transitions
-	const reducedMotionClass = "!animate-none !transition-none";
+	const reducedMotionClass = "animate-none! transition-none!";
 
 	useLayoutEffect(() => {
 		if (reducedMotion) {

@@ -145,7 +145,7 @@ export function MultiSelect({
 				{selectedItems.map((item) => (
 					<div
 						key={item}
-						className="flex items-center justify-center gap-1 bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded"
+						className="flex items-center justify-center gap-1 bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded-sm"
 					>
 						<Text order="sm">{item}</Text>
 						<Button

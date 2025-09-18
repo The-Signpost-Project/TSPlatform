@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { Title, Text, Image } from "@lib/components";
 
 const defaultStyles =
-	"flex flex-col max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700";
+	"flex flex-col max-w-lg bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700";
 
 export function Card({
 	children,

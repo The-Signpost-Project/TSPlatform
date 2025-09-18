@@ -10,12 +10,12 @@ export default function SignIn() {
 				<OAuthButton name="Google" location="/oauth/google" iconPath="/icons/google.svg" />
 			</div>
 
-			<div className="flex flex-row flex-grow w-11/12 items-center">
-				<hr className="flex-grow border-t-2 border-gray-300 dark:border-gray-700 h-1" />
+			<div className="flex flex-row grow w-11/12 items-center">
+				<hr className="grow border-t-2 border-gray-300 dark:border-gray-700 h-1" />
 				<Text className="mx-2" order="sm">
 					or
 				</Text>
-				<hr className="flex-grow border-t-2 border-gray-300 dark:border-gray-700 h-1" />
+				<hr className="grow border-t-2 border-gray-300 dark:border-gray-700 h-1" />
 			</div>
 			<SignUpForm />
 			<Text>

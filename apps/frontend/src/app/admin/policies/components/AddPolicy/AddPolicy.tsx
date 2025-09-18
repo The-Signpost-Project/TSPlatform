@@ -116,7 +116,7 @@ export function AddPolicy() {
 					/>
 
 					<div className="flex sm:gap-4 gap-2 items-center">
-						<div className="flex-grow">
+						<div className="grow">
 							<Text order="sm" description>
 								Conditions (advanced)
 							</Text>

@@ -85,7 +85,7 @@ export function EditRole({ policies, id, name }: EditRoleProps) {
 						helperText={formState.errors.name?.message as string}
 					/>
 
-					<div className="flex-grow">
+					<div className="grow">
 						<Text order="sm" description>
 							Policies
 						</Text>

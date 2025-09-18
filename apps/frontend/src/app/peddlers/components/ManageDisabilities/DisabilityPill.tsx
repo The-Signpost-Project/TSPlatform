@@ -35,7 +35,7 @@ export function DisabilityPill({ id, defaultName, onDelete, ...rest }: Disabilit
 	};
 	return (
 		<div
-			className="flex items-center justify-between gap-1 bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded"
+			className="flex items-center justify-between gap-1 bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded-sm"
 			{...rest}
 		>
 			{isEditing ? (

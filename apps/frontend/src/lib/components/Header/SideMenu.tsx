@@ -126,7 +126,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 					initial={reducedMotion ? false : { opacity: 0 }}
 					animate={{ opacity: 1 }}
 					transition={{ duration: 0.2 }}
-					className="max-w-lg bg-white border border-gray-200 rounded-lg shadow dark:bg-zinc-800 dark:border-gray-700"
+					className="max-w-lg bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-zinc-800 dark:border-gray-700"
 				>
 					{renderNavButtons()}
 
@@ -137,7 +137,7 @@ export function SideMenu({ navLinks }: SideMenuProps) {
 		>
 			<button
 				onClick={() => setOpen((value) => !value)}
-				className="p-2 rounded bg-zinc-200 dark:bg-zinc-800"
+				className="p-2 rounded-sm bg-zinc-200 dark:bg-zinc-800"
 				data-testid="theme-toggle"
 				tabIndex={-1}
 				type="button"

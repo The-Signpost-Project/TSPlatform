@@ -52,7 +52,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 
 	return (
 		<section
-			className="fixed w-screen h-svh top-0 bg-gray-900/40 backdrop-blur-sm z-50 overflow-y-scroll"
+			className="fixed w-screen h-svh top-0 bg-gray-900/40 backdrop-blur-xs z-50 overflow-y-scroll"
 			onClick={navigate}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") navigate();
@@ -67,7 +67,7 @@ export function CaseOverlay({ routerAction, caseId }: CaseOverlayProps) {
 					<ModalCloseButton
 						onClick={navigate}
 						accessibilityLabel="case overlay"
-						className="hover:dark:bg-gray-950"
+						className="dark:hover:bg-gray-950"
 					/>
 					<div className="px-4 flex flex-col gap-4">
 						<Title order={4}>Case {caseId}</Title>

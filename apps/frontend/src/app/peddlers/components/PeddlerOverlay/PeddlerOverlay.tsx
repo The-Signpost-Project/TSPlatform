@@ -54,7 +54,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 
 	return (
 		<section
-			className="fixed w-screen h-svh top-0 bg-gray-900/40 backdrop-blur-sm z-50 overflow-y-scroll"
+			className="fixed w-screen h-svh top-0 bg-gray-900/40 backdrop-blur-xs z-50 overflow-y-scroll"
 			onClick={navigate}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") navigate();
@@ -69,7 +69,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 					<ModalCloseButton
 						onClick={navigate}
 						accessibilityLabel="peddler overlay"
-						className="hover:dark:bg-gray-950"
+						className="dark:hover:bg-gray-950"
 					/>
 					<div className="px-4 flex flex-col gap-4">
 						{error && !isPending && (
@@ -115,7 +115,7 @@ export function PeddlerOverlay({ routerAction, peddlerId }: PeddlerOverlayProps)
 												{peddlerData.disabilities.map((disability) => (
 													<Text
 														key={disability.id}
-														className="bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded"
+														className="bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded-sm"
 														order="xs"
 													>
 														{disability.name}

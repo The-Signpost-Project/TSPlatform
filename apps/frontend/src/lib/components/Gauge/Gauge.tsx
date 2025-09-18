@@ -18,11 +18,7 @@ export function Gauge({ progress, className, children, color = "info" }: GaugePr
 
 	return (
 		<div className={twMerge("relative size-36", className)}>
-			<svg
-				className="rotate-[135deg] size-full"
-				viewBox="0 0 36 36"
-				xmlns="http://www.w3.org/2000/svg"
-			>
+			<svg className="rotate-135 size-full" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
 				<title>Gauge</title>
 				<circle
 					cx="18"

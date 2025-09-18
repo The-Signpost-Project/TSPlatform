@@ -44,7 +44,7 @@ export function Profile() {
 				onSubmit={({ username }) => changeUsernameCallback(user?.id, username)}
 				schema={UpdateUserInputSchema.required().shape.username}
 			/>
-			<AccordionRoot type="multiple" className="flex gap-2 p-2 w-full overflow-auto !mt-0">
+			<AccordionRoot type="multiple" className="flex gap-2 p-2 w-full overflow-auto mt-0!">
 				<AccordionItem value="1" className="w-full">
 					<AccordionTrigger withArrow className="w-full flex mb-2">
 						<Text order="lg">Your Roles</Text>

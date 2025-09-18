@@ -28,7 +28,7 @@ export default async function TeamsPage() {
 
 	if (!allTeamsData || allTeamsError || !allUsersData || allUsersError) {
 		return (
-			<div className="p-4 flex flex-col gap-1 flex-grow">
+			<div className="p-4 flex flex-col gap-1 grow">
 				<Title order={2}>Teams</Title>
 				<Text description>
 					Teams are groups of users that are responsible for befriending peddlers in certain
@@ -49,7 +49,7 @@ export default async function TeamsPage() {
 	}
 
 	return (
-		<section className="flex flex-col gap-2 sm:p-8 p-4 flex-grow">
+		<section className="flex flex-col gap-2 sm:p-8 p-4 grow">
 			<div className="flex justify-between gap-6 sm:items-center sm:flex-row flex-col">
 				<div className="flex flex-col gap-1">
 					<Title order={2}>Teams</Title>

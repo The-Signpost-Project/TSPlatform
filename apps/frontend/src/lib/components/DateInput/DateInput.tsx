@@ -19,7 +19,7 @@ export function DateInput({
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 	const [inputFocused, setInputFocused] = useState(false);
 	const inputClasses = twMerge(
-		"block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500",
+		"block w-full px-3 py-2 border rounded-md shadow-xs sm:text-sm focus:outline-hidden dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 disabled:text-gray-400 dark:disabled:text-gray-500",
 		variant === undefined ? "focus:border-orange-300" : "",
 		variant === "success" ? "border-green-300 focus:border-green-500 dark:border-green-400" : "",
 		variant === "error" ? "border-red-300 focus:border-red-500 dark:border-red-400" : "",
@@ -66,16 +66,16 @@ export function DateInput({
 
 										nav: "absolute inset-x-0 flex justify-end items-center h-9 gap-2",
 										button_next:
-											"relative inline-flex items-center justify-center size-9 hover:bg-gray-100 dark:hover:bg-gray-800 rounded",
+											"relative inline-flex items-center justify-center size-9 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm",
 										button_previous:
-											"relative inline-flex items-center justify-center size-9 hover:bg-gray-100 dark:hover:bg-gray-800 rounded",
+											"relative inline-flex items-center justify-center size-9 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-sm",
 										chevron: "inline-block size-7 fill-gray-400",
 										week: "grid grid-cols-7",
 										weekdays: "grid grid-cols-7",
 										weekday:
 											"size-9 flex items-center justify-center text-gray-500 dark:text-gray-400",
 										day_button: "size-9",
-										day: "inline-flex items-center justify-center rounded text-gray-700 dark:text-gray-200 hover:bg-gray-200 hover:text-gray-900 hover:dark:bg-gray-800 hover:dark:text-gray-300 font-normal aria-selected:opacity-100 cursor-pointer",
+										day: "inline-flex items-center justify-center rounded-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-300 font-normal aria-selected:opacity-100 cursor-pointer",
 										today: "font-semibold",
 										selected: "bg-orange-500 text-white focus:bg-orange-500 focus:text-white",
 										outside: "text-gray-500 opacity-50",

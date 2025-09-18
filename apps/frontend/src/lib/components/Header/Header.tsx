@@ -48,7 +48,7 @@ export function Header() {
 						onClick={() => {
 							setTheme(theme === "light" ? "dark" : "light");
 						}}
-						className="p-2 rounded bg-zinc-200 dark:bg-zinc-800"
+						className="p-2 rounded-sm bg-zinc-200 dark:bg-zinc-800"
 						data-testid="theme-toggle"
 						tabIndex={-1}
 						type="button"

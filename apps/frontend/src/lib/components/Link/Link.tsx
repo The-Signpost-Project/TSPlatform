@@ -5,7 +5,7 @@ import { default as NextLink } from "next/link";
 const defaultStyles = `
 text-orange-500 dark:text-orange-400 
 underline sm:no-underline underline-offset-2
-hover:sm:underline
+sm:hover:underline
 hover:text-orange-600 dark:hover:text-orange-300 
 focus:text-orange-600 dark:focus:text-orange-300 
 active:text-orange-600 dark:active:text-orange-300`;

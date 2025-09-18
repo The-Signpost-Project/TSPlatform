@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 const defaultStyle = `
   text-zinc-800 dark:text-white
-  !bg-transparent
+  bg-transparent!
 `;
 
 export function Code({ children, className }: CodeProps) {

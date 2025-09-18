@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 // Define common base styles used by all buttons.
 export const twButtonBaseStyles = `
-  border focus:ring-4 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inherit
+  border focus:ring-4 focus:outline-hidden focus:ring-offset-2 focus:ring-2 focus:ring-inherit
   font-medium rounded-lg text-sm px-5 py-2.5 text-center
 `.trim();
 

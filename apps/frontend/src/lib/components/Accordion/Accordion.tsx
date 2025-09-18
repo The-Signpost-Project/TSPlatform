@@ -17,7 +17,7 @@ export function AccordionTrigger({ children, withArrow = false, ...props }: Acco
 			<Accordion.Trigger {...props} className="flex justify-between items-center w-full">
 				{children}{" "}
 				{withArrow && (
-					<div className="flex items-center m-1 justify-center w-8 h-8  rounded-full hover:bg-gray-100 hover:dark:bg-gray-900 hover:text-zinc-700 text-zinc-900 hover:dark:text-zinc-200 dark:text-zinc-100 transition-colors duration-200">
+					<div className="flex items-center m-1 justify-center w-8 h-8  rounded-full hover:bg-gray-100 dark:hover:bg-gray-900 hover:text-zinc-700 text-zinc-900 dark:hover:text-zinc-200 dark:text-zinc-100 transition-colors duration-200">
 						<svg
 							className="w-6 h-6 "
 							aria-hidden="true"

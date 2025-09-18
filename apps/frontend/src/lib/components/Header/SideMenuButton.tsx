@@ -6,7 +6,7 @@ export function SideMenuButton({ text, icon, onClick, imageClassname }: SideMenu
 	return (
 		<button
 			type="button"
-			className="flex gap-3 items-center px-4 py-2 hover:dark:bg-zinc-700  hover:bg-gray-100 rounded-lg w-full"
+			className="flex gap-3 items-center px-4 py-2 dark:hover:bg-zinc-700  hover:bg-gray-100 rounded-lg w-full"
 			onClick={onClick}
 		>
 			<Image

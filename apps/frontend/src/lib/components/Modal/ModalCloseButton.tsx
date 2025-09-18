@@ -11,7 +11,7 @@ export function ModalCloseButton({
 		<Button
 			aria-label={`Close ${accessibilityLabel}`}
 			className={twMerge(
-				"w-8 h-8 flex items-center justify-center border-none rounded-full bg-transparent dark:bg-transparent hover:bg-gray-100 hover:dark:bg-gray-900/20 hover:text-zinc-700 text-zinc-900 hover:dark:text-zinc-200 dark:text-zinc-100 transition-colors duration-200",
+				"w-8 h-8 flex items-center justify-center border-none rounded-full bg-transparent dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-900/20 hover:text-zinc-700 text-zinc-900 dark:hover:text-zinc-200 dark:text-zinc-100 transition-colors duration-200",
 				className,
 			)}
 			onClick={onClick}

@@ -59,7 +59,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 	};
 
 	return (
-		<div className="flex flex-col gap-2 flex-grow mt-1">
+		<div className="flex flex-col gap-2 grow mt-1">
 			<hr className="border-t-2 border-gray-300 dark:border-gray-700 h-1 md:hidden" />
 			{isEditing ? (
 				<div className="flex flex-col gap-1">
@@ -103,7 +103,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 					{filteredUsers.map((user) => (
 						<div
 							className={twMerge(
-								"px-2 py-1.5 rounded w-full cursor-pointer",
+								"px-2 py-1.5 rounded-sm w-full cursor-pointer",
 								user.isMember
 									? "bg-gray-200 dark:bg-gray-800"
 									: "bg-gray-200/50 dark:bg-gray-800/50",
@@ -134,7 +134,7 @@ export function TeamContent({ team, allUsers }: TeamContentProps) {
 
 					{team.members.map((member) => (
 						<div
-							className="bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded w-full"
+							className="bg-gray-200 dark:bg-gray-800 px-2 py-1.5 rounded-sm w-full"
 							key={member.id}
 						>
 							<Text>{member.username}</Text>

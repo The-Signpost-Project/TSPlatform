@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useKeybinds } from "@lib/hooks";
 
 const modalDefaultStyles = `
-!m-0 !translate-x-[-50%] !translate-y-[-50%] top-1/2 left-1/2
+m-0! translate-x-[-50%]! translate-y-[-50%]! top-1/2 left-1/2
 p-0 border-0 z-50
 rounded-md
 max-h-[90vh] overflow-y-auto
