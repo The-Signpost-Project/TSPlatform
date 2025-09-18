@@ -1,3 +1,4 @@
+"use client";
 import {
 	Tab as ExternalTab,
 	Tabs as ExternalTabs,

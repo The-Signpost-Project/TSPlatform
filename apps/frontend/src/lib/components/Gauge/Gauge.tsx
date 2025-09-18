@@ -1,3 +1,4 @@
+"use client";
 import type { GaugeProps } from "./types";
 import { twMerge } from "tailwind-merge";
 import { motion } from "motion/react";
